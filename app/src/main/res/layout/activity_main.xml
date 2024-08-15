@@ -13,10 +13,13 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="#fff"
+      app:itemTextColor="@color/cc_gray"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:menu="@menu/bottom_menu"
+      app:itemBackground="@drawable/bnv_click_behaviour"
+      style="@style/CustomBottomNavigationView"
       />
 
   <androidx.fragment.app.FragmentContainerView
