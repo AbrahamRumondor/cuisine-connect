@@ -1,6 +1,9 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
+  alias(libs.plugins.google.gms.google.services)
+  id("kotlin-kapt")
+  id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -27,19 +30,52 @@ android {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
   }
+  buildFeatures {
+    viewBinding = true
+    buildConfig = true
+  }
   kotlinOptions {
     jvmTarget = "1.8"
   }
 }
 
-dependencies {
+kapt {
+  correctErrorTypes = true
+}
 
+dependencies {
+  implementation(libs.androidx.navigation.fragment.ktx)
+  implementation(libs.androidx.navigation.ui.ktx)
+  val coroutinesAndroid = "1.7.1"
+  val coroutinesCore = "1.6.4"
+
+  implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+  implementation("androidx.fragment:fragment-ktx:1.8.0")
+  implementation("com.google.firebase:firebase-firestore:25.0.0")
+  implementation("com.google.firebase:firebase-auth:23.0.0")
+  implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+  implementation("com.google.firebase:firebase-storage:21.0.0")
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
   implementation(libs.androidx.activity)
   implementation(libs.androidx.constraintlayout)
+  implementation(libs.firebase.firestore)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
+
+  // hilt
+  implementation("com.google.dagger:hilt-android:2.48")
+  kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesAndroid")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroid")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCore")
+
+  // timber
+  implementation("com.jakewharton.timber:timber:5.0.1")
 }
