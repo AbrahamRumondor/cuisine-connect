@@ -5,28 +5,69 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".app.MainActivity"
     >
 
+<!--  <androidx.appcompat.widget.Toolbar-->
+<!--      android:id="@+id/toolbar"-->
+<!--      android:layout_width="match_parent"-->
+<!--      android:layout_height="130dp"-->
+<!--      android:background="@drawable/gradient_cc_yellow"-->
+<!--      android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+<!--      app:layout_constraintEnd_toEndOf="parent"-->
+<!--      app:layout_constraintStart_toStartOf="parent"-->
+<!--      app:layout_constraintTop_toTopOf="parent"-->
+<!--      >-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        >-->
+
+<!--      <TextView-->
+<!--          android:id="@+id/tb_title"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          app:layout_constraintStart_toStartOf="parent"-->
+<!--          app:layout_constraintTop_toTopOf="parent"-->
+<!--          app:layout_constraintBottom_toBottomOf="parent"-->
+<!--          android:text="Cuisine Connect"-->
+<!--          android:textSize="20sp"-->
+<!--          android:textStyle="bold"-->
+<!--          />-->
+
+<!--      <TextView-->
+<!--          android:id="@+id/tb_body"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          app:layout_constraintStart_toStartOf="parent"-->
+<!--          app:layout_constraintTop_toBottomOf="@id/tb_title"-->
+<!--          android:text="What should we cook up today?"-->
+<!--          />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--  </androidx.appcompat.widget.Toolbar>-->
+
   <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/bnv_main"
+      style="@style/CustomBottomNavigationView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="#fff"
+      app:itemBackground="@drawable/bnv_click_behaviour"
       app:itemTextColor="@color/cc_gray"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:menu="@menu/bottom_menu"
-      app:itemBackground="@drawable/bnv_click_behaviour"
-      style="@style/CustomBottomNavigationView"
       />
 
   <androidx.fragment.app.FragmentContainerView
       android:id="@+id/fragmentContainerView"
       android:name="androidx.navigation.fragment.NavHostFragment"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       app:defaultNavHost="true"
       app:layout_constraintBottom_toTopOf="@id/bnv_main"
       app:layout_constraintEnd_toEndOf="parent"
