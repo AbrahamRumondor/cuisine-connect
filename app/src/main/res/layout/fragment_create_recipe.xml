@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.screen.create.CreateRecipeFragment"
+    >
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/cv_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
+  </androidx.cardview.widget.CardView>
+
+  <!-- Username TextView -->
+  <EditText
+      android:id="@+id/et_username"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:hint="Username..."
+      android:inputType="text"
+      android:padding="8dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+      />
+
+  <!-- Description TextView -->
+  <EditText
+      android:id="@+id/et_description"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:hint="Description..."
+      android:inputType="textMultiLine"
+      android:minHeight="48dp"
+      android:padding="8dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/et_username"
+      app:layout_constraintVertical_chainStyle="packed"
+      />
+
+  <!-- Porsi Label -->
+  <TextView
+      android:id="@+id/tv_porsi_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingEnd="8dp"
+      android:text="Porsi:"
+      android:textColor="#000"
+      android:textSize="16sp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/et_description"
+      />
+
+  <!-- Porsi TextView -->
+  <EditText
+      android:id="@+id/tv_porsi_value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingStart="4dp"
+      android:text="[... people]"
+      android:textColor="#000"
+      android:textSize="16sp"
+      app:layout_constraintBottom_toBottomOf="@id/tv_porsi_label"
+      app:layout_constraintStart_toEndOf="@id/tv_porsi_label"
+      app:layout_constraintTop_toTopOf="@id/tv_porsi_label"
+      />
+
+
+  <!-- Lama Memasak Label -->
+  <TextView
+      android:id="@+id/tv_lama_memasak_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingEnd="8dp"
+      android:text="Lama memasak:"
+      android:textColor="#000"
+      android:textSize="16sp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tv_porsi_label"
+      />
+
+  <!-- Lama Memasak TextView -->
+  <EditText
+      android:id="@+id/tv_lama_memasak_value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingStart="4dp"
+      android:text="[1 hour 30 minutes]"
+      android:textColor="#000"
+      android:textSize="16sp"
+      app:layout_constraintBottom_toBottomOf="@id/tv_lama_memasak_label"
+      app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
+      app:layout_constraintTop_toTopOf="@id/tv_lama_memasak_label"
+      />
+
+  <!-- Container for dynamically added EditTexts -->
+  <LinearLayout
+      android:id="@+id/ll_step_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tv_lama_memasak_value"
+      >
+
+    <!-- Button to add new EditText -->
+    <Button
+        android:id="@+id/btn_add_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        />
+
+    <!-- Optional: Button to retrieve all EditText contents -->
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        />
+
+  </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

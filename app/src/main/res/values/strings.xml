@@ -6,4 +6,5 @@
   <string name="search">Search</string>
   <string name="collection">Collection</string>
   <string name="profile">Profile</string>
+  <string name="icon_create_recipe">icon create recipe</string>
 </resources>

@@ -13,4 +13,8 @@
       android:text="home"
       />
 
+  <include layout="@layout/item_fab_create_recipe"
+      android:id="@+id/incl_fab"
+      />
+
 </FrameLayout>
