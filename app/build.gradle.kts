@@ -48,6 +48,8 @@ dependencies {
   implementation(libs.androidx.navigation.ui.ktx)
   implementation(libs.androidx.legacy.support.v4)
   implementation(libs.androidx.recyclerview)
+  implementation(libs.androidx.annotation)
+  implementation(libs.androidx.lifecycle.livedata.ktx)
   val coroutinesAndroid = "1.7.1"
   val coroutinesCore = "1.6.4"
 

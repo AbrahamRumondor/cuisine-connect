@@ -1,25 +1,26 @@
 package com.example.cuisineconnect.app.screen.create
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
-import timber.log.Timber
 
 class CreateRecipeFragment : Fragment() {
 
   private lateinit var binding: FragmentCreateRecipeBinding
 
-  private val editTextList = mutableListOf<EditText>()
+  private val editTextIngreList = mutableListOf<EditText>()
+  private val editTextStepList = mutableListOf<EditText>()
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -35,13 +36,20 @@ class CreateRecipeFragment : Fragment() {
 
     setupToolbar()
 
-    binding.btnAddStep.setOnClickListener {
-      addNewEditText()
+    binding.btnAddIngre.setOnClickListener {
+      addNewIngredient()
     }
 
-    binding.btnSubmit.setOnClickListener {
-      Log.d("brobruh", "masuk ke click listener")
+    binding.btnAddStep.setOnClickListener {
+      addNewStep()
+    }
+
+    binding.btnSubmitIngre.setOnClickListener {
       printAll()
+    }
+
+    binding.btnSubmitStep.setOnClickListener {
+      printAllStep()
     }
 
     return binding.root
@@ -63,19 +71,48 @@ class CreateRecipeFragment : Fragment() {
     }
   }
 
-  private fun addNewEditText() {
-      val customCardView = LayoutInflater.from(context).inflate(R.layout.item_ingredient_input, binding.llStepContainer, false)
+  private fun addNewIngredient() {
+      val customCardView = LayoutInflater.from(context).inflate(R.layout.item_edit_text_input, binding.llIngreContainer, false)
       val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
-      etUserInput.hint = "Enter text for item"
+      etUserInput.hint = "2 Carrots"
+
+    // Add the new EditText to the container
+    binding.llIngreContainer.addView(customCardView)
+
+    // Add the new EditText to the list
+    editTextIngreList.add(etUserInput)
+  }
+
+  private fun addNewStep() {
+    val customCardView = LayoutInflater.from(context).inflate(R.layout.item_edit_text_input, binding.llStepContainer, false)
+    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+    etUserInput.hint = "Start by putting all the ingredients together..."
+    etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
     // Add the new EditText to the container
     binding.llStepContainer.addView(customCardView)
 
     // Add the new EditText to the list
-    editTextList.add(etUserInput)
+    editTextStepList.add(etUserInput)
   }
 
   private fun printAll() {
+    Log.d("brobruh", "${(binding.llIngreContainer?.childCount ?: 0)}")
+
+    for (i in 0 until (binding.llIngreContainer.childCount ?: 0)) {
+      val childView = binding.llIngreContainer.getChildAt(i)
+
+      // Check if the child is a CardView and contains the EditText
+      if (childView is CardView) {
+        val editText = childView.findViewById<EditText>(R.id.etUserInput)
+        if (editText != null) {
+          Log.d("brobruh", "ingre: ${editText.layout.text}")
+        }
+      }
+    }
+  }
+
+  private fun printAllStep() {
     Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
 
     for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
@@ -85,7 +122,7 @@ class CreateRecipeFragment : Fragment() {
       if (childView is CardView) {
         val editText = childView.findViewById<EditText>(R.id.etUserInput)
         if (editText != null) {
-          Log.d("brobruh", "coba: ${editText.layout.text}")
+          Log.d("brobruh", "step: ${editText.layout.text}")
         }
       }
     }

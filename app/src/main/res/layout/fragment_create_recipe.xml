@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,135 +7,238 @@
     tools:context=".app.screen.create.CreateRecipeFragment"
     >
 
-  <androidx.cardview.widget.CardView
-      android:id="@+id/cv_toolbar"
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
+      android:layout_height="match_parent"
       >
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        />
-  </androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
-  <!-- Username TextView -->
-  <EditText
-      android:id="@+id/et_username"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:hint="Username..."
-      android:inputType="text"
-      android:padding="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
-      />
+      <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="@color/white"
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          />
+    </androidx.cardview.widget.CardView>
 
-  <!-- Description TextView -->
-  <EditText
-      android:id="@+id/et_description"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:hint="Description..."
-      android:inputType="textMultiLine"
-      android:minHeight="48dp"
-      android:padding="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/et_username"
-      app:layout_constraintVertical_chainStyle="packed"
-      />
+    <!-- Username TextView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+        >
 
-  <!-- Porsi Label -->
-  <TextView
-      android:id="@+id/tv_porsi_label"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingEnd="8dp"
-      android:text="Porsi:"
-      android:textColor="#000"
-      android:textSize="16sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/et_description"
-      />
+      <EditText
+          android:id="@+id/et_title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="Judul: ..."
+          android:inputType="text"
+          android:background="@android:color/transparent"
+          android:padding="8dp"
+          />
+    </androidx.cardview.widget.CardView>
 
-  <!-- Porsi TextView -->
-  <EditText
-      android:id="@+id/tv_porsi_value"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingStart="4dp"
-      android:text="[... people]"
-      android:textColor="#000"
-      android:textSize="16sp"
-      app:layout_constraintBottom_toBottomOf="@id/tv_porsi_label"
-      app:layout_constraintStart_toEndOf="@id/tv_porsi_label"
-      app:layout_constraintTop_toTopOf="@id/tv_porsi_label"
-      />
+    <!-- Description TextView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_title"
+        >
+
+      <EditText
+          android:id="@+id/et_description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="Description..."
+          android:inputType="textMultiLine"
+          android:background="@android:color/transparent"
+          android:minHeight="48dp"
+          android:padding="8dp"
+          app:layout_constraintVertical_chainStyle="packed"
+          />
+
+    </androidx.cardview.widget.CardView>
 
 
-  <!-- Lama Memasak Label -->
-  <TextView
-      android:id="@+id/tv_lama_memasak_label"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingEnd="8dp"
-      android:text="Lama memasak:"
-      android:textColor="#000"
-      android:textSize="16sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/tv_porsi_label"
-      />
-
-  <!-- Lama Memasak TextView -->
-  <EditText
-      android:id="@+id/tv_lama_memasak_value"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingStart="4dp"
-      android:text="[1 hour 30 minutes]"
-      android:textColor="#000"
-      android:textSize="16sp"
-      app:layout_constraintBottom_toBottomOf="@id/tv_lama_memasak_label"
-      app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
-      app:layout_constraintTop_toTopOf="@id/tv_lama_memasak_label"
-      />
-
-  <!-- Container for dynamically added EditTexts -->
-  <LinearLayout
-      android:id="@+id/ll_step_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/tv_lama_memasak_value"
-      >
-
-    <!-- Button to add new EditText -->
-    <Button
-        android:id="@+id/btn_add_step"
+    <!-- Porsi Label -->
+    <TextView
+        android:id="@+id/tv_porsi_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="25dp"
+        android:paddingEnd="8dp"
+        android:text="Porsi:"
+        android:textColor="#000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_description"
         />
 
-    <!-- Optional: Button to retrieve all EditText contents -->
-    <Button
-        android:id="@+id/btn_submit"
+    <!-- Porsi TextView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_porsi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/tv_porsi_label"
+        app:layout_constraintEnd_toEndOf="@id/cv_description"
+        app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
+        app:layout_constraintTop_toTopOf="@id/tv_porsi_label"
+        >
+    <EditText
+        android:id="@+id/et_porsi_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:text="[... people]"
+        android:textColor="#000"
+        android:background="@android:color/transparent"
+        android:textSize="16sp"
+        />
+    </androidx.cardview.widget.CardView>
+
+
+
+    <!-- Lama Memasak Label -->
+    <TextView
+        android:id="@+id/tv_lama_memasak_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:layout_margin="15dp"
+        android:paddingEnd="8dp"
+        android:text="Lama memasak:"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_porsi"
         />
 
-  </LinearLayout>
+    <!-- Lama Memasak TextView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_lama_memasak"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/tv_lama_memasak_label"
+        app:layout_constraintEnd_toEndOf="@id/cv_description"
+        app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
+        app:layout_constraintTop_toTopOf="@id/tv_lama_memasak_label"
+        >
+    <EditText
+        android:id="@+id/et_lama_memasak_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:text="[1 hour 30 minutes]"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:background="@android:color/transparent"
+        />
+    </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Container for dynamically added EditTexts -->
+    <LinearLayout
+        android:id="@+id/ll_ingre_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_lama_memasak"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_ingre_btns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_ingre_container"
+        >
+
+      <Button
+          android:id="@+id/btn_add_ingre"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Add"
+          android:layout_marginHorizontal="5dp"
+          app:layout_constraintStart_toStartOf="parent"
+          />
+
+      <!-- Optional: Button to retrieve all EditText contents -->
+      <Button
+          android:id="@+id/btn_submit_ingre"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="5dp"
+          android:text="Submit"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_step_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_ingre_btns"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_step_btns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_step_container"
+        >
+
+      <Button
+          android:id="@+id/btn_add_step"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Add"
+          android:layout_marginHorizontal="5dp"
+          app:layout_constraintStart_toStartOf="parent"
+          />
+
+      <!-- Optional: Button to retrieve all EditText contents -->
+      <Button
+          android:id="@+id/btn_submit_step"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="5dp"
+          android:text="Submit"
+          />
+    </LinearLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

@@ -7,4 +7,25 @@
   <string name="collection">Collection</string>
   <string name="profile">Profile</string>
   <string name="icon_create_recipe">icon create recipe</string>
+  <string name="title_activity_login">LoginActivity</string>
+  <string name="prompt_email">Email</string>
+  <string name="prompt_password">Password</string>
+  <string name="action_sign_in">Sign in or register</string>
+  <string name="action_sign_in_short">Sign in</string>
+  <string name="welcome">"Welcome !"</string>
+  <string name="invalid_username">Not a valid username</string>
+  <string name="invalid_password">Password must be >5 characters</string>
+  <string name="login_failed">"Login failed"</string>
+  <string name="please_enter_your_e_mail_and_password_to_create_an_account">Please Enter your e-mail and Password to create an account.</string>
+  <string name="email">Email</string>
+  <string name="eg_namaemail_emailkamu_com">Eg namaemail@emailkamu.com</string>
+  <string name="password_stars">**** **** ****</string>
+  <string name="password">Password</string>
+  <string name="create_account">Create Account</string>
+  <string name="already_have_an_account">Already have an account?</string>
+  <string name="login_here"><u>Login here</u></string>
+  <string name="welcome_back">Welcome Back!</string>
+  <string name="kindly_sign_in_to_continue">Kindly Sign in to continue.</string>
+  <string name="login">Login</string>
+  <string name="or_register_here">Or register here</string>
 </resources>
