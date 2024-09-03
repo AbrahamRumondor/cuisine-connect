@@ -3,14 +3,17 @@ package com.example.cuisineconnect.app
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding

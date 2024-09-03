@@ -1,0 +1,9 @@
+package com.example.cuisineconnect.domain.usecase.user
+
+import com.example.cuisineconnect.domain.model.User
+import kotlinx.coroutines.flow.StateFlow
+
+interface UserUseCase {
+    suspend fun getCurrentUser(): StateFlow<User>
+    suspend fun storeUser(uid: String, user: User)
+}
