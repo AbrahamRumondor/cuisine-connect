@@ -44,4 +44,18 @@ object AppModule {
     return Firebase.firestore.collection("users")
   }
 
+  @Provides
+  @Singleton
+  @Named("recipesRef")
+  fun provideRecipesRef(): CollectionReference {
+    return Firebase.firestore.collection("recipes")
+  }
+
+  @Provides
+  @Singleton
+  @Named("stepsRef")
+  fun provideStepsRef(): CollectionReference {
+    return Firebase.firestore.collection("steps")
+  }
+
 }

@@ -2,17 +2,14 @@ package com.example.cuisineconnect.app.screen.home
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.databinding.FragmentHomeBinding
@@ -24,7 +21,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
   private lateinit var binding: FragmentHomeBinding
-  private lateinit var auth: FirebaseAuth
   private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
   override fun onCreateView(

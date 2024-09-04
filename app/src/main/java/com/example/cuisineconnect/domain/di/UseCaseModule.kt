@@ -3,6 +3,10 @@ package com.example.cuisineconnect.domain.di
 import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCaseImpl
+import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
+import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCaseImpl
+import com.example.cuisineconnect.domain.usecase.step.StepUseCase
+import com.example.cuisineconnect.domain.usecase.step.StepUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import dagger.Binds
 import dagger.Module
@@ -25,5 +29,17 @@ abstract class UseCaseModule {
   abstract fun provideUserUseCase(
     userUseCaseImpl: UserUseCaseImpl
   ): UserUseCase
+
+  @Binds
+  @ViewModelScoped
+  abstract fun provideRecipeUseCase(
+    recipeUseCaseImpl: RecipeUseCaseImpl
+  ): RecipeUseCase
+
+  @Binds
+  @ViewModelScoped
+  abstract fun provideStepUseCase(
+    stepUseCaseImpl: StepUseCaseImpl
+  ): StepUseCase
 
 }
