@@ -119,16 +119,16 @@
 
     <!-- Porsi TextView -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_porsi"
+        android:id="@+id/cv_portion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/tv_porsi_label"
         app:layout_constraintEnd_toEndOf="@id/cv_description"
-        app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
+        app:layout_constraintStart_toEndOf="@id/tv_duration"
         app:layout_constraintTop_toTopOf="@id/tv_porsi_label"
         >
     <EditText
-        android:id="@+id/et_porsi_value"
+        android:id="@+id/et_portion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -144,7 +144,7 @@
 
     <!-- Lama Memasak Label -->
     <TextView
-        android:id="@+id/tv_lama_memasak_label"
+        android:id="@+id/tv_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -154,21 +154,21 @@
         android:textSize="16sp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_porsi"
+        app:layout_constraintTop_toBottomOf="@id/cv_portion"
         />
 
     <!-- Lama Memasak TextView -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_lama_memasak"
+        android:id="@+id/cv_duration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tv_lama_memasak_label"
+        app:layout_constraintBottom_toBottomOf="@id/tv_duration"
         app:layout_constraintEnd_toEndOf="@id/cv_description"
-        app:layout_constraintStart_toEndOf="@id/tv_lama_memasak_label"
-        app:layout_constraintTop_toTopOf="@id/tv_lama_memasak_label"
+        app:layout_constraintStart_toEndOf="@id/tv_duration"
+        app:layout_constraintTop_toTopOf="@id/tv_duration"
         >
     <EditText
-        android:id="@+id/et_lama_memasak_value"
+        android:id="@+id/et_duration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -189,7 +189,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_lama_memasak"
+        app:layout_constraintTop_toBottomOf="@id/cv_duration"
         />
 
     <LinearLayout

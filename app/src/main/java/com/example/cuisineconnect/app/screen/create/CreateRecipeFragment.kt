@@ -14,18 +14,22 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.activity.viewModels
+import com.example.cuisineconnect.domain.model.Step
 import java.util.UUID
 
 @AndroidEntryPoint
 class CreateRecipeFragment : Fragment() {
 
   private lateinit var binding: FragmentCreateRecipeBinding
+  private val createRecipeViewModel: CreateRecipeViewModel by viewModels()
 
   private val editTextIngreList = mutableListOf<EditText>()
   private val editTextStepList = mutableListOf<EditText>()
@@ -47,33 +51,72 @@ class CreateRecipeFragment : Fragment() {
     // Inflate the layout for this fragment
     binding = FragmentCreateRecipeBinding.inflate(inflater, container, false)
 
-    setupToolbar()
+    binding.run {
+      setupToolbar()
 
-    binding.btnAddIngre.setOnClickListener {
-      addNewIngredient()
+      btnAddIngre.setOnClickListener {
+        addNewIngredient()
+      }
+
+      btnAddStep.setOnClickListener {
+        addNewStep()
+      }
+
+      btnSubmitIngre.setOnClickListener {
+        printAll()
+      }
+
+      btnSubmitStep.setOnClickListener {
+        val steps = createRecipeViewModel.toSteps(createList())
+
+        createRecipeViewModel.saveRecipeInDatabase(
+          title = etTitle.text.toString(),
+          description = etDescription.text.toString(),
+          portion = etPortion.text.toString().toInt(),
+          duration = etDuration.text.toString().toInt(),
+          image = imageUri.toString(),
+          steps = steps
+        ) { text ->
+          if (text == null) {
+            Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
+          } else {
+            Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
+          }
+        }
+      }
+
+      btnAddImage.setOnClickListener {
+        val i = Intent()
+        i.setType("image/*")
+        i.setAction(Intent.ACTION_GET_CONTENT)
+
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+      }
+
     }
-
-    binding.btnAddStep.setOnClickListener {
-      addNewStep()
-    }
-
-    binding.btnSubmitIngre.setOnClickListener {
-      printAll()
-    }
-
-    binding.btnSubmitStep.setOnClickListener {
-      printAllStep()
-    }
-
-    binding.btnAddImage.setOnClickListener {
-      val i = Intent()
-      i.setType("image/*")
-      i.setAction(Intent.ACTION_GET_CONTENT)
-
-      startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
-    }
-
     return binding.root
+  }
+
+  private fun createList(): List<String> {
+    Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
+
+    val list = mutableListOf<String>()
+
+    for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
+      val childView = binding.llStepContainer.getChildAt(i)
+
+      // Check if the child is a CardView and contains the EditText
+      if (childView is CardView) {
+        val editText = childView.findViewById<EditText>(R.id.etUserInput)
+        if (editText != null && !editText.text.isNullOrEmpty()) {
+          val text = editText.text.toString()
+          list.add(text)
+          Log.d("brobruh", "step: ${editText.layout.text}")
+        }
+      }
+    }
+
+    return list
   }
 
   @Deprecated("Deprecated in Java")
@@ -108,8 +151,7 @@ class CreateRecipeFragment : Fragment() {
       ref.putFile(imageUri!!)
         .addOnSuccessListener {
           // Get download URL and display it
-          ref.downloadUrl.addOnSuccessListener {
-            uri ->
+          ref.downloadUrl.addOnSuccessListener { uri ->
             Log.d("FirebaseStorage", "Image URL: $uri")
             Toast.makeText(context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
           }
@@ -140,9 +182,10 @@ class CreateRecipeFragment : Fragment() {
   }
 
   private fun addNewIngredient() {
-      val customCardView = LayoutInflater.from(context).inflate(R.layout.item_edit_text_input, binding.llIngreContainer, false)
-      val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
-      etUserInput.hint = "2 Carrots"
+    val customCardView = LayoutInflater.from(context)
+      .inflate(R.layout.item_edit_text_input, binding.llIngreContainer, false)
+    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+    etUserInput.hint = "2 Carrots"
 
     // Add the new EditText to the container
     binding.llIngreContainer.addView(customCardView)
@@ -152,7 +195,8 @@ class CreateRecipeFragment : Fragment() {
   }
 
   private fun addNewStep() {
-    val customCardView = LayoutInflater.from(context).inflate(R.layout.item_edit_text_input, binding.llStepContainer, false)
+    val customCardView = LayoutInflater.from(context)
+      .inflate(R.layout.item_edit_text_input, binding.llStepContainer, false)
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
     etUserInput.hint = "Start by putting all the ingredients together..."
     etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE

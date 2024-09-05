@@ -3,8 +3,7 @@ package com.example.cuisineconnect.app.screen.create
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alfaresto_customersapp.data.network.NetworkUtils
-import com.example.alfaresto_customersapp.domain.callbacks.FirestoreCallback
+import com.example.cuisineconnect.domain.callbacks.FirestoreCallback
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.StepResponse
@@ -21,7 +20,6 @@ import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.Duration
 
 @HiltViewModel
 class CreateRecipeViewModel @Inject constructor(
@@ -56,10 +54,10 @@ class CreateRecipeViewModel @Inject constructor(
     getUserFromDB(object : FirestoreCallback {
       override fun onSuccess(user: User?) {
 
-        if (NetworkUtils.isConnectedToNetwork.value == false) {
-          onResult(R.string.no_internet)
-          return
-        }
+//        if (NetworkUtils.isConnectedToNetwork.value == false) {
+//          onResult(R.string.no_internet)
+//          return
+//        }
 
         user?.let { me ->
           try {
@@ -77,30 +75,27 @@ class CreateRecipeViewModel @Inject constructor(
               )
               val recipeToFirebase = RecipeResponse.transform(recipe)
 
-              // create menu id
-              val menuRefs = steps.map { step ->
-                db.collection("steps").document(step.id) to step
-              }
-
-              val snapshots = menuRefs.map { (ref, _) ->
-                transaction.get(ref)
-              }
-
+              // Save Recipe in Firestore
               transaction.set(
                 db.collection("recipes").document(recipe.id), recipeToFirebase
               )
 
-              snapshots.forEachIndexed { index, snapshot ->
-                val (ref, step) = menuRefs[index]
+              // Update reference to steps collection under the recipe
+              val stepRefs = steps.map { step ->
+                val newStep = step.copy(id = getRecipeStepDocumentId(recipe.id))
 
-                val stepResponse =
-                  StepResponse.transform(step.copy(id = getRecipeStepDocumentId(recipe.id)))
+                db.collection("recipes").document(recipe.id)
+                  .collection("steps").document(newStep.id) to newStep
+              }
+
+              // Save Steps
+              stepRefs.forEachIndexed { index, (ref, step) ->
+                val stepResponse = StepResponse.transform(step)
 
                 transaction.set(
                   db.collection("recipes").document(recipe.id).collection("steps")
                     .document(step.id), stepResponse
                 )
-//                  transaction.update(ref, "menu_stock", newStock)
               }
             }.addOnSuccessListener {
 

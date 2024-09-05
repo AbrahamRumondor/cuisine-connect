@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.callbacks
+package com.example.cuisineconnect.domain.callbacks
 
 import com.example.cuisineconnect.domain.model.User
 
