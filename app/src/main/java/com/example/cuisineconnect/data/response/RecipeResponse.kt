@@ -32,6 +32,18 @@ data class RecipeResponse(
   @get:PropertyName("recipe_image")
   @set:PropertyName("recipe_image")
   var image: String = "",
+
+  @get:PropertyName("recipe_description")
+  @set:PropertyName("recipe_description")
+  var description: String = "",
+
+  @get:PropertyName("recipe_portion")
+  @set:PropertyName("recipe_portion")
+  var portion: Int = 0,
+
+  @get:PropertyName("recipe_duration")
+  @set:PropertyName("recipe_duration")
+  var duration: Int = 0,
 ) {
 
   constructor() : this("")

@@ -41,8 +41,12 @@ class RecipeRepositoryImpl @Inject constructor(
     return recipes
   }
 
-  override fun getRecipeDocID(): String {
-    return recipesRef.document().id
+  override fun getRecipeDocID(userId: String): String {
+    return "${userId}_${recipesRef.document().id}"
+  }
+
+  override fun getRecipeStepDocID(recipeId: String): String {
+    return recipesRef.document(recipeId).collection("steps").document().id
   }
 
   override fun setRecipe(recipeId: String, recipeResponse: RecipeResponse) {

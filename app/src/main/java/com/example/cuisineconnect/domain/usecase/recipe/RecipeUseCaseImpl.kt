@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class RecipeUseCaseImpl @Inject constructor(
   private val recipeRepository: RecipeRepository
-) : RecipeRepository {
+) : RecipeUseCase {
 
   override suspend fun getRecipes(): StateFlow<List<Recipe>> {
     return recipeRepository.getRecipes()
@@ -18,8 +18,12 @@ class RecipeUseCaseImpl @Inject constructor(
     return recipeRepository.getMyRecipes(userId)
   }
 
-  override fun getRecipeDocID(): String {
-    return recipeRepository.getRecipeDocID()
+  override fun getRecipeDocID(userId: String): String {
+    return recipeRepository.getRecipeDocID(userId)
+  }
+
+  override fun getRecipeStepDocID(recipeId: String): String {
+    return recipeRepository.getRecipeStepDocID(recipeId)
   }
 
   override fun setRecipe(recipeId: String, recipeResponse: RecipeResponse) {

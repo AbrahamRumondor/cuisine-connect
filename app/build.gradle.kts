@@ -73,6 +73,10 @@ dependencies {
   implementation("com.google.dagger:hilt-android:2.48")
   kapt("com.google.dagger:hilt-android-compiler:2.48")
 
+  // glide
+  implementation("com.github.bumptech.glide:glide:4.12.0")
+  kapt("com.github.bumptech.glide:compiler:4.12.0")
+
   implementation("com.squareup.retrofit2:retrofit:2.9.0")
   implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
