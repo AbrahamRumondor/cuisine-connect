@@ -1,10 +1,14 @@
 package com.example.cuisineconnect.data.di
 
 import com.example.cuisineconnect.data.repository.AuthRepositoryImpl
+import com.example.cuisineconnect.data.repository.CategoryRepositoryImpl
+import com.example.cuisineconnect.data.repository.IngredientRepositoryImpl
 import com.example.cuisineconnect.data.repository.RecipeRepositoryImpl
 import com.example.cuisineconnect.data.repository.StepRepositoryImpl
 import com.example.cuisineconnect.data.repository.UserRepositoryImpl
 import com.example.cuisineconnect.domain.repository.AuthRepository
+import com.example.cuisineconnect.domain.repository.CategoryRepository
+import com.example.cuisineconnect.domain.repository.IngredientRepository
 import com.example.cuisineconnect.domain.repository.RecipeRepository
 import com.example.cuisineconnect.domain.repository.StepRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
@@ -37,4 +41,13 @@ abstract class AppRepositoryModule {
     stepRepositoryImpl: StepRepositoryImpl
   ): StepRepository
 
+  @Binds
+  abstract fun provideIngredientRepository(
+    ingredientRepositoryImpl: IngredientRepositoryImpl
+  ): IngredientRepository
+
+  @Binds
+  abstract fun provideCategoryRepository(
+    categoryRepositoryImpl: CategoryRepositoryImpl
+  ): CategoryRepository
 }

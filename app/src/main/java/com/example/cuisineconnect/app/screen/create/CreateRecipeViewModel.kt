@@ -49,6 +49,8 @@ class CreateRecipeViewModel @Inject constructor(
     duration: Int,
     image: String,
     steps: List<Step>,
+    ingredients: List<String>,
+//    category: List<String>,
     onResult: (msg: Int?) -> Unit
   ) {
     getUserFromDB(object : FirestoreCallback {
@@ -71,6 +73,7 @@ class CreateRecipeViewModel @Inject constructor(
                 portion = portion,
                 duration = duration,
                 image = image,
+                ingredients = ingredients,
                 date = Date(),
               )
               val recipeToFirebase = RecipeResponse.transform(recipe)

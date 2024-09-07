@@ -21,8 +21,6 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.activity.viewModels
-import com.example.cuisineconnect.domain.model.Step
 import java.util.UUID
 
 @AndroidEntryPoint
@@ -63,11 +61,10 @@ class CreateRecipeFragment : Fragment() {
       }
 
       btnSubmitIngre.setOnClickListener {
-        printAll()
       }
 
       btnSubmitStep.setOnClickListener {
-        val steps = createRecipeViewModel.toSteps(createList())
+        val steps = createRecipeViewModel.toSteps(getSteps())
 
         createRecipeViewModel.saveRecipeInDatabase(
           title = etTitle.text.toString(),
@@ -75,10 +72,12 @@ class CreateRecipeFragment : Fragment() {
           portion = etPortion.text.toString().toInt(),
           duration = etDuration.text.toString().toInt(),
           image = imageUri.toString(),
+          ingredients = getIngredients(),
           steps = steps
         ) { text ->
           if (text == null) {
             Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
+            uploadImage()
           } else {
             Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
           }
@@ -95,28 +94,6 @@ class CreateRecipeFragment : Fragment() {
 
     }
     return binding.root
-  }
-
-  private fun createList(): List<String> {
-    Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
-
-    val list = mutableListOf<String>()
-
-    for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
-      val childView = binding.llStepContainer.getChildAt(i)
-
-      // Check if the child is a CardView and contains the EditText
-      if (childView is CardView) {
-        val editText = childView.findViewById<EditText>(R.id.etUserInput)
-        if (editText != null && !editText.text.isNullOrEmpty()) {
-          val text = editText.text.toString()
-          list.add(text)
-          Log.d("brobruh", "step: ${editText.layout.text}")
-        }
-      }
-    }
-
-    return list
   }
 
   @Deprecated("Deprecated in Java")
@@ -153,15 +130,19 @@ class CreateRecipeFragment : Fragment() {
           // Get download URL and display it
           ref.downloadUrl.addOnSuccessListener { uri ->
             Log.d("FirebaseStorage", "Image URL: $uri")
-            Toast.makeText(context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
+            Glide.with(binding.root.context)
+              .load(uri)   // Load the image URL into the ImageView
+              .into(binding.ivImage)
+            binding.ivImage.visibility = View.VISIBLE
+            Toast.makeText(binding.root.context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
           }
         }
         .addOnFailureListener { e ->
           Log.e("FirebaseStorage", "Upload Failed", e)
-          Toast.makeText(context, "Upload Failed", Toast.LENGTH_SHORT).show()
+          Toast.makeText(binding.root.context, "Upload Failed", Toast.LENGTH_SHORT).show()
         }
     } else {
-      Toast.makeText(context, "No Image Selected", Toast.LENGTH_SHORT).show()
+      Toast.makeText(binding.root.context, "No Image Selected", Toast.LENGTH_SHORT).show()
     }
   }
 
@@ -208,8 +189,31 @@ class CreateRecipeFragment : Fragment() {
     editTextStepList.add(etUserInput)
   }
 
-  private fun printAll() {
+  private fun getSteps(): List<String> {
+    Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
+
+    val list = mutableListOf<String>()
+
+    for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
+      val childView = binding.llStepContainer.getChildAt(i)
+
+      // Check if the child is a CardView and contains the EditText
+      if (childView is CardView) {
+        val editText = childView.findViewById<EditText>(R.id.etUserInput)
+        if (editText != null && !editText.text.isNullOrEmpty()) {
+          val text = editText.text.toString()
+          list.add(text)
+          Log.d("brobruh", "step: ${editText.layout.text}")
+        }
+      }
+    }
+
+    return list
+  }
+
+  private fun getIngredients(): List<String> {
     Log.d("brobruh", "${(binding.llIngreContainer?.childCount ?: 0)}")
+    val list = mutableListOf<String>()
 
     for (i in 0 until (binding.llIngreContainer.childCount ?: 0)) {
       val childView = binding.llIngreContainer.getChildAt(i)
@@ -218,10 +222,11 @@ class CreateRecipeFragment : Fragment() {
       if (childView is CardView) {
         val editText = childView.findViewById<EditText>(R.id.etUserInput)
         if (editText != null) {
-          Log.d("brobruh", "ingre: ${editText.layout.text}")
+          list.add(editText.layout.text.toString())
         }
       }
     }
+    return list
   }
 
   private fun printAllStep() {

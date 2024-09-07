@@ -57,7 +57,10 @@ data class RecipeResponse(
         date = recipeResponse.date,
         upvote = recipeResponse.upvote,
         category = recipeResponse.category,
-        image = recipeResponse.image
+        image = recipeResponse.image,
+        description = recipeResponse.description,
+        portion = recipeResponse.portion,
+        duration = recipeResponse.duration
       )
     }
 
@@ -69,7 +72,10 @@ data class RecipeResponse(
         date = recipe.date,
         upvote = recipe.upvote,
         category = recipe.category,
-        image = recipe.image
+        image = recipe.image,
+        description = recipe.description,
+        portion = recipe.portion,
+        duration = recipe.duration
       )
     }
   }
