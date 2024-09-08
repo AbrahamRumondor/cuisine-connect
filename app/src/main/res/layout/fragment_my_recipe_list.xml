@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:background="@color/cc_gray"
+    android:background="@color/white"
     app:layoutManager="LinearLayoutManager"
     tools:context=".app.screen.collection.MyRecipeFragment"
     tools:listitem="@layout/fragment_my_recipe"

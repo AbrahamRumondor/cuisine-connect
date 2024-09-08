@@ -25,8 +25,8 @@ class CollectionFragment : Fragment() {
     // Link the TabLayout with the ViewPager2
     TabLayoutMediator(binding.tlCollection, binding.vp2Collection) { tab, position ->
       tab.text = when (position) {
-        0 -> "First Tab"
-        1 -> "Second Tab"
+        0 -> "My Recipes"
+        1 -> "Saved Recipes"
         else -> null
       }
     }.attach()

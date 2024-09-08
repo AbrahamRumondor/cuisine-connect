@@ -35,4 +35,5 @@
   <string name="namasayadaniel">Eg nama_saya_daniel</string>
   <string name="add_image">add image</string>
   <string name="no_internet">No internet, please check your connection</string>
+  <string name="image">image</string>
 </resources>

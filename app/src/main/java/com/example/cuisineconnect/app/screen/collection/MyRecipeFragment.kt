@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.screen.collection.placeholder.PlaceholderContent
+import com.example.cuisineconnect.domain.model.Recipe
 
 /**
  * A fragment representing a list of Items.
@@ -17,6 +17,18 @@ import com.example.cuisineconnect.app.screen.collection.placeholder.PlaceholderC
 class MyRecipeFragment : Fragment() {
 
   private var columnCount = 1
+
+  val ITEMS: List<Recipe> = listOf(
+    Recipe("1", "A Sweet and Sour Dessert?! Under 10$", "Description 1 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
+    Recipe("2", "Recipe 2", "Description 2 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
+    Recipe("3", "Recipe 3", "Description 3 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis."),
+    Recipe("1", "Recipe 1", "Description 1" ),
+    Recipe("2", "Recipe 2", "Description 2This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
+    Recipe("3", "Recipe 3", "Description 3"),
+    Recipe("1", "Recipe 1", "Description 1" ),
+    Recipe("2", "Recipe 2", "Description 2 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
+    Recipe("3", "Recipe 3", "Description 3"),
+  )
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -39,7 +51,7 @@ class MyRecipeFragment : Fragment() {
           columnCount <= 1 -> LinearLayoutManager(context)
           else -> GridLayoutManager(context, columnCount)
         }
-        adapter = MyRecipeRecyclerViewAdapter(PlaceholderContent.ITEMS)
+        adapter = MyRecipeRecyclerViewAdapter(ITEMS)
       }
     }
 
