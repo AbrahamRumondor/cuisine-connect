@@ -36,4 +36,6 @@
   <string name="add_image">add image</string>
   <string name="no_internet">No internet, please check your connection</string>
   <string name="image">image</string>
+  <string name="exception.message">%s</string>
+  <string name="image_upload_failed">Failed to upload image</string>
 </resources>

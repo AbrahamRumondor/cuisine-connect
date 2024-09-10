@@ -2,6 +2,7 @@ package com.example.cuisineconnect.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class MainActivityViewModel @Inject constructor(
   private fun getUser() {
     viewModelScope.launch {
       _user.value = userUseCase.getCurrentUser().value
+      currentUser = _user.value
     }
   }
 }

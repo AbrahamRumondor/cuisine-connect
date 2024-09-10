@@ -73,11 +73,11 @@ class CreateRecipeFragment : Fragment() {
           duration = etDuration.text.toString().toInt(),
           image = imageUri.toString(),
           ingredients = getIngredients(),
-          steps = steps
+          steps = steps,
+          imageUri = imageUri
         ) { text ->
           if (text == null) {
             Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
-            uploadImage()
           } else {
             Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
           }
@@ -119,32 +119,33 @@ class CreateRecipeFragment : Fragment() {
     }
   }
 
-  private fun uploadImage() {
-    if (imageUri != null) {
-      // Unique name for the image
-      val fileName = UUID.randomUUID().toString()
-      val ref = storageReference.child("images/$fileName")
-
-      ref.putFile(imageUri!!)
-        .addOnSuccessListener {
-          // Get download URL and display it
-          ref.downloadUrl.addOnSuccessListener { uri ->
-            Log.d("FirebaseStorage", "Image URL: $uri")
-            Glide.with(binding.root.context)
-              .load(uri)   // Load the image URL into the ImageView
-              .into(binding.ivImage)
-            binding.ivImage.visibility = View.VISIBLE
-            Toast.makeText(binding.root.context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
-          }
-        }
-        .addOnFailureListener { e ->
-          Log.e("FirebaseStorage", "Upload Failed", e)
-          Toast.makeText(binding.root.context, "Upload Failed", Toast.LENGTH_SHORT).show()
-        }
-    } else {
-      Toast.makeText(binding.root.context, "No Image Selected", Toast.LENGTH_SHORT).show()
-    }
-  }
+//  private fun uploadImage() {
+//    if (imageUri != null) {
+//      // Unique name for the image
+//      val fileName = UUID.randomUUID().toString()
+//      val ref = storageReference.child("images/$fileName")
+//
+//      ref.putFile(imageUri!!)
+//        .addOnSuccessListener {
+//          // Get download URL and display it
+//          ref.downloadUrl.addOnSuccessListener { uri ->
+//            Log.d("FirebaseStorage", "Image URL: $uri")
+//            Glide.with(binding.root.context)
+//              .load(uri)   // Load the image URL into the ImageView
+//              .into(binding.ivImage)
+//            binding.ivImage.visibility = View.VISIBLE
+//            Toast.makeText(binding.root.context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
+//            // TODO UPDATE KE FIRESTORE
+//          }
+//        }
+//        .addOnFailureListener { e ->
+//          Log.e("FirebaseStorage", "Upload Failed", e)
+//          Toast.makeText(binding.root.context, "Upload Failed", Toast.LENGTH_SHORT).show()
+//        }
+//    } else {
+//      Toast.makeText(binding.root.context, "No Image Selected", Toast.LENGTH_SHORT).show()
+//    }
+//  }
 
   private fun setupToolbar() {
     (activity as? AppCompatActivity)?.apply {

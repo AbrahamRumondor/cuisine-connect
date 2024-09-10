@@ -8,27 +8,31 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivityViewModel
+import com.example.cuisineconnect.databinding.FragmentMyRecipeBinding
+import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
 import com.example.cuisineconnect.domain.model.Recipe
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
  */
+@AndroidEntryPoint
 class MyRecipeFragment : Fragment() {
 
   private var columnCount = 1
 
-  val ITEMS: List<Recipe> = listOf(
-    Recipe("1", "A Sweet and Sour Dessert?! Under 10$", "Description 1 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
-    Recipe("2", "Recipe 2", "Description 2 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
-    Recipe("3", "Recipe 3", "Description 3 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis."),
-    Recipe("1", "Recipe 1", "Description 1" ),
-    Recipe("2", "Recipe 2", "Description 2This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
-    Recipe("3", "Recipe 3", "Description 3"),
-    Recipe("1", "Recipe 1", "Description 1" ),
-    Recipe("2", "Recipe 2", "Description 2 This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis." ),
-    Recipe("3", "Recipe 3", "Description 3"),
-  )
+  private lateinit var binding: FragmentMyRecipeListBinding
+  private val collectionViewModel: CollectionViewModel by viewModels()
+
+  private val recipeAdapter by lazy { MyRecipeRecyclerViewAdapter(binding) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -42,21 +46,51 @@ class MyRecipeFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = inflater.inflate(R.layout.fragment_my_recipe_list, container, false)
+    binding = FragmentMyRecipeListBinding.inflate(inflater, container, false)
 
-    // Set the adapter
-    if (view is RecyclerView) {
-      with(view) {
+    if (binding.list is RecyclerView) {
+      with(binding.list) {
         layoutManager = when {
           columnCount <= 1 -> LinearLayoutManager(context)
           else -> GridLayoutManager(context, columnCount)
         }
-        adapter = MyRecipeRecyclerViewAdapter(ITEMS)
+
+        setupAdapter()
       }
     }
 
-    view.isNestedScrollingEnabled = true
-    return view
+    binding.root.isNestedScrollingEnabled = true
+
+    binding.root.setOnRefreshListener {
+      refreshContent()
+    }
+
+    return binding.root
+  }
+
+  private fun refreshContent() {
+    lifecycleScope.launch {
+      collectionViewModel.recipes.collectLatest {
+        if (it != null) {
+          recipeAdapter.updateData(it)
+        }
+      }
+    }
+
+    binding.root.isRefreshing = false
+  }
+
+  private fun setupAdapter() {
+    binding.list.adapter = recipeAdapter
+
+    lifecycleScope.launch {
+      collectionViewModel.recipes.collectLatest {
+        if (it != null) {
+          recipeAdapter.updateData(it)
+        }
+      }
+    }
+
   }
 
   companion object {

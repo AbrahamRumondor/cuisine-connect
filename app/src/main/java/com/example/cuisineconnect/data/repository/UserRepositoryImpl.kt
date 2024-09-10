@@ -5,6 +5,7 @@ import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,6 +49,19 @@ class UserRepositoryImpl @Inject constructor(
         e, "Error saving user"
       )
     }
+  }
+
+  override fun addRecipeToUser(newRecipe: String) {
+    usersRef.document(currentUser.value.id)
+      .update("user_recipes", FieldValue.arrayUnion(newRecipe))
+      .addOnSuccessListener {
+        // Handle success
+        println("Recipe added successfully")
+      }
+      .addOnFailureListener { e ->
+        // Handle failure
+        println("Error adding recipe: ${e.message}")
+      }
   }
 
 }

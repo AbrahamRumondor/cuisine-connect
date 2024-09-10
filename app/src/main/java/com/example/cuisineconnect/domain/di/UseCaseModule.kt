@@ -1,6 +1,6 @@
 package com.example.cuisineconnect.domain.di
 
-import com.example.alfaresto_customersapp.domain.usecase.user.UserUseCaseImpl
+import com.example.cuisineconnect.domain.usecase.user.UserUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.category.CategoryUseCase

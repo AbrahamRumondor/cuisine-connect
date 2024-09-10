@@ -20,21 +20,21 @@ data class UserResponse(
     @set:PropertyName("user_password")
     var password: String = "",
 
-//    @get:PropertyName("user_recipes")
-//    @set:PropertyName("user_recipes")
-//    var recipes: List<String> = listOf(),
+    @get:PropertyName("user_recipes")
+    @set:PropertyName("user_recipes")
+    var recipes: List<String> = listOf(),
 
     @get:PropertyName("user_image")
     @set:PropertyName("user_image")
     var image: String = "",
 
-//    @get:PropertyName("user_follower")
-//    @set:PropertyName("user_follower")
-//    var follower: List<String> = listOf(),
+    @get:PropertyName("user_follower")
+    @set:PropertyName("user_follower")
+    var follower: List<String> = listOf(),
 
-//    @get:PropertyName("user_following")
-//    @set:PropertyName("user_following")
-//    var following: List<String> = listOf()
+    @get:PropertyName("user_following")
+    @set:PropertyName("user_following")
+    var following: List<String> = listOf()
 ) {
 
     constructor() : this("", "", "", "")
@@ -45,7 +45,11 @@ data class UserResponse(
                 id = userResponse.id,
                 name = userResponse.name,
                 email = userResponse.email,
-                password = userResponse.password
+                password = userResponse.password,
+                recipes = userResponse.recipes,
+                follower = userResponse.follower,
+                following = userResponse.following,
+                image = userResponse.image
             )
         }
 
@@ -54,7 +58,11 @@ data class UserResponse(
                 id = user.id,
                 name = user.name,
                 email = user.email,
-                password = user.password
+                password = user.password,
+                recipes = user.recipes,
+                follower = user.follower,
+                following = user.following,
+                image = user.image
             )
         }
     }

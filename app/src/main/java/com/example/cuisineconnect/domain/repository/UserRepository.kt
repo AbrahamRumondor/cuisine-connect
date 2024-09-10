@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.StateFlow
 interface UserRepository {
   suspend fun getCurrentUser(uid: String): StateFlow<User>
   suspend fun storeUser(uid: String, user: User)
+  fun addRecipeToUser(newRecipe: String)
 }

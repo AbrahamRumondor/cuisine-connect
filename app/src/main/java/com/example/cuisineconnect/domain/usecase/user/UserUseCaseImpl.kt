@@ -1,4 +1,4 @@
-package com.example.alfaresto_customersapp.domain.usecase.user
+package com.example.cuisineconnect.domain.usecase.user
 
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.AuthRepository
@@ -18,5 +18,9 @@ class UserUseCaseImpl @Inject constructor(
 
     override suspend fun storeUser(uid: String, user: User) {
         userRepository.storeUser(uid, user)
+    }
+
+    override fun addRecipeToUser(newRecipe: String) {
+        userRepository.addRecipeToUser(newRecipe)
     }
 }
