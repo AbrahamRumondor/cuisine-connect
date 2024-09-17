@@ -16,6 +16,10 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getCurrentUser(authRepository.getCurrentUserID())
     }
 
+    override suspend fun getUserByUserId(userId: String): User? {
+        return userRepository.getUserByUserId(userId)
+    }
+
     override suspend fun storeUser(uid: String, user: User) {
         userRepository.storeUser(uid, user)
     }

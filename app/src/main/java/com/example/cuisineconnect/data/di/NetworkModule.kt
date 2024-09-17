@@ -2,7 +2,7 @@ package com.example.cuisineconnect.data.di
 
 import android.content.Context
 import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
-import com.example.alfaresto_customersapp.data.network.networkStatusObserver.NetworkConnectivityObserver
+import com.example.cuisineconnect.data.network.networkStatusObserver.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

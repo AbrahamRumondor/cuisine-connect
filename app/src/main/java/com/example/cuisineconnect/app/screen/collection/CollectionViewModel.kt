@@ -3,7 +3,6 @@ package com.example.cuisineconnect.app.screen.collection
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
@@ -24,26 +23,52 @@ class CollectionViewModel @Inject constructor(
   private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-  private val _recipes: MutableStateFlow<List<Recipe>?> = MutableStateFlow(null)
-  val recipes: StateFlow<List<Recipe>?> = _recipes
+  private val _recipes: MutableStateFlow<List<Pair<User?,Recipe>>?> = MutableStateFlow(null)
+  val recipes: StateFlow<List<Pair<User?,Recipe>>?> = _recipes
+
+  private val _myRecipes: MutableStateFlow<List<Pair<User?,Recipe>>?> = MutableStateFlow(null)
+  val myRecipes: StateFlow<List<Pair<User?,Recipe>>?> = _myRecipes
+
+  private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
+  val user: StateFlow<User?> = _user
 
   init {
-    getCollection()
+    getRecipes()
   }
 
-  private fun getCollection() {
+  private fun getRecipes() {
     viewModelScope.launch {
-      userUseCase.getCurrentUser().collectLatest { user ->
+      userUseCase.getCurrentUser().collectLatest { currentUser ->
         // Use coroutineScope to launch parallel tasks
         coroutineScope {
-          user.recipes.map { recipeId ->
+          val recipes = currentUser.recipes.map { recipeId ->
             Log.d("brobruh", recipeId)
             async {
               recipeUseCase.getRecipeByID(recipeId) as Recipe
             }
-          }.awaitAll().let { recipes ->
-            Log.d("brobruh", recipes.toString())
-            _recipes.value = recipes
+          }.awaitAll()
+
+          val pairList = recipes.map { recipe ->
+            val userId = recipe.id.substringBefore("_")
+            async {
+              val user = userUseCase.getUserByUserId(userId)
+              Pair(user, recipe) // Create the Pair asynchronously
+            }
+          }.awaitAll() // Await all user fetching tasks
+
+          Log.d("brobruh", pairList.toString())
+          _recipes.value = pairList // Assign the result to _myRecipes
+        }
+      }
+    }
+  }
+
+  fun getMyRecipes() {
+    viewModelScope.launch {
+      recipes.collectLatest { allRecipes ->
+        userUseCase.getCurrentUser().collectLatest { currentUser ->
+          allRecipes?.let { recipes ->
+            _myRecipes.value = recipes.filter { it.first?.id == currentUser.id }
           }
         }
       }

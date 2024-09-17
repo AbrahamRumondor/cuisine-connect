@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".app.screen.collection.MyRecipeFragment"
+    tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
     tools:listitem="@layout/fragment_my_recipe"
     >
 
@@ -20,7 +20,7 @@
       android:layout_marginRight="16dp"
       android:background="@color/white"
       app:layoutManager="LinearLayoutManager"
-      tools:context=".app.screen.collection.MyRecipeFragment"
+      tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
       tools:listitem="@layout/fragment_my_recipe"/>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

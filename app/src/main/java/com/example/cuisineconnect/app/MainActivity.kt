@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         Timber.tag("abcd").d(destination.id.toString())
         when (destination.id) {
           R.id.createRecipeFragment -> hideBottomNav()
+          R.id.recipeDetailFragment -> hideBottomNav()
           else -> showBottomNav()
         }
       }

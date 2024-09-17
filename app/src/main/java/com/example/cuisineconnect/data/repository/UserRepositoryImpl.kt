@@ -37,6 +37,17 @@ class UserRepositoryImpl @Inject constructor(
     return currentUser
   }
 
+  override suspend fun getUserByUserId(userId: String): User? {
+      return try {
+        val snapshot = usersRef.document(userId).get().await()
+        val user = snapshot.toObject(UserResponse::class.java)?.let { UserResponse.transform(it) }
+
+        user
+      } catch (e: Exception) {
+        null
+      }
+    }
+
   override suspend fun storeUser(uid: String, user: User) {
     val currentUser = usersRef.document(uid)
 

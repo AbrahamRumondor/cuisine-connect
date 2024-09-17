@@ -1,22 +1,20 @@
-package com.example.cuisineconnect.app.screen.collection
+package com.example.cuisineconnect.app.screen.collection.myRecipe
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
-import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.MainActivityViewModel
-import com.example.cuisineconnect.databinding.FragmentMyRecipeBinding
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.app.listener.RecipeListListener
+import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
+import com.example.cuisineconnect.app.screen.collection.CollectionViewModel
 import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
-import com.example.cuisineconnect.domain.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,6 +34,8 @@ class MyRecipeFragment : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    collectionViewModel.getMyRecipes()
 
     arguments?.let {
       columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -70,27 +70,35 @@ class MyRecipeFragment : Fragment() {
 
   private fun refreshContent() {
     lifecycleScope.launch {
-      collectionViewModel.recipes.collectLatest {
+      collectionViewModel.getMyRecipes()
+      collectionViewModel.myRecipes.collectLatest {
         if (it != null) {
           recipeAdapter.updateData(it)
+          binding.root.isRefreshing = false
         }
       }
     }
-
-    binding.root.isRefreshing = false
   }
 
   private fun setupAdapter() {
     binding.list.adapter = recipeAdapter
+    recipeAdapter.isMyRecipes()
 
     lifecycleScope.launch {
-      collectionViewModel.recipes.collectLatest {
+      collectionViewModel.myRecipes.collectLatest {
         if (it != null) {
           recipeAdapter.updateData(it)
         }
       }
     }
 
+    recipeAdapter.setItemListener(object : RecipeListListener {
+      override fun onRecipeClicked(recipeId: String) {
+        val action =
+          CollectionFragmentDirections.actionCollectionFragmentToRecipeDetailFragment(recipeId)
+        findNavController().navigate(action)
+      }
+    })
   }
 
   companion object {

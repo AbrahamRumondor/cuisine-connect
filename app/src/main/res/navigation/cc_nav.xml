@@ -23,15 +23,62 @@
       android:id="@+id/collectionFragment"
       android:name="com.example.cuisineconnect.app.screen.collection.CollectionFragment"
       android:label="fragment_collection"
-      tools:layout="@layout/fragment_collection" />
-  <fragment
-      android:id="@+id/profileFragment"
-      android:name="com.example.cuisineconnect.app.screen.profile.ProfileFragment"
-      android:label="fragment_profile"
-      tools:layout="@layout/fragment_profile" />
+      tools:layout="@layout/fragment_collection" >
+    <action
+        android:id="@+id/action_collectionFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
+  </fragment>
   <fragment
       android:id="@+id/createRecipeFragment"
       android:name="com.example.cuisineconnect.app.screen.create.CreateRecipeFragment"
       android:label="fragment_create_recipe"
       tools:layout="@layout/fragment_create_recipe" />
+  <fragment
+      android:id="@+id/myRecipeFragment"
+      android:name="com.example.cuisineconnect.app.screen.collection.myRecipe.MyRecipeFragment"
+      android:label="fragment_my_recipe_list"
+      tools:layout="@layout/fragment_my_recipe_list" >
+    <action
+        android:id="@+id/action_myRecipeFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
+  </fragment>
+  <navigation android:id="@+id/navigation5"
+      app:startDestination="@id/navigation4">
+    <navigation
+        android:id="@+id/navigation4"
+        app:startDestination="@id/navigation3">
+      <navigation
+          android:id="@+id/navigation3"
+          app:startDestination="@id/navigation2">
+        <navigation
+            android:id="@+id/navigation2"
+            app:startDestination="@id/navigation">
+          <navigation
+              android:id="@+id/navigation"
+              app:startDestination="@id/profileFragment">
+            <fragment
+                android:id="@+id/profileFragment"
+                android:name="com.example.cuisineconnect.app.screen.profile.ProfileFragment"
+                android:label="fragment_profile"
+                tools:layout="@layout/fragment_profile" />
+          </navigation>
+        </navigation>
+      </navigation>
+    </navigation>
+  </navigation>
+  <fragment
+      android:id="@+id/savedRecipeFragment"
+      android:name="com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment"
+      android:label="fragment_saved_recipe_list"
+      tools:layout="@layout/fragment_saved_recipe_list" />
+  <fragment
+      android:id="@+id/recipeDetailFragment"
+      android:name="com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragment"
+      android:label="fragment_recipe_detail"
+      tools:layout="@layout/fragment_recipe_detail" >
+    <argument
+        android:name="recipeId"
+        app:argType="string"
+        app:nullable="true" />
+  </fragment>
 </navigation>
