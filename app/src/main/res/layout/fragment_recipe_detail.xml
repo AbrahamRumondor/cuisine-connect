@@ -99,8 +99,9 @@
 
         <ImageView
             android:id="@+id/iv_ic_thumbs"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_thumbs_up_regular"
             />
@@ -124,8 +125,9 @@
 
         <ImageView
             android:id="@+id/iv_ic_reply"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_msg_bubble"
             />
@@ -149,8 +151,9 @@
 
         <ImageView
             android:id="@+id/iv_ic_bookmark"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_bookmark_regular"
             />

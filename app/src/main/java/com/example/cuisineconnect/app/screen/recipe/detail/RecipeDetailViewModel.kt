@@ -11,6 +11,7 @@ import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,6 +23,9 @@ class RecipeDetailViewModel @Inject constructor(
   private val stepUseCase: StepUseCase
 ) : ViewModel() {
 
+  private val _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
+  val currentUser: StateFlow<User?> = _currentUser
+
   private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
   val user: StateFlow<User?> = _user
 
@@ -30,6 +34,22 @@ class RecipeDetailViewModel @Inject constructor(
 
   private val _steps: MutableStateFlow<List<Step>?> = MutableStateFlow(null)
   val steps: StateFlow<List<Step>?> = _steps
+
+  init {
+    fetchCurrentUser()
+  }
+
+  fun fetchCurrentUser() {
+    viewModelScope.launch {
+      try {
+        userUseCase.getCurrentUser().collectLatest {
+          _currentUser.value = it
+        }
+      } catch (e: Exception) {
+        Timber.tag("USER_PROBLEM").e("Error fetching user: %s", e.message)
+      }
+    }
+  }
 
   fun fetchUser(userId: String) {
     viewModelScope.launch {
@@ -82,8 +102,21 @@ class RecipeDetailViewModel @Inject constructor(
     }
     detailRecipe.add(true) // add bottom spacing
 
-
     return detailRecipe
+  }
+
+  fun upvoteRecipe(recipeId: String, userId: String) {
+    viewModelScope.launch {
+      recipeUseCase.upvoteRecipe(recipeId, userId)
+      fetchRecipe(recipeId)
+    }
+  }
+
+  fun downVoteRecipe(recipeId: String, userId: String) {
+    viewModelScope.launch {
+      recipeUseCase.removeUpvote(recipeId, userId)
+      fetchRecipe(recipeId)
+    }
   }
 
 }

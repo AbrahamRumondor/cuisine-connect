@@ -67,4 +67,43 @@ class RecipeRepositoryImpl @Inject constructor(
       null
     }
   }
+
+  override suspend fun upvoteRecipe(recipeId: String, userId: String) {
+    try {
+      val recipeDoc = recipesRef.document(recipeId)
+      val snapshot = recipeDoc.get().await()
+      val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
+
+      recipeResponse?.let { response ->
+        val upvotes = response.upvotes.toMutableMap()
+        upvotes[userId] = true // Mark the user's upvote as true
+
+        response.upvotes = upvotes
+        recipeDoc.set(response).await()
+        Timber.tag("Upvote").d("User $userId upvoted recipe $recipeId successfully")
+      }
+    } catch (e: Exception) {
+      Timber.tag("Upvote").e(e, "Error upvoting recipe $recipeId by user $userId")
+    }
+  }
+
+  // New method to remove an upvote
+  override suspend fun removeUpvote(recipeId: String, userId: String) {
+    try {
+      val recipeDoc = recipesRef.document(recipeId)
+      val snapshot = recipeDoc.get().await()
+      val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
+
+      recipeResponse?.let { response ->
+        val upvotes = response.upvotes.toMutableMap()
+
+        response.upvotes = upvotes.filterNot { it.key == userId }
+        recipeDoc.set(response).await()
+        Timber.tag("RemoveUpvote").d("User $userId removed upvote from recipe $recipeId successfully")
+      }
+    } catch (e: Exception) {
+      Timber.tag("RemoveUpvote").e(e, "Error removing upvote from recipe $recipeId by user $userId")
+    }
+  }
+
 }

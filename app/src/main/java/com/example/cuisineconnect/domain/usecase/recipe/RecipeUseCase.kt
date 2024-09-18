@@ -11,4 +11,6 @@ interface RecipeUseCase {
     fun getRecipeStepDocID(recipeId: String): String
     fun setRecipe(recipeId: String, recipeResponse: RecipeResponse)
     suspend fun getRecipeByID(recipeId: String): Recipe?
+    suspend fun upvoteRecipe(recipeId: String, userId: String)
+    suspend fun removeUpvote(recipeId: String, userId: String)
 }

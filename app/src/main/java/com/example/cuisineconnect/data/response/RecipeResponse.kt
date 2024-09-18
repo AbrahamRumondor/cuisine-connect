@@ -21,13 +21,13 @@ data class RecipeResponse(
   @set:PropertyName("recipe_date")
   var date: Date = Date(),
 
-  @get:PropertyName("recipe_upvote")
-  @set:PropertyName("recipe_upvote")
-  var upvote: Int = 0,
+  @get:PropertyName("recipe_upvotes")
+  @set:PropertyName("recipe_upvotes")
+  var upvotes: Map<String, Boolean> = emptyMap(),
 
-    @get:PropertyName("recipe_category")
-    @set:PropertyName("recipe_category")
-    var category: List<String> = listOf(),
+  @get:PropertyName("recipe_category")
+  @set:PropertyName("recipe_category")
+  var category: List<String> = listOf(),
 
   @get:PropertyName("recipe_image")
   @set:PropertyName("recipe_image")
@@ -55,7 +55,7 @@ data class RecipeResponse(
         title = recipeResponse.title,
         ingredients = recipeResponse.ingredients,
         date = recipeResponse.date,
-        upvote = recipeResponse.upvote,
+        upvotes = recipeResponse.upvotes,
         category = recipeResponse.category,
         image = recipeResponse.image,
         description = recipeResponse.description,
@@ -70,7 +70,7 @@ data class RecipeResponse(
         title = recipe.title,
         ingredients = recipe.ingredients,
         date = recipe.date,
-        upvote = recipe.upvote,
+        upvotes = recipe.upvotes,
         category = recipe.category,
         image = recipe.image,
         description = recipe.description,

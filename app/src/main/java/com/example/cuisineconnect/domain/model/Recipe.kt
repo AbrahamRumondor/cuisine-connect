@@ -11,6 +11,6 @@ data class Recipe(
   var ingredients: List<String> = listOf(),
   var category: List<String> = listOf(),
   var date: Date = Date(),
-  var upvote: Int = 0,
+  var upvotes: Map<String, Boolean> = emptyMap(),
   var image: String = "",
 )
