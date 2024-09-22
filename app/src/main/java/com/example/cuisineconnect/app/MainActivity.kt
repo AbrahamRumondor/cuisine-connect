@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         when (destination.id) {
           R.id.createRecipeFragment -> hideBottomNav()
           R.id.recipeDetailFragment -> hideBottomNav()
+          R.id.replyRecipeFragment -> hideBottomNav()
           else -> showBottomNav()
         }
       }

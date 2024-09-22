@@ -2,13 +2,14 @@ package com.example.cuisineconnect.app.screen.recipe.detail
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentRecipeDetailBinding
@@ -67,7 +68,7 @@ class RecipeDetailFragment : Fragment() {
         if (recipe == null || user == null) return@collectLatest
 
         binding.run {
-          tvLikeCount.text = recipe.upvotes.size.toString()
+          tvUpvoteCount.text = recipe.upvotes.size.toString()
 
           setupUpvoteButton(recipe, user, recipeId)
 
@@ -82,29 +83,13 @@ class RecipeDetailFragment : Fragment() {
             }
           }
 
-          ivIcReply.setOnClickListener {
-            // Handle reply action here
+          llReply.setOnClickListener {
+            val action =
+              RecipeDetailFragmentDirections.actionRecipeDetailFragmentToReplyRecipeFragment(
+                recipeId
+              )
+            findNavController().navigate(action)
           }
-        }
-      }
-    }
-  }
-
-  private fun setupUpvoteButton(recipe: Recipe, user: User, recipeId: String) {
-    binding.ivIcThumbs.apply {
-      Log.d("brobruhbruh", recipe.toString())
-      val isUpvoted = recipe.upvotes[user.id] == true
-      setImageResource(
-        if (isUpvoted) R.drawable.ic_thumbs_up_solid else R.drawable.ic_thumbs_up_regular
-      )
-
-      setOnClickListener {
-        if (isUpvoted) {
-          recipeDetailViewModel.downVoteRecipe(recipeId, user.id)
-          Toast.makeText(this.context, "DOWNVOTED", Toast.LENGTH_SHORT).show()
-        } else {
-          recipeDetailViewModel.upvoteRecipe(recipeId, user.id)
-          Toast.makeText(this.context, "UPVOTED", Toast.LENGTH_SHORT).show()
         }
       }
     }
@@ -120,9 +105,7 @@ class RecipeDetailFragment : Fragment() {
       ) { recipe, user, steps ->
         Triple(recipe, user, steps)
       }.collectLatest { (recipe, user, steps) ->
-        // Ensure all necessary data is available before populating the adapter
         if (recipe != null && user != null && steps != null) {
-          // Populate the adapter only if it hasn't been set already
           if (binding.rvRecipeDetail.adapter == null) {
             binding.rvRecipeDetail.adapter = recipeAdapter
 
@@ -147,5 +130,39 @@ class RecipeDetailFragment : Fragment() {
     recipeDetailViewModel.fetchUser(userId)
     recipeDetailViewModel.fetchRecipe(recipeId)
     recipeDetailViewModel.fetchSteps(recipeId)
+  }
+
+  private fun setupUpvoteButton(recipe: Recipe, user: User, recipeId: String) {
+    val isUpvoted = recipe.upvotes[user.id] == true
+
+    updateUpvoteIcon(isUpvoted)
+
+    binding.llUpvote.setOnClickListener {
+      if (isUpvoted) {
+        handleDownvote(recipeId, user.id)
+      } else {
+        handleUpvote(recipeId, user.id)
+      }
+    }
+  }
+
+  private fun updateUpvoteIcon(isUpvoted: Boolean) {
+    binding.ivIcThumbs.setImageResource(
+      if (isUpvoted) R.drawable.ic_thumbs_up_solid else R.drawable.ic_thumbs_up_regular
+    )
+  }
+
+  private fun handleUpvote(recipeId: String, userId: String) {
+    recipeDetailViewModel.upvoteRecipe(recipeId, userId)
+    showToast("UPVOTED")
+  }
+
+  private fun handleDownvote(recipeId: String, userId: String) {
+    recipeDetailViewModel.downVoteRecipe(recipeId, userId)
+    showToast("DOWNVOTED")
+  }
+
+  private fun showToast(message: String) {
+    Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
   }
 }

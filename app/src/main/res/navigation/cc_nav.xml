@@ -80,5 +80,18 @@
         android:name="recipeId"
         app:argType="string"
         app:nullable="true" />
+    <action
+        android:id="@+id/action_recipeDetailFragment_to_replyRecipeFragment"
+        app:destination="@id/replyRecipeFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/replyRecipeFragment"
+      android:name="com.example.cuisineconnect.app.screen.recipe.reply.ReplyRecipeFragment"
+      android:label="fragment_reply_recipe"
+      tools:layout="@layout/fragment_reply_recipe" >
+    <argument
+        android:name="recipeId"
+        app:argType="string"
+        app:nullable="true" />
   </fragment>
 </navigation>

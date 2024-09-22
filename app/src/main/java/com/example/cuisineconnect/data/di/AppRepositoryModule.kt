@@ -4,12 +4,14 @@ import com.example.cuisineconnect.data.repository.AuthRepositoryImpl
 import com.example.cuisineconnect.data.repository.CategoryRepositoryImpl
 import com.example.cuisineconnect.data.repository.IngredientRepositoryImpl
 import com.example.cuisineconnect.data.repository.RecipeRepositoryImpl
+import com.example.cuisineconnect.data.repository.ReplyRepositoryImpl
 import com.example.cuisineconnect.data.repository.StepRepositoryImpl
 import com.example.cuisineconnect.data.repository.UserRepositoryImpl
 import com.example.cuisineconnect.domain.repository.AuthRepository
 import com.example.cuisineconnect.domain.repository.CategoryRepository
 import com.example.cuisineconnect.domain.repository.IngredientRepository
 import com.example.cuisineconnect.domain.repository.RecipeRepository
+import com.example.cuisineconnect.domain.repository.ReplyRepository
 import com.example.cuisineconnect.domain.repository.StepRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
 import dagger.Binds
@@ -50,4 +52,9 @@ abstract class AppRepositoryModule {
   abstract fun provideCategoryRepository(
     categoryRepositoryImpl: CategoryRepositoryImpl
   ): CategoryRepository
+
+  @Binds
+  abstract fun provideReplyRepository(
+    replyRepositoryImpl: ReplyRepositoryImpl
+  ): ReplyRepository
 }

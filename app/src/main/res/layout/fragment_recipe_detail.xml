@@ -90,10 +90,12 @@
         >
 
       <LinearLayout
+          android:id="@+id/ll_upvote"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:gravity="center"
+          android:layout_marginHorizontal="30dp"
           android:orientation="horizontal"
           >
 
@@ -107,7 +109,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_like_count"
+            android:id="@+id/tv_upvote_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
@@ -116,10 +118,12 @@
       </LinearLayout>
 
       <LinearLayout
+          android:id="@+id/ll_reply"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:gravity="center"
+          android:layout_marginHorizontal="30dp"
           android:orientation="horizontal"
           >
 
@@ -147,6 +151,7 @@
           android:layout_weight="1"
           android:gravity="center"
           android:orientation="horizontal"
+          android:layout_marginHorizontal="30dp"
           >
 
         <ImageView

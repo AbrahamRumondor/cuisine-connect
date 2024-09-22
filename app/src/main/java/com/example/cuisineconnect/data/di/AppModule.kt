@@ -71,5 +71,4 @@ object AppModule {
   fun provideCategoriesRef(): CollectionReference {
     return Firebase.firestore.collection("categories")
   }
-
 }
