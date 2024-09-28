@@ -29,12 +29,23 @@ class ReplyUseCaseImpl @Inject constructor(
     return replyRepository.getChildReplyDocID(recipeId, rootReplyId)
   }
 
-  override suspend fun upvoteReply(recipeId: String, replyId: String) {
-    replyRepository.upvoteReply(recipeId, replyId)
+  override suspend fun upvoteReply(
+    recipeId: String,
+    repliedId: String,
+    userId: String,
+    result: (Reply) -> Unit
+  ) {
+    replyRepository.upvoteReply(recipeId, repliedId, userId, result)
   }
 
-  override suspend fun removeUpvote(recipeId: String, replyId: String) {
-    replyRepository.removeUpvote(recipeId, replyId)
+  override suspend fun downVoteReply(
+    recipeId: String,
+    repliedId: String,
+    userId: String,
+    result: (Reply) -> Unit
+  ) {
+    replyRepository.removeUpvote(recipeId, repliedId, userId, result)
   }
+
 
 }

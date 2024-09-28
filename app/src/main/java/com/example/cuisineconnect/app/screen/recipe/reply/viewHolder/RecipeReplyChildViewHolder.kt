@@ -35,7 +35,7 @@ class RecipeReplyChildViewHolder(
                 tvBody.text = reply.body
                 tvReplyUpvote.text = reply.upvotes.toString()
                 llUpvote.setOnClickListener {
-                    itemListener?.onUpvoteClicked(position, reply.id)
+                    itemListener?.onUpvoteClicked(position, reply, user.id)
                 }
 
                 // replies

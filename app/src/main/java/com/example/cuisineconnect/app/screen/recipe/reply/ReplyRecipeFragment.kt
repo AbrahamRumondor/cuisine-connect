@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
 import com.example.cuisineconnect.databinding.FragmentReplyRecipeBinding
+import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -117,9 +118,18 @@ class ReplyRecipeFragment : Fragment() {
 //        TODO("Not yet implemented")
       }
 
-      override fun onUpvoteClicked(position: Int, replyId: String) {
-        // TODO WRONG LOGIC, UPVOTE MUST USE MAP
-        replyRecipeViewModel.upvoteReply(recipeId, replyId)
+      override fun onUpvoteClicked(position: Int, reply: Reply, userId: String) {
+        replyRecipeViewModel.upvoteReply(recipeId, reply.id, userId) { replied ->
+          Log.d("oofoof", "upvoting")
+          recipeReplyAdapter.updateReplyAtPosition(position, replied)
+        }
+      }
+
+      override fun onDownVoteClicked(position: Int, reply: Reply, userId: String) {
+        replyRecipeViewModel.downVoteReply(recipeId, reply.id, userId) { replied ->
+          Log.d("oofoof", "downvoting")
+          recipeReplyAdapter.updateReplyAtPosition(position, replied)
+        }
       }
 
       override fun onReplyInputClicked(position: Int, targetReplyId: String, user: User) {

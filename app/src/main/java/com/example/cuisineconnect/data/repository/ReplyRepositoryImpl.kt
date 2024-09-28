@@ -1,10 +1,10 @@
 package com.example.cuisineconnect.data.repository
 
+import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.repository.ReplyRepository
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -76,47 +76,51 @@ class ReplyRepositoryImpl @Inject constructor(
     }
   }
 
-  override suspend fun upvoteReply(recipeId: String, replyId: String) {
+  override suspend fun upvoteReply(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
     val repliesRef = recipesRef.document(recipeId).collection("replies")
 
     try {
-      val recipeDoc = repliesRef.document(replyId)
+      val recipeDoc = repliesRef.document(repliedId)
       val snapshot = recipeDoc.get().await()
       val replyResponse = snapshot.toObject(ReplyResponse::class.java)
+      Timber.tag("Upvote").d("DAH MASUK NIH DI REPO")
 
       replyResponse?.let { response ->
-        val upvotes = response.upvotes + 1
+        val upvotes = response.upvotes.toMutableMap()
+        upvotes[userId] = true // Mark the user's upvote as true
 
         response.upvotes = upvotes
         recipeDoc.set(response).await()
-        Timber.tag("Upvote").d("User upvoted reply successfully")
+        Timber.tag("Upvote").d("User $userId upvoted recipe $repliedId successfully")
+        result(ReplyResponse.transform(response))
       }
     } catch (e: Exception) {
-      Timber.tag("Upvote").e(e, "Error upvoting reply")
+      Timber.tag("Upvote").e(e, "Error upvoting recipe $repliedId by user $userId")
     }
+
   }
 
   // New method to remove an upvote
-  override suspend fun removeUpvote(recipeId: String, replyId: String) {
+  override suspend fun removeUpvote(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
     val repliesRef = recipesRef.document(recipeId).collection("replies")
 
     try {
-      val recipeDoc = repliesRef.document(replyId)
+      val recipeDoc = repliesRef.document(repliedId)
       val snapshot = recipeDoc.get().await()
       val replyResponse = snapshot.toObject(ReplyResponse::class.java)
+      Timber.tag("Upvote").d("DAH MASUK NIH DI REPO DOWNVOTE")
 
+      Timber.tag("Upvote").d("kenapa cok ${replyResponse}")
       replyResponse?.let { response ->
-        if (response.upvotes > 0) {
-          val upvotes = response.upvotes - 1
+        val upvotes = response.upvotes.toMutableMap()
 
-          response.upvotes = upvotes
-          recipeDoc.set(response).await()
-          Timber.tag("RemoveUpvote")
-            .d("User removed upvote from reply")
-        }
+        response.upvotes = upvotes.filterNot { it.key == userId }
+        recipeDoc.set(response).await()
+        Timber.tag("RemoveUpvote").d("User $userId removed upvote from recipe $repliedId successfully")
+        result(ReplyResponse.transform(response))
       }
     } catch (e: Exception) {
-      Timber.tag("RemoveUpvote").e(e, "Error removing upvote from reply")
+      Timber.tag("RemoveUpvote").e(e, "Error removing upvote from recipe $repliedId by user $userId")
     }
   }
 

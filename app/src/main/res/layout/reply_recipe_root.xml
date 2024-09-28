@@ -104,15 +104,16 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:paddingTop="16dp"
       android:gravity="center_horizontal"
       >
 
-    <ImageButton
-        android:id="@+id/btn_upvote"
+    <ImageView
+        android:id="@+id/iv_upvote"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginHorizontal="16dp"
-        android:background="@drawable/ic_thumbs_up_regular"
+        android:src="@drawable/ic_thumbs_up_regular"
         android:visibility="visible"
         />
 

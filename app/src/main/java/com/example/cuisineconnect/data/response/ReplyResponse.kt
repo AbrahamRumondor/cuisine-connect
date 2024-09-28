@@ -27,7 +27,7 @@ data class ReplyResponse(
 
   @get:PropertyName("reply_upvotes")
   @set:PropertyName("reply_upvotes")
-  var upvotes: Int = -1,
+  var upvotes: Map<String, Boolean> = emptyMap(),
 
   @get:PropertyName("reply_parent_id")
   @set:PropertyName("reply_parent_id")

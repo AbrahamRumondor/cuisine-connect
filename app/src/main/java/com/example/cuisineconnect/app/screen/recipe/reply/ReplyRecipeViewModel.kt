@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class ReplyRecipeViewModel @Inject constructor(
@@ -150,7 +149,10 @@ class ReplyRecipeViewModel @Inject constructor(
             // Now update the local list once the Firestore operation succeeds
             val updatedReplies = _replies.value!!.toMutableList().apply {
               val index = indexOfFirst { it.second.id == repliesId }
-              set(index, Pair(pair.first, updatedReply)) // Replace the old reply with the updated one
+              set(
+                index,
+                Pair(pair.first, updatedReply)
+              ) // Replace the old reply with the updated one
             }
             _replies.value = updatedReplies
           }
@@ -164,7 +166,6 @@ class ReplyRecipeViewModel @Inject constructor(
       body = body,
       date = Date(),
       repliesId = mutableListOf(), // No replies yet, empty list
-      upvotes = 0,
       userId = userId,
       parentId = repliesId
     )
@@ -180,15 +181,15 @@ class ReplyRecipeViewModel @Inject constructor(
 //    return replyUseCase.getChildReplyDocID(rootReplyId)
 //  }
 
-  fun upvoteReply(recipeId: String, replyId: String) {
+  fun upvoteReply(recipeId: String, replyId: String, userId: String, result: (Reply) -> Unit) {
     viewModelScope.launch {
-      replyUseCase.upvoteReply(recipeId, replyId)
+      replyUseCase.upvoteReply(recipeId, replyId, userId, result)
     }
   }
 
-  fun removeUpvote(recipeId: String, replyId: String) {
+  fun downVoteReply(recipeId: String, replyId: String, userId: String, result: (Reply) -> Unit) {
     viewModelScope.launch {
-      replyUseCase.removeUpvote(recipeId, replyId)
+      replyUseCase.downVoteReply(recipeId, replyId, userId, result)
     }
   }
 

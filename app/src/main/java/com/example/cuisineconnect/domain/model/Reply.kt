@@ -7,7 +7,7 @@ data class Reply(
   var body: String = "",
   var date: Date = Date(),
   var repliesId: List<String> = listOf(), //rootReplyId_Id
-  var upvotes: Int = -1,
+  var upvotes: Map<String, Boolean> = emptyMap(),
   var userId: String = "",
   var parentId: String = "",
 
