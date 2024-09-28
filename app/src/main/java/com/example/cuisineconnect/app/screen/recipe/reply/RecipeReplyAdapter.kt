@@ -61,21 +61,21 @@ class RecipeReplyAdapter :
   }
 
   fun submitReplies(newReplies: MutableList<Pair<User?, Reply>>) {
-    val startIndex = items.indexOfFirst { currentItem ->
-      newReplies.none { newItem -> newItem.second.id == currentItem.second.id }
-    }
-
-    if (startIndex == -1) {
+//    val startIndex = items.indexOfFirst { currentItem ->
+//      newReplies.none { newItem -> newItem.second.id == currentItem.second.id }
+//    }
+//
+//    if (startIndex == -1) {
       this.items.clear()
       this.items.addAll(newReplies)
       notifyDataSetChanged()
       return
-    }
-
-    this.items.clear()
-    this.items.addAll(newReplies)
-
-    notifyItemRangeChanged(startIndex, newReplies.size - startIndex)
+//    }
+//
+//    this.items.clear()
+//    this.items.addAll(newReplies)
+//
+//    notifyItemRangeChanged(startIndex, newReplies.size - startIndex)
   }
 
   // Add new replies at a specific position

@@ -4,6 +4,7 @@ import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.repository.ReplyRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -56,7 +57,7 @@ class ReplyRepositoryImpl @Inject constructor(
     val repliesRef = recipesRef.document(recipeId).collection("replies")
 
     repliesRef.document(replyId).set(replyResponse).addOnSuccessListener {
-      Timber.tag("TEST").d("SUCCESS ON reply INSERTION")
+      Timber.tag("TEST").d("SUCCESS ON reply INSERTION, ${replyResponse}")
     }
       .addOnFailureListener { Timber.tag("TEST").d("ERROR ON reply INSERTION") }
   }

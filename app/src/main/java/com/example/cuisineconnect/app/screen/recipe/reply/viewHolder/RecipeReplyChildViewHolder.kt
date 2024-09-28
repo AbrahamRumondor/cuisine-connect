@@ -40,7 +40,7 @@ class RecipeReplyChildViewHolder(
 
                 // replies
                 tvBtnReply.setOnClickListener {
-                    itemListener?.onReplyInputClicked(position, reply.id)
+                    itemListener?.onReplyInputClicked(position, reply.id, user)
                 }
             }
         }

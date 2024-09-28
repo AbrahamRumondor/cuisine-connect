@@ -27,7 +27,11 @@ data class ReplyResponse(
 
   @get:PropertyName("reply_upvotes")
   @set:PropertyName("reply_upvotes")
-  var upvotes: Int = -1
+  var upvotes: Int = -1,
+
+  @get:PropertyName("reply_parent_id")
+  @set:PropertyName("reply_parent_id")
+  var parentId: String = ""
 ) {
 
   constructor() : this("")
@@ -41,6 +45,7 @@ data class ReplyResponse(
         repliesId = replyResponse.repliesId,
         upvotes = replyResponse.upvotes,
         userId = replyResponse.userId,
+        parentId = replyResponse.parentId
       )
     }
 
@@ -51,7 +56,8 @@ data class ReplyResponse(
         date = reply.date,
         repliesId = reply.repliesId,
         upvotes = reply.upvotes,
-        userId = reply.userId
+        userId = reply.userId,
+        parentId = reply.parentId
       )
     }
   }

@@ -9,6 +9,7 @@ data class Reply(
   var repliesId: List<String> = listOf(), //rootReplyId_Id
   var upvotes: Int = -1,
   var userId: String = "",
+  var parentId: String = "",
 
   var isRoot: Int = 0
 )

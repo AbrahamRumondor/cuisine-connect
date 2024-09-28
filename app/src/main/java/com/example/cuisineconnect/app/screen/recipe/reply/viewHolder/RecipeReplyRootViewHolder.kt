@@ -43,16 +43,23 @@ class RecipeReplyRootViewHolder(
                 }
 
                 // replies
-                val replies = "view ${reply.repliesId.size} replies"
-                tvShowReply.text = replies
                 tvBtnReply.setOnClickListener {
-                    itemListener?.onReplyInputClicked(position, reply.id)
+                    itemListener?.onReplyInputClicked(position, reply.id, user)
                 }
                 if (reply.repliesId.isEmpty()){
                     llShowReply.visibility = View.INVISIBLE
                 } else {
+                    val replies = "view ${reply.repliesId.size} replies"
+                    if (tvShowReply.text != "Hide replies") tvShowReply.text = replies
                     llShowReply.visibility = View.VISIBLE
                     llShowReply.setOnClickListener {
+                        if (tvShowReply.text == "Hide replies") {
+                            tvShowReply.text = replies
+                            itemListener?.onReplyListSecondClicked(position, reply.id, reply.repliesId)
+                            return@setOnClickListener
+                        }
+                        val text = "Hide replies"
+                        tvShowReply.text = text
                         itemListener?.onReplyListClicked(position, reply.id, reply.repliesId)
                     }
                 }

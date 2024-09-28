@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.recipe.reply
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class ReplyRecipeViewModel @Inject constructor(
@@ -26,12 +28,14 @@ class ReplyRecipeViewModel @Inject constructor(
   private val replyUseCase: ReplyUseCase
 ) : ViewModel() {
 
-  private val _replies: MutableStateFlow<List<Pair<User?, Reply>>> =
-    MutableStateFlow(mutableListOf(Pair(User(), Reply())))
-  val replies: StateFlow<List<Pair<User?, Reply>>> = _replies
+  private val _replies: MutableStateFlow<List<Pair<User?, Reply>>?> =
+    MutableStateFlow(null)
+  val replies: StateFlow<List<Pair<User?, Reply>>?> = _replies
 
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
+
+  val openedReply = mutableListOf<String>()
 
   init {
     getUser()
@@ -44,9 +48,13 @@ class ReplyRecipeViewModel @Inject constructor(
     }
   }
 
-  fun getRepliesByRecipe(recipeId: String) {
+  fun getRepliesByRecipe(recipeId: String, openReply: String?) {
+    if (openReply == null) openedReply.clear()
+    else if (openReply.isNotEmpty()) openedReply.add(openReply)
+
     viewModelScope.launch {
       replyUseCase.getRepliesByRecipe(recipeId).collectLatest { replies ->
+
         // Fetch users in parallel using async
         val userReplies = replies.map { reply ->
           async {
@@ -54,16 +62,40 @@ class ReplyRecipeViewModel @Inject constructor(
             Pair(user, reply)
           }
         }.awaitAll() // Wait for all async tasks to complete
-
         // Update the StateFlow with the new list of pairs
-        _replies.value = userReplies
+        _replies.value = sortUserReplies(recipeId, userReplies)
       }
     }
   }
 
+  private fun sortUserReplies(
+    recipeId: String,
+    userReplies: List<Pair<User?, Reply>>
+  ): List<Pair<User?, Reply>> {
+    val sortedUserReplies = userReplies.sortedByDescending { it.second.date }
+
+    val replyMap = sortedUserReplies.groupBy { it.second.parentId }
+    val result = mutableListOf<Pair<User?, Reply>>()
+
+    replyMap[recipeId]?.forEach { rootReplyPair ->
+      val rootReply = rootReplyPair.second.copy(isRoot = 0)
+      result.add(Pair(rootReplyPair.first, rootReply))  // Add the root reply with updated isRoot
+
+      // Add its children (where parentId == rootReply's id), marking them as children
+      val children =
+        sortedUserReplies.filter { it.second.parentId == rootReplyPair.second.id && it.second.parentId in openedReply }
+      result.addAll(children.map { childReplyPair ->
+        val childReply = childReplyPair.second.copy(isRoot = 1)
+        Pair(childReplyPair.first, childReply)  // Add child reply with updated isRoot
+      })
+    }
+
+    return result
+  }
+
   fun getReplyById(recipeId: String, rootReply: String, replyIds: List<String>) {
     viewModelScope.launch {
-      val rootIndex = _replies.value.indexOfFirst { it.second.id == rootReply }
+      val rootIndex = _replies.value?.indexOfFirst { it.second.id == rootReply }
 
       if (rootIndex != -1) {
         replyIds.forEach { replyId ->
@@ -73,10 +105,12 @@ class ReplyRecipeViewModel @Inject constructor(
             val userReplyPair = Pair(user, newReply)
 
             // Create a mutable copy of the current list of Pair<User, Reply>
-            val updatedReplies = _replies.value.toMutableList()
+            val updatedReplies = _replies.value?.toMutableList()
 
             // Insert the new reply right after the rootReply
-            updatedReplies.add(rootIndex + 1, userReplyPair)
+            if (rootIndex != null) {
+              updatedReplies?.add(rootIndex + 1, userReplyPair)
+            }
 
             // Update the StateFlow with the new list
             _replies.value = updatedReplies
@@ -98,25 +132,28 @@ class ReplyRecipeViewModel @Inject constructor(
   ): ReplyResponse {
     val newReplyId = getRecipeReplyDocID(recipeId)
 
-    viewModelScope.launch {
-      _replies.value.find { it.second.id == repliesId }?.let { pair ->
-        val originalReply = pair.second
+    if (repliesId != recipeId) {
+      viewModelScope.launch {
+        _replies.value?.find { it.second.id == repliesId }?.let { pair ->
+          val originalReply = pair.second
 
-        val updatedRepliesId = originalReply.repliesId.toMutableList().apply {
-          add(newReplyId)
-        }
+          val updatedRepliesId = originalReply.repliesId.toMutableList().apply {
+            add(newReplyId)
+          }
 
-        val updatedReply = originalReply.copy(repliesId = updatedRepliesId)
+          val updatedReply = originalReply.copy(repliesId = updatedRepliesId)
 
-        val updatedReplies = _replies.value.toMutableList().apply {
-          val index = indexOfFirst { it.second.id == repliesId }
-          set(index, Pair(pair.first, updatedReply)) // Replace the old reply with the updated one
-        }
-        _replies.value = updatedReplies
+          // First, update Firestore and then update the local list
+          setReply(recipeId, ReplyResponse.transform(updatedReply)) {
+            Log.d("brobruh", "WORKING")
 
-        // Update the reply in Firestore
-        setReply(newReplyId, ReplyResponse.transform(updatedReply)){
-
+            // Now update the local list once the Firestore operation succeeds
+            val updatedReplies = _replies.value!!.toMutableList().apply {
+              val index = indexOfFirst { it.second.id == repliesId }
+              set(index, Pair(pair.first, updatedReply)) // Replace the old reply with the updated one
+            }
+            _replies.value = updatedReplies
+          }
         }
       }
     }
@@ -128,7 +165,8 @@ class ReplyRecipeViewModel @Inject constructor(
       date = Date(),
       repliesId = mutableListOf(), // No replies yet, empty list
       upvotes = 0,
-      userId = userId
+      userId = userId,
+      parentId = repliesId
     )
   }
 

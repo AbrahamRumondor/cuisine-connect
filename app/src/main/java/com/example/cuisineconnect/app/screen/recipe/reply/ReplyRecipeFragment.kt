@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
 import com.example.cuisineconnect.databinding.FragmentReplyRecipeBinding
+import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ class ReplyRecipeFragment : Fragment() {
 
     val recipeId = args.recipeId
     recipeId?.let {
-      replyRecipeViewModel.getRepliesByRecipe(it)
+      replyRecipeViewModel.getRepliesByRecipe(it, null)
       populateRepliesAdapter(it)
       setupSendButton(it)
     }
@@ -59,13 +60,13 @@ class ReplyRecipeFragment : Fragment() {
               replyRecipeViewModel.setReply(
                 recipeId,
                 replyRecipeViewModel.createReplyResponse(
-                  repliesId = rootReply.second,
+                  repliesId = rootReply.second.ifEmpty { recipeId },
                   body = inputText,
                   userId = user.id,
                   recipeId = recipeId,
                 )
               ) {
-                replyRecipeViewModel.getRepliesByRecipe(recipeId)
+                replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
               }
               etInputReply.text.clear()
             }
@@ -102,10 +103,9 @@ class ReplyRecipeFragment : Fragment() {
         if (binding.rvReplies.adapter == null) {
           binding.rvReplies.adapter = recipeReplyAdapter
         }
-        recipeReplyAdapter.submitReplies(
-          // sort by latest date
-          replies.sortedByDescending { it.second.date }.toMutableList()
-        )
+        if (replies != null) {
+          recipeReplyAdapter.submitReplies(replies.toMutableList())
+        }
       }
     }
     setRecipeReplyAdapterButtons(recipeId)
@@ -122,12 +122,30 @@ class ReplyRecipeFragment : Fragment() {
         replyRecipeViewModel.upvoteReply(recipeId, replyId)
       }
 
-      override fun onReplyInputClicked(position: Int, targetReplyId: String) {
+      override fun onReplyInputClicked(position: Int, targetReplyId: String, user: User) {
+        binding.run {
+          val text = "Replying to ${user.name}"
+          tvReplyOtherUser.text = text
+          clReplyOther.visibility = View.VISIBLE
+          btnClose.setOnClickListener {
+            clReplyOther.visibility = View.GONE
+            rootReply = Triple(true, "", 0)
+          }
+        }
         rootReply = Triple(false, targetReplyId, position)
       }
 
       override fun onReplyListClicked(position: Int, replyId: String, repliesId: List<String>) {
-        replyRecipeViewModel.getReplyById(recipeId, replyId, repliesId)
+        replyRecipeViewModel.getRepliesByRecipe(recipeId, replyId)
+      }
+
+      override fun onReplyListSecondClicked(
+        position: Int,
+        replyId: String,
+        repliesId: List<String>
+      ) {
+        replyRecipeViewModel.openedReply.removeIf { it == replyId }
+        replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
       }
     })
   }
