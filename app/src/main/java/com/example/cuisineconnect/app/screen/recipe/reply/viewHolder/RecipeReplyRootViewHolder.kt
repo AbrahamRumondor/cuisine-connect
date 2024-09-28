@@ -39,12 +39,9 @@ class RecipeReplyRootViewHolder(
 
         upvoteLogic(reply, user)
         llUpvote.setOnClickListener {
-          Log.d("oofoof", "kenapa nih")
           if (upvoteLogic(reply, user)) {
-            Log.d("oofoof", "downvoting")
             itemListener?.onDownVoteClicked(position, reply, user.id)
           } else {
-            Log.d("oofoof", "upvoting")
             itemListener?.onUpvoteClicked(position, reply, user.id)
           }
           upvoteLogic(reply, user)

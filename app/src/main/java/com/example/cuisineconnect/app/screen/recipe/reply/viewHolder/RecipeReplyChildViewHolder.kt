@@ -1,7 +1,9 @@
 package com.example.cuisineconnect.app.screen.recipe.reply.viewHolder
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
 import com.example.cuisineconnect.databinding.RecipeDetailStepBinding
 import com.example.cuisineconnect.databinding.ReplyRecipeChildBinding
@@ -16,7 +18,7 @@ class RecipeReplyChildViewHolder(
     private val itemListener: RecipeReplyItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
-    fun bind(position: Int, user: User?, reply: Reply?) {
+    fun bind(position: Int, user: User?, reply: Reply?, userTarget: User?) {
         view.run {
             if (reply != null && user != null) {
 
@@ -32,10 +34,18 @@ class RecipeReplyChildViewHolder(
                 }
 
                 // contents
-                tvBody.text = reply.body
+                val text = "@${userTarget?.name ?: "User"} " + reply.body
+                tvBody.text = text
                 tvReplyUpvote.text = reply.upvotes.toString()
+
+                upvoteLogic(reply, user)
                 llUpvote.setOnClickListener {
-                    itemListener?.onUpvoteClicked(position, reply, user.id)
+                    if (upvoteLogic(reply, user)) {
+                        itemListener?.onDownVoteClicked(position, reply, user.id)
+                    } else {
+                        itemListener?.onUpvoteClicked(position, reply, user.id)
+                    }
+                    upvoteLogic(reply, user)
                 }
 
                 // replies
@@ -44,5 +54,16 @@ class RecipeReplyChildViewHolder(
                 }
             }
         }
+    }
+
+    private fun upvoteLogic(reply: Reply, user: User): Boolean {
+        val upVoted = reply.upvotes[user.id] ?: false
+        view.run {
+            ivUpvote.setImageResource(
+                if (upVoted) R.drawable.ic_thumbs_up_solid else R.drawable.ic_thumbs_up_regular
+            )
+            tvReplyUpvote.text = reply.upvotes.size.toString()
+        }
+        return upVoted
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.recipe.reply
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ import com.example.cuisineconnect.domain.model.User
 class RecipeReplyAdapter :
   RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-  private var items: MutableList<Pair<User?, Reply>> = mutableListOf()
+  private var items: MutableList<Triple<User?, Reply, User?>> = mutableListOf()
   private var recipeReplyItemListener: RecipeReplyItemListener? = null
 
   private val ROOT_REPLY = 0
@@ -49,7 +50,7 @@ class RecipeReplyAdapter :
 
       ROOT_REPLY -> (holder as RecipeReplyRootViewHolder).bind(position, item.first, item.second)
 
-      CHILD_REPLY -> (holder as RecipeReplyChildViewHolder).bind(position, item.first, item.second)
+      CHILD_REPLY -> (holder as RecipeReplyChildViewHolder).bind(position, item.first, item.second, item.third)
 
       else -> throw IllegalArgumentException("Invalid item type")
     }
@@ -60,7 +61,7 @@ class RecipeReplyAdapter :
     return items.size
   }
 
-  fun submitReplies(newReplies: MutableList<Pair<User?, Reply>>) {
+  fun submitReplies(newReplies: MutableList<Triple<User?, Reply, User?>>) {
 //    val startIndex = items.indexOfFirst { currentItem ->
 //      newReplies.none { newItem -> newItem.second.id == currentItem.second.id }
 //    }
@@ -78,12 +79,12 @@ class RecipeReplyAdapter :
 //    notifyItemRangeChanged(startIndex, newReplies.size - startIndex)
   }
 
-  // Add new replies at a specific position
-  fun addRepliesAtPosition(position: Int, newReplies: List<Pair<User?, Reply>>) {
-    // Insert new replies right after the position provided
-    items.addAll(position + 1, newReplies)
-    notifyItemRangeInserted(position + 1, newReplies.size)
-  }
+//  // Add new replies at a specific position
+//  fun addRepliesAtPosition(position: Int, newReplies: List<Pair<User?, Reply>>) {
+//    // Insert new replies right after the position provided
+//    items.addAll(position + 1, newReplies)
+//    notifyItemRangeInserted(position + 1, newReplies.size)
+//  }
 
   // Update upvotes for a reply at a specific position
   fun updateReplyAtPosition(position: Int, updatedReply: Reply) {

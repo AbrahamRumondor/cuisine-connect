@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
+import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.databinding.FragmentReplyRecipeBinding
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
@@ -120,15 +121,13 @@ class ReplyRecipeFragment : Fragment() {
 
       override fun onUpvoteClicked(position: Int, reply: Reply, userId: String) {
         replyRecipeViewModel.upvoteReply(recipeId, reply.id, userId) { replied ->
-          Log.d("oofoof", "upvoting")
-          recipeReplyAdapter.updateReplyAtPosition(position, replied)
+          recipeReplyAdapter.updateReplyAtPosition(position, replied.copy(isRoot = reply.isRoot))
         }
       }
 
       override fun onDownVoteClicked(position: Int, reply: Reply, userId: String) {
         replyRecipeViewModel.downVoteReply(recipeId, reply.id, userId) { replied ->
-          Log.d("oofoof", "downvoting")
-          recipeReplyAdapter.updateReplyAtPosition(position, replied)
+          recipeReplyAdapter.updateReplyAtPosition(position, replied.copy(isRoot = reply.isRoot))
         }
       }
 

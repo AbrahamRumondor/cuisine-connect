@@ -11,8 +11,9 @@
       android:id="@+id/v_divider"
       android:layout_width="4dp"
       android:layout_height="0dp"
-      android:layout_marginHorizontal="16dp"
-      android:background="@color/cc_light_gray"
+      android:layout_marginHorizontal="24dp"
+      android:background="@android:color/darker_gray"
+      android:alpha="0.5"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +33,7 @@
       android:id="@+id/ll_user"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginHorizontal="16dp"
+      android:layout_marginHorizontal="24dp"
       android:layout_marginTop="12dp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -102,7 +103,8 @@
       android:layout_height="wrap_content"
       android:ellipsize="end"
       android:maxLines="4"
-      android:paddingHorizontal="16dp"
+      android:paddingStart="24dp"
+      android:paddingEnd="12dp"
       android:text=" @Daniel A Sweet and Sour Dessert?! Under 10$ aokwoakoakwokoawokooakwokoaowkoakowkoao"
       android:textColor="@color/cc_gray"
       android:textSize="18sp"
@@ -115,14 +117,15 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       android:gravity="center_horizontal"
+      android:paddingTop="16dp"
       >
 
-    <ImageButton
-        android:id="@+id/btn_upvote"
+    <ImageView
+        android:id="@+id/iv_upvote"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginHorizontal="16dp"
-        android:background="@drawable/ic_thumbs_up_regular"
+        android:src="@drawable/ic_thumbs_up_regular"
         android:visibility="visible"
         />
 
@@ -141,7 +144,7 @@
       android:id="@+id/tv_btn_reply"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingHorizontal="16dp"
+      android:paddingHorizontal="24dp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/ll_body"
       app:layout_constraintBottom_toBottomOf="parent"

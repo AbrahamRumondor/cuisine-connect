@@ -27,9 +27,9 @@ class ReplyRecipeViewModel @Inject constructor(
   private val replyUseCase: ReplyUseCase
 ) : ViewModel() {
 
-  private val _replies: MutableStateFlow<List<Pair<User?, Reply>>?> =
+  private val _replies: MutableStateFlow<List<Triple<User?, Reply, User?>>?> =
     MutableStateFlow(null)
-  val replies: StateFlow<List<Pair<User?, Reply>>?> = _replies
+  val replies: StateFlow<List<Triple<User?, Reply, User?>>?> = _replies
 
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
@@ -47,6 +47,12 @@ class ReplyRecipeViewModel @Inject constructor(
     }
   }
 
+  fun addOpenedReply(reply: Reply) {
+    if (reply.parentId in openedReply) {
+      openedReply.add(reply.id)
+    }
+  }
+
   fun getRepliesByRecipe(recipeId: String, openReply: String?) {
     if (openReply == null) openedReply.clear()
     else if (openReply.isNotEmpty()) openedReply.add(openReply)
@@ -58,7 +64,9 @@ class ReplyRecipeViewModel @Inject constructor(
         val userReplies = replies.map { reply ->
           async {
             val user = userUseCase.getUserByUserId(reply.userId) // Suspend function
-            Pair(user, reply)
+            val replyTarget = replyUseCase.getReplyById(recipeId, reply.parentId)
+            val targetUser = replyTarget?.let { userUseCase.getUserByUserId(it.userId) }
+            Triple(user, reply, targetUser)
           }
         }.awaitAll() // Wait for all async tasks to complete
         // Update the StateFlow with the new list of pairs
@@ -69,55 +77,68 @@ class ReplyRecipeViewModel @Inject constructor(
 
   private fun sortUserReplies(
     recipeId: String,
-    userReplies: List<Pair<User?, Reply>>
-  ): List<Pair<User?, Reply>> {
+    userReplies: List<Triple<User?, Reply, User?>>
+  ): List<Triple<User?, Reply, User?>> {
+    // Sort replies by date, descending
     val sortedUserReplies = userReplies.sortedByDescending { it.second.date }
 
+    // Group replies by their parentId
     val replyMap = sortedUserReplies.groupBy { it.second.parentId }
-    val result = mutableListOf<Pair<User?, Reply>>()
+    val result = mutableListOf<Triple<User?, Reply, User?>>()
 
+    // Recursive function to add replies to the result
+    fun addRepliesToResult(rootReply: String, parentId: String?) {
+      // Get replies that have this parentId
+      replyMap[parentId]?.forEach { replyPair ->
+        // Add the reply to the result
+        if (rootReply in openedReply) {
+          result.add(Triple(replyPair.first, replyPair.second.copy(isRoot = 1), replyPair.third))
+        }
+
+        // Recursively add all children of this reply
+        addRepliesToResult(rootReply, replyPair.second.id)
+      }
+    }
+
+    // Start from the root replies
     replyMap[recipeId]?.forEach { rootReplyPair ->
+      // Add the root reply to the result
       val rootReply = rootReplyPair.second.copy(isRoot = 0)
-      result.add(Pair(rootReplyPair.first, rootReply))  // Add the root reply with updated isRoot
+      result.add(Triple(rootReplyPair.first, rootReply, rootReplyPair.third))
 
-      // Add its children (where parentId == rootReply's id), marking them as children
-      val children =
-        sortedUserReplies.filter { it.second.parentId == rootReplyPair.second.id && it.second.parentId in openedReply }
-      result.addAll(children.map { childReplyPair ->
-        val childReply = childReplyPair.second.copy(isRoot = 1)
-        Pair(childReplyPair.first, childReply)  // Add child reply with updated isRoot
-      })
+      // Recursively add all replies under this root reply
+      addRepliesToResult(rootReplyPair.second.id, rootReplyPair.second.id)
     }
 
     return result
   }
 
-  fun getReplyById(recipeId: String, rootReply: String, replyIds: List<String>) {
-    viewModelScope.launch {
-      val rootIndex = _replies.value?.indexOfFirst { it.second.id == rootReply }
-
-      if (rootIndex != -1) {
-        replyIds.forEach { replyId ->
-          replyUseCase.getReplyById(recipeId, replyId)?.let { reply ->
-            val user = userUseCase.getUserByUserId(reply.userId)
-            val newReply = reply.copy(isRoot = 1)
-            val userReplyPair = Pair(user, newReply)
-
-            // Create a mutable copy of the current list of Pair<User, Reply>
-            val updatedReplies = _replies.value?.toMutableList()
-
-            // Insert the new reply right after the rootReply
-            if (rootIndex != null) {
-              updatedReplies?.add(rootIndex + 1, userReplyPair)
-            }
-
-            // Update the StateFlow with the new list
-            _replies.value = updatedReplies
-          }
-        }
-      }
-    }
-  }
+//  fun getReplyById(recipeId: String, rootReply: String, replyIds: List<String>) {
+//    viewModelScope.launch {
+//      val rootIndex = _replies.value?.indexOfFirst { it.second.id == rootReply }
+//
+//      if (rootIndex != -1) {
+//        replyIds.forEach { replyId ->
+//          replyUseCase.getReplyById(recipeId, replyId)?.let { reply ->
+//            val user = userUseCase.getUserByUserId(reply.userId)
+//            val newReply = reply.copy(isRoot = 1)
+//            val userReplyPair = Pair(user, newReply)
+//
+//            // Create a mutable copy of the current list of Pair<User, Reply>
+//            val updatedReplies = _replies.value?.toMutableList()
+//
+//            // Insert the new reply right after the rootReply
+//            if (rootIndex != null) {
+//              updatedReplies?.add(rootIndex + 1, userReplyPair)
+//            }
+//
+//            // Update the StateFlow with the new list
+//            _replies.value = updatedReplies
+//          }
+//        }
+//      }
+//    }
+//  }
 
   private fun getRecipeReplyDocID(recipeId: String): String {
     return replyUseCase.getRecipeReplyDocID(recipeId)
@@ -133,8 +154,8 @@ class ReplyRecipeViewModel @Inject constructor(
 
     if (repliesId != recipeId) {
       viewModelScope.launch {
-        _replies.value?.find { it.second.id == repliesId }?.let { pair ->
-          val originalReply = pair.second
+        _replies.value?.find { it.second.id == repliesId }?.let { triple ->
+          val originalReply = triple.second
 
           val updatedRepliesId = originalReply.repliesId.toMutableList().apply {
             add(newReplyId)
@@ -151,7 +172,7 @@ class ReplyRecipeViewModel @Inject constructor(
               val index = indexOfFirst { it.second.id == repliesId }
               set(
                 index,
-                Pair(pair.first, updatedReply)
+                Triple(triple.first, updatedReply, triple.third)
               ) // Replace the old reply with the updated one
             }
             _replies.value = updatedReplies
