@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import com.example.cuisineconnect.databinding.FragmentCollectionBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -19,7 +18,7 @@ class CollectionFragment : Fragment() {
   ): View {
     binding = FragmentCollectionBinding.inflate(inflater, container, false)
 
-    val adapter = ViewPagerAdapter(this)
+    val adapter = CollectionViewPagerAdapter(this)
     binding.vp2Collection.adapter = adapter
 
     // Link the TabLayout with the ViewPager2

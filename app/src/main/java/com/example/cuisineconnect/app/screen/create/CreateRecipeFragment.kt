@@ -78,6 +78,7 @@ class CreateRecipeFragment : Fragment() {
         ) { text ->
           if (text == null) {
             Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
           } else {
             Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
           }

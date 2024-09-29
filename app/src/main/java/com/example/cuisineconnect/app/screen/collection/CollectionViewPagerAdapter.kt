@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.cuisineconnect.app.screen.collection.myRecipe.MyRecipeFragment
 
-class ViewPagerAdapter(activity: CollectionFragment) : FragmentStateAdapter(activity) {
+class CollectionViewPagerAdapter(activity: CollectionFragment) : FragmentStateAdapter(activity) {
   override fun getItemCount(): Int = 2  // Number of tabs
 
   override fun createFragment(position: Int): Fragment {
