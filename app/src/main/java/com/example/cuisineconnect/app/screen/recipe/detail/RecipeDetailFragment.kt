@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
 
-  val args: RecipeDetailFragmentArgs by navArgs()
+  private val args: RecipeDetailFragmentArgs by navArgs()
 
   private lateinit var binding: FragmentRecipeDetailBinding
   private val recipeDetailViewModel: RecipeDetailViewModel by viewModels()

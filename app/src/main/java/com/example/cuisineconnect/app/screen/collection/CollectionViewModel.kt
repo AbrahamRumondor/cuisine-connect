@@ -64,6 +64,7 @@ class CollectionViewModel @Inject constructor(
   }
 
   fun getMyRecipes() {
+    getRecipes()
     viewModelScope.launch {
       recipes.collectLatest { allRecipes ->
         userUseCase.getCurrentUser().collectLatest { currentUser ->

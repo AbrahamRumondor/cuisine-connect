@@ -62,7 +62,7 @@
           </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tb_title"
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -74,7 +74,7 @@
             />
 
         <TextView
-            android:id="@+id/tb_body"
+            android:id="@+id/tv_unique_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -122,6 +122,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_edit_profile"
             android:layout_width="125dp"
             android:layout_height="38dp"
             app:layout_constraintEnd_toEndOf="parent"

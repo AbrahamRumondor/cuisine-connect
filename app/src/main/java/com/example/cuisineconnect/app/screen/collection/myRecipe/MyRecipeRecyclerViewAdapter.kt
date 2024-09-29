@@ -2,6 +2,7 @@ package com.example.cuisineconnect.app.screen.collection.myRecipe
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -79,6 +80,9 @@ class MyRecipeRecyclerViewAdapter(
     if (isMyRecipes) holder.editRecipe.visibility = View.VISIBLE
     else holder.editRecipe.visibility = View.GONE
 
+    Log.d("oofoof", "masuk ${item.second.title} ${item.second.upvotes.size.toString()}")
+    holder.upvoteCount.text = item.second.upvotes.size.toString()
+
     // USER
     item.first?.let { user ->
       holder.userTitle.text = user.name
@@ -104,6 +108,9 @@ class MyRecipeRecyclerViewAdapter(
     val editRecipe = binding.btnEdit
     val userProfile = binding.ivUserProfile
     val userTitle = binding.tvUsername
+    val upvoteCount = binding.tvUpvoteCount
+    val replyCount = binding.tvReplyCount
+    val bookmarkCount = binding.tvBookmarkCount
   }
 
   fun updateData(newItems: List<Pair<User?, Recipe>>) {
