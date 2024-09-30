@@ -69,6 +69,7 @@ class RecipeDetailFragment : Fragment() {
 
         binding.run {
           tvUpvoteCount.text = recipe.upvotes.size.toString()
+          tvReplyCount.text = recipe.replyCount.toString()
 
           setupUpvoteButton(recipe, user, recipeId)
 

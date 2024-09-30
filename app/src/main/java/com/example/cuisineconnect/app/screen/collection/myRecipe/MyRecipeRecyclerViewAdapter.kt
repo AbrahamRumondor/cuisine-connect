@@ -80,8 +80,10 @@ class MyRecipeRecyclerViewAdapter(
     if (isMyRecipes) holder.editRecipe.visibility = View.VISIBLE
     else holder.editRecipe.visibility = View.GONE
 
-    Log.d("oofoof", "masuk ${item.second.title} ${item.second.upvotes.size.toString()}")
     holder.upvoteCount.text = item.second.upvotes.size.toString()
+    Log.d("oofoof", "masuk ${item.second.title} ${item.second.replyCount}")
+    holder.replyCount.text = item.second.replyCount.toString()
+    holder.bookmarkCount.text = item.second.bookmarkCount.toString()
 
     // USER
     item.first?.let { user ->

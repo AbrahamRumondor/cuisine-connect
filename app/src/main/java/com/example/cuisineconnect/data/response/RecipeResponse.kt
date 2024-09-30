@@ -44,6 +44,14 @@ data class RecipeResponse(
   @get:PropertyName("recipe_duration")
   @set:PropertyName("recipe_duration")
   var duration: Int = 0,
+
+  @get:PropertyName("recipe_reply_count")
+  @set:PropertyName("recipe_reply_count")
+  var replyCount: Int = 0,
+
+  @get:PropertyName("recipe_bookmark_count")
+  @set:PropertyName("recipe_bookmark_count")
+  var bookmarkCount: Int = 0
 ) {
 
   constructor() : this("")
@@ -60,7 +68,9 @@ data class RecipeResponse(
         image = recipeResponse.image,
         description = recipeResponse.description,
         portion = recipeResponse.portion,
-        duration = recipeResponse.duration
+        duration = recipeResponse.duration,
+        bookmarkCount = recipeResponse.bookmarkCount,
+        replyCount = recipeResponse.replyCount
       )
     }
 
@@ -75,7 +85,9 @@ data class RecipeResponse(
         image = recipe.image,
         description = recipe.description,
         portion = recipe.portion,
-        duration = recipe.duration
+        duration = recipe.duration,
+        bookmarkCount = recipe.bookmarkCount,
+        replyCount = recipe.replyCount
       )
     }
   }

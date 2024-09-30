@@ -66,7 +66,8 @@ class ReplyRecipeFragment : Fragment() {
                   body = inputText,
                   userId = user.id,
                   recipeId = recipeId,
-                )
+                ),
+                isNewReply = true
               ) {
                 replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
               }

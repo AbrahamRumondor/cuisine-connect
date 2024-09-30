@@ -164,7 +164,7 @@ class ReplyRecipeViewModel @Inject constructor(
           val updatedReply = originalReply.copy(repliesId = updatedRepliesId)
 
           // First, update Firestore and then update the local list
-          setReply(recipeId, ReplyResponse.transform(updatedReply)) {
+          setReply(recipeId, ReplyResponse.transform(updatedReply), isNewReply = false) {
             Log.d("brobruh", "WORKING")
 
             // Now update the local list once the Firestore operation succeeds
@@ -192,8 +192,8 @@ class ReplyRecipeViewModel @Inject constructor(
     )
   }
 
-  fun setReply(recipeId: String, replyResponse: ReplyResponse, result: (ReplyResponse) -> Unit) {
-    replyUseCase.setReply(recipeId, replyResponse.id, replyResponse)
+  fun setReply(recipeId: String, replyResponse: ReplyResponse, isNewReply: Boolean, result: (ReplyResponse) -> Unit) {
+    replyUseCase.setReply(recipeId, replyResponse.id, replyResponse, isNewReply)
     result(replyResponse)
   }
 

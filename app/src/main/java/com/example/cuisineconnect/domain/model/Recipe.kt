@@ -13,4 +13,6 @@ data class Recipe(
   var date: Date = Date(),
   var upvotes: Map<String, Boolean> = emptyMap(),
   var image: String = "",
+  var replyCount: Int = 0,
+  var bookmarkCount: Int = 0
 )

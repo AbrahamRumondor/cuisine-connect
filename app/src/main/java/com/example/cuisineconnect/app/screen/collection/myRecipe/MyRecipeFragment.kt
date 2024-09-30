@@ -101,6 +101,11 @@ class MyRecipeFragment : Fragment() {
     })
   }
 
+  override fun onResume() {
+    super.onResume()
+    collectionViewModel.getRecipes()
+  }
+
   companion object {
 
     // TODO: Customize parameter argument names

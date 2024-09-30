@@ -17,8 +17,13 @@ class ReplyUseCaseImpl @Inject constructor(
     return replyRepository.getReplyById(recipeId, replyId)
   }
 
-  override fun setReply(recipeId: String, replyId: String, replyResponse: ReplyResponse) {
-    replyRepository.setReply(recipeId, replyId, replyResponse)
+  override fun setReply(
+    recipeId: String,
+    replyId: String,
+    replyResponse: ReplyResponse,
+    isNewReply: Boolean
+  ) {
+    replyRepository.setReply(recipeId, replyId, replyResponse, isNewReply)
   }
 
   override fun getRecipeReplyDocID(recipeId: String): String {

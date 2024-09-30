@@ -36,7 +36,7 @@ class CollectionViewModel @Inject constructor(
     getRecipes()
   }
 
-  private fun getRecipes() {
+  fun getRecipes() {
     viewModelScope.launch {
       userUseCase.getCurrentUser().collectLatest { currentUser ->
         // Use coroutineScope to launch parallel tasks

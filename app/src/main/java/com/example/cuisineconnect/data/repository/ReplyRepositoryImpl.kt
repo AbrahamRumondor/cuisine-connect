@@ -5,6 +5,7 @@ import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.repository.ReplyRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -53,13 +54,29 @@ class ReplyRepositoryImpl @Inject constructor(
     return "${rootReplyId}_${repliesRef.document(rootReplyId).collection("replies").document().id}"
   }
 
-  override fun setReply(recipeId: String, replyId: String, replyResponse: ReplyResponse) {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
+  override fun setReply(recipeId: String, replyId: String, replyResponse: ReplyResponse, isNewReply: Boolean) {
+    val recipeDocRef = recipesRef.document(recipeId)
+    val repliesRef = recipeDocRef.collection("replies")
 
-    repliesRef.document(replyId).set(replyResponse).addOnSuccessListener {
-      Timber.tag("TEST").d("SUCCESS ON reply INSERTION, ${replyResponse}")
-    }
-      .addOnFailureListener { Timber.tag("TEST").d("ERROR ON reply INSERTION") }
+    // First, set the reply in the "replies" collection
+    repliesRef.document(replyId).set(replyResponse)
+      .addOnSuccessListener {
+        Timber.tag("TEST").d("SUCCESS ON reply INSERTION, $replyResponse")
+
+        if (isNewReply) {
+          // Now increment the recipe's replyCount by 1
+          recipeDocRef.update("recipe_reply_count", FieldValue.increment(1))
+            .addOnSuccessListener {
+              Timber.tag("TEST").d("Successfully incremented reply count")
+            }
+            .addOnFailureListener { e ->
+              Timber.tag("TEST").d("Failed to increment reply count: ${e.message}")
+            }
+        }
+      }
+      .addOnFailureListener { e ->
+        Timber.tag("TEST").d("ERROR ON reply INSERTION: ${e.message}")
+      }
   }
 
   override suspend fun getReplyById(recipeId: String, replyId: String): Reply? {
@@ -76,7 +93,12 @@ class ReplyRepositoryImpl @Inject constructor(
     }
   }
 
-  override suspend fun upvoteReply(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
+  override suspend fun upvoteReply(
+    recipeId: String,
+    repliedId: String,
+    userId: String,
+    result: (Reply) -> Unit
+  ) {
     val repliesRef = recipesRef.document(recipeId).collection("replies")
 
     try {
@@ -101,7 +123,12 @@ class ReplyRepositoryImpl @Inject constructor(
   }
 
   // New method to remove an upvote
-  override suspend fun removeUpvote(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
+  override suspend fun removeUpvote(
+    recipeId: String,
+    repliedId: String,
+    userId: String,
+    result: (Reply) -> Unit
+  ) {
     val repliesRef = recipesRef.document(recipeId).collection("replies")
 
     try {
@@ -116,11 +143,13 @@ class ReplyRepositoryImpl @Inject constructor(
 
         response.upvotes = upvotes.filterNot { it.key == userId }
         recipeDoc.set(response).await()
-        Timber.tag("RemoveUpvote").d("User $userId removed upvote from recipe $repliedId successfully")
+        Timber.tag("RemoveUpvote")
+          .d("User $userId removed upvote from recipe $repliedId successfully")
         result(ReplyResponse.transform(response))
       }
     } catch (e: Exception) {
-      Timber.tag("RemoveUpvote").e(e, "Error removing upvote from recipe $repliedId by user $userId")
+      Timber.tag("RemoveUpvote")
+        .e(e, "Error removing upvote from recipe $repliedId by user $userId")
     }
   }
 
