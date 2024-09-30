@@ -19,4 +19,11 @@
     <item name="fabSize">normal</item>
     <item name="android:scaleType">centerInside</item>
   </style>
+
+  <style name="CustomFABStyleExtended" parent="Widget.MaterialComponents.FloatingActionButton">
+    <item name="backgroundTint">@color/cc_light_gray</item>
+    <item name="tint">@color/cc_gray</item>
+    <item name="fabSize">normal</item>
+    <item name="android:scaleType">centerCrop</item>
+  </style>
 </resources>

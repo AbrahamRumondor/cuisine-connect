@@ -64,6 +64,15 @@ class MyRecipeRecyclerViewAdapter(
         Toast.LENGTH_SHORT
       ).show()
     }
+    holder.recipeItem.setOnLongClickListener {
+      recipeListListener?.onRecipeLongClicked(item.second.id)
+      Toast.makeText(
+        myRecipeFragment.root.context,
+        "you long touched ${item.second.title} 😳😳😳",
+        Toast.LENGTH_SHORT
+      ).show()
+      true
+    }
     holder.editRecipe.setOnClickListener {
       Toast.makeText(
         myRecipeFragment.root.context,

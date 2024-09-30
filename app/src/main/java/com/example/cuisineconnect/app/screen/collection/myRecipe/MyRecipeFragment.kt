@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.collection.CollectionViewModel
@@ -98,7 +100,33 @@ class MyRecipeFragment : Fragment() {
           CollectionFragmentDirections.actionCollectionFragmentToRecipeDetailFragment(recipeId)
         findNavController().navigate(action)
       }
+
+      override fun onRecipeLongClicked(recipeId: String) {
+        onRecipeSelected(recipeId)
+      }
     })
+  }
+
+  fun onRecipeSelected(recipeId: String) {
+    // Pass the selected recipeId back to CreatePostFragment
+    val bundle = Bundle().apply {
+      putString("recipeId", recipeId)
+    }
+    requireActivity().supportFragmentManager.setFragmentResult("requestKey", bundle)
+
+    // Navigate back to CreatePostFragment
+    navigateBackToCreatePostFragment()
+  }
+
+  private fun navigateBackToCreatePostFragment() {
+    val navController = findNavController()
+
+    val success = navController.popBackStack(R.id.createPostFragment, false)
+
+    if (!success) {
+      // If CreatePostFragment is not in the back stack, handle it appropriately
+      // You may navigate back to a specific fragment or show an error message
+    }
   }
 
   override fun onResume() {

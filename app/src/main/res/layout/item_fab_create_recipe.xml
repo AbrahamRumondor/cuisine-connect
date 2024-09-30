@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fab_create_recipe"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_create"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
     android:layout_margin="16dp"
-    android:contentDescription="@string/icon_create_recipe"
-    android:src="@drawable/ic_create_recipe"
-    android:scaleType="centerCrop"
-    style="@style/CustomFABStyle"
-    />
+    >
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/fab_open_options"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_margin="16dp"
+      android:contentDescription="@string/icon_create_recipe"
+      android:src="@drawable/ic_create_recipe"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:scaleType="centerCrop"
+      style="@style/CustomFABStyle"
+      />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/fab_create_recipe"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:contentDescription="@string/icon_create_recipe"
+      android:src="@drawable/ic_fav_recipe"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/fab_open_options"
+      android:backgroundTint="@color/cc_light_gray"
+      style="@style/CustomFABStyleExtended"
+      android:visibility="gone"
+      />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/fab_create_post"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:visibility="gone"
+      android:contentDescription="@string/icon_create_recipe"
+      android:src="@drawable/ic_fab_post"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/fab_create_recipe"
+      android:backgroundTint="@color/cc_light_gray"
+      style="@style/CustomFABStyleExtended"
+      />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>

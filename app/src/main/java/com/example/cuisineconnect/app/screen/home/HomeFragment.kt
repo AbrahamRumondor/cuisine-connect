@@ -29,8 +29,29 @@ class HomeFragment : Fragment() {
   ): View {
     binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-    binding.inclFab.fabCreateRecipe.setOnClickListener {
-      findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+    binding.run {
+      inclFab.fabOpenOptions.setOnClickListener {
+        if (inclFab.fabCreatePost.visibility == View.GONE && inclFab.fabCreateRecipe.visibility == View.GONE) {
+          inclFab.fabCreatePost.visibility = View.VISIBLE
+          inclFab.fabCreateRecipe.visibility = View.VISIBLE
+          inclFab.fabOpenOptions.setImageResource(
+            R.drawable.ic_close
+          )
+
+          inclFab.fabCreateRecipe.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+          }
+          inclFab.fabCreatePost.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+          }
+        } else {
+          inclFab.fabCreatePost.visibility = View.GONE
+          inclFab.fabCreateRecipe.visibility = View.GONE
+          inclFab.fabOpenOptions.setImageResource(
+            R.drawable.ic_create_recipe
+          )
+        }
+      }
     }
 
     lifecycleScope.launch {
