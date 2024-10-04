@@ -71,4 +71,11 @@ object AppModule {
   fun provideCategoriesRef(): CollectionReference {
     return Firebase.firestore.collection("categories")
   }
+
+  @Provides
+  @Singleton
+  @Named("postsRef")
+  fun providePostsRef(): CollectionReference {
+    return Firebase.firestore.collection("posts")
+  }
 }

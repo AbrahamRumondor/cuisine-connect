@@ -6,6 +6,8 @@ import com.example.cuisineconnect.domain.usecase.auth.AuthUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.category.CategoryUseCase
 import com.example.cuisineconnect.domain.usecase.category.CategoryUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.ingredient.IngredientUseCase
+import com.example.cuisineconnect.domain.usecase.post.PostUseCase
+import com.example.cuisineconnect.domain.usecase.post.PostUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.reply.ReplyUseCase
@@ -64,4 +66,10 @@ abstract class UseCaseModule {
   abstract fun provideReplyUseCase(
     replyUseCaseImpl: ReplyUseCaseImpl
   ): ReplyUseCase
+
+  @Binds
+  @ViewModelScoped
+  abstract fun providePostUseCase(
+    postUseCaseImpl: PostUseCaseImpl
+  ): PostUseCase
 }

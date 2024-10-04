@@ -46,6 +46,16 @@
               android:textColor="@android:color/black"
               android:textSize="18sp"
               />
+
+          <androidx.appcompat.widget.AppCompatButton
+              android:id="@+id/btn_post"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Post"
+              android:background="@android:color/transparent"
+              android:textAllCaps="false"
+              />
+
         </LinearLayout>
       </androidx.appcompat.widget.Toolbar>
     </androidx.cardview.widget.CardView>
