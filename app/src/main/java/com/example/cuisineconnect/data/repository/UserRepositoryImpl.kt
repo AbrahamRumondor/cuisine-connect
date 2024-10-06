@@ -75,4 +75,17 @@ class UserRepositoryImpl @Inject constructor(
       }
   }
 
+  override fun addPostToUser(newPost: String) {
+    usersRef.document(currentUser.value.id)
+      .update("user_posts", FieldValue.arrayUnion(newPost))
+      .addOnSuccessListener {
+        // Handle success
+        println("Recipe added successfully")
+      }
+      .addOnFailureListener { e ->
+        // Handle failure
+        println("Error adding recipe: ${e.message}")
+      }
+  }
+
 }

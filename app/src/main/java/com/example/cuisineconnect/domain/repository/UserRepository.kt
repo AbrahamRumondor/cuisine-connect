@@ -10,4 +10,5 @@ interface UserRepository {
   suspend fun getUserByUserId(userId: String): User?
   suspend fun storeUser(uid: String, user: User)
   fun addRecipeToUser(newRecipe: String)
+  fun addPostToUser(newPost: String)
 }

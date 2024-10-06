@@ -14,13 +14,16 @@ import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 @HiltViewModel
 class CreatePostViewModel @Inject constructor(
@@ -30,7 +33,7 @@ class CreatePostViewModel @Inject constructor(
 ) : ViewModel() {
   private val storageReference = FirebaseStorage.getInstance().reference
 
-  val postContent: MutableList<MutableMap<String, String>> = mutableListOf()
+  var postContent: MutableList<MutableMap<String, String>> = mutableListOf()
   val imageList: MutableList<Uri> = mutableListOf()
 
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
@@ -83,19 +86,21 @@ class CreatePostViewModel @Inject constructor(
       // Upload all images in postContent and update the "value" with the URL
       val updatedPostContent = postContent.toMutableList()
 
-      updatedPostContent.forEachIndexed { index, item ->
-        when (item["type"]) {
-          "image" -> {
-            // Find the corresponding image URI from imageList based on the "value" field
-            val imageUriString = item["value"]
-            val imageUri = imageList.find { it.toString() == imageUriString }
+      withContext(Dispatchers.IO) {
+        // Sequentially upload images and update postContent
+        updatedPostContent.forEachIndexed { index, item ->
+          val types = item["type"]
+          types?.let { type ->
+            if (type.contains("image")) {
+              val imageUriString = item["value"]
+              val imageUri = imageList.find { it.toString() == imageUriString }
 
-            imageUri?.let { uri ->
-              uploadImage(uri) { uploadedUri ->
+              imageUri?.let { uri ->
+                // Await the image upload and update the postContent
+                val uploadedUri = uploadImageSuspend(uri)
                 uploadedUri?.let { downloadUri ->
-                  // Update the postContent with the new Firebase URL
                   updatedPostContent[index] = mutableMapOf(
-                    "type" to "image",
+                    "type" to type,
                     "value" to downloadUri.toString()
                   )
                 }
@@ -106,8 +111,6 @@ class CreatePostViewModel @Inject constructor(
       }
 
       // Ensure that all image uploads and post content updates are completed before saving
-//      val noneEmpty = updatedPostContent.all { map -> map.values.none { it.isEmpty() } }
-//      if (noneEmpty) {
       val post = PostResponse().copy(
         id = id,
         date = Date(),
@@ -115,10 +118,23 @@ class CreatePostViewModel @Inject constructor(
       )
 
       postUseCase.setPost(id, post, result)
-//      }
+      userUseCase.addPostToUser(post.id)
     }
   }
 
+  private suspend fun uploadImageSuspend(uri: Uri): Uri? {
+    return withContext(Dispatchers.IO) {
+      suspendCancellableCoroutine { continuation ->
+        uploadImage(uri) { uploadedUri ->
+          if (continuation.isActive) {
+            continuation.resume(uploadedUri)
+          } else {
+            continuation.resume(null)
+          }
+        }
+      }
+    }
+  }
   private fun createPostDoc(): String {
     return postUseCase.getPostDocID(user.value.id)
   }

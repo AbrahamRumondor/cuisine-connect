@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,143 +7,168 @@
     tools:context=".app.screen.profile.edit.ProfileEditFragment"
     >
 
-  <LinearLayout
+  <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:orientation="vertical"
-      android:paddingTop="16dp"
+      android:layout_height="match_parent"
       >
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp"
-        android:layout_marginBottom="16dp">
-
-      <androidx.appcompat.widget.Toolbar
-          android:id="@+id/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          android:background="@color/white"
-          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-          >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            >
-
-          <TextView
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Edit Profile"
-              android:textSize="18sp"
-              android:textColor="@android:color/black"/>
-
-          <Button
-              android:id="@+id/btn_save"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:background="@android:color/transparent"
-              android:text="Save"
-              android:textColor="@color/cc_gray"
-              android:textSize="18sp"/>
-        </LinearLayout>
-      </androidx.appcompat.widget.Toolbar>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Profile Image Card -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="250dp"
-        app:cardElevation="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
         >
 
-      <ImageView
-          android:id="@+id/iv_profile_picture"
-          android:layout_width="match_parent"
-          android:layout_height="96dp"
-          android:scaleType="centerCrop"
-          android:src="@drawable/ic_thumbs_up_regular"
-          tools:srcCompat="@tools:sample/avatars"/>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Username -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/username"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="15dp">
-
-      <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/et_name"
+      <androidx.cardview.widget.CardView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          app:cardElevation="4dp"
+          >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit Profile"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="Save"
+                android:textColor="@color/cc_gray"
+                android:textSize="18sp"
+                />
+          </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+      </androidx.cardview.widget.CardView>
+
+      <!-- Profile Image Card -->
+      <androidx.cardview.widget.CardView
+          android:layout_width="96dp"
+          android:layout_height="96dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="8dp"
+          android:clickable="true"
+          android:focusable="true"
+          android:foreground="?attr/selectableItemBackground"
+          app:cardCornerRadius="250dp"
+          app:cardElevation="4dp"
+          >
+
+        <ImageView
+            android:id="@+id/iv_profile_picture"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_thumbs_up_regular"
+            tools:srcCompat="@tools:sample/avatars"
+            />
+      </androidx.cardview.widget.CardView>
+
+      <!-- Username -->
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="24dp"
+          android:layout_marginTop="16dp"
+          android:text="@string/username"
+          android:textColor="@android:color/black"
+          android:textSize="16sp"
           />
-    </com.google.android.material.textfield.TextInputLayout>
 
-<!--    &lt;!&ndash; Email &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="24dp"-->
-<!--        android:text="@string/email"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@android:color/black"/>-->
+      <com.google.android.material.textfield.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="24dp"
+          android:layout_marginBottom="15dp"
+          >
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="24dp"-->
-<!--        android:layout_marginBottom="15dp">-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+      </com.google.android.material.textfield.TextInputLayout>
 
-<!--      <com.google.android.material.textfield.TextInputEditText-->
-<!--          android:id="@+id/et_email"-->
-<!--          android:layout_width="match_parent"-->
-<!--          android:layout_height="wrap_content"-->
-<!--          />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+      <!--    &lt;!&ndash; Email &ndash;&gt;-->
+      <!--    <TextView-->
+      <!--        android:layout_width="match_parent"-->
+      <!--        android:layout_height="wrap_content"-->
+      <!--        android:layout_marginHorizontal="24dp"-->
+      <!--        android:text="@string/email"-->
+      <!--        android:textSize="16sp"-->
+      <!--        android:textColor="@android:color/black"/>-->
 
-<!--    &lt;!&ndash; Password &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="24dp"-->
-<!--        android:text="@string/password"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@android:color/black"/>-->
+      <!--    <com.google.android.material.textfield.TextInputLayout-->
+      <!--        android:layout_width="match_parent"-->
+      <!--        android:layout_height="wrap_content"-->
+      <!--        android:layout_marginHorizontal="24dp"-->
+      <!--        android:layout_marginBottom="15dp">-->
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="24dp"-->
-<!--        android:layout_marginBottom="15dp">-->
+      <!--      <com.google.android.material.textfield.TextInputEditText-->
+      <!--          android:id="@+id/et_email"-->
+      <!--          android:layout_width="match_parent"-->
+      <!--          android:layout_height="wrap_content"-->
+      <!--          />-->
+      <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
-<!--      <com.google.android.material.textfield.TextInputEditText-->
-<!--          android:id="@+id/et_password"-->
-<!--          android:layout_width="match_parent"-->
-<!--          android:layout_height="wrap_content"-->
-<!--          android:inputType="textPassword"/>-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+      <!--    &lt;!&ndash; Password &ndash;&gt;-->
+      <!--    <TextView-->
+      <!--        android:layout_width="match_parent"-->
+      <!--        android:layout_height="wrap_content"-->
+      <!--        android:layout_marginHorizontal="24dp"-->
+      <!--        android:text="@string/password"-->
+      <!--        android:textSize="16sp"-->
+      <!--        android:textColor="@android:color/black"/>-->
 
-  </LinearLayout>
-</ScrollView>
+      <!--    <com.google.android.material.textfield.TextInputLayout-->
+      <!--        android:layout_width="match_parent"-->
+      <!--        android:layout_height="wrap_content"-->
+      <!--        android:layout_marginHorizontal="24dp"-->
+      <!--        android:layout_marginBottom="15dp">-->
+
+      <!--      <com.google.android.material.textfield.TextInputEditText-->
+      <!--          android:id="@+id/et_password"-->
+      <!--          android:layout_width="match_parent"-->
+      <!--          android:layout_height="wrap_content"-->
+      <!--          android:inputType="textPassword"/>-->
+      <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    </LinearLayout>
+
+  </ScrollView>
+
+  <include layout="@layout/item_loading"
+      android:id="@+id/ll_loading"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:visibility="gone"
+      />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

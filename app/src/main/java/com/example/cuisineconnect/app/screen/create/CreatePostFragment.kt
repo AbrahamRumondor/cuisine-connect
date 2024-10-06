@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -64,6 +65,7 @@ class CreatePostFragment : Fragment() {
 
       recipeId?.let { id ->
         lifecycleScope.launch {
+          Log.d("lololol", "this: ${createPostViewModel.postContent}")
           restorePostContent()
           addRecipe(id, true, null)
         }
@@ -92,8 +94,10 @@ class CreatePostFragment : Fragment() {
       btnPost.text = postText
       btnPost.setOnClickListener {
         updateTextPostContent()
+        llLoading.root.visibility = View.VISIBLE
         createPostViewModel.savePostInDatabase {
           Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
+          llLoading.root.visibility = View.GONE
           findNavController().popBackStack()
         }
       }
@@ -277,8 +281,8 @@ class CreatePostFragment : Fragment() {
 //          IVPreviewImage.setImageURI(selectedImageUri)
           imageUri?.let {
             createPostViewModel.imageList.add(it)
+            addImage(it.toString(), true, null)
           }
-          addImage(imageUri.toString(), true, null)
         }
       }
     }
@@ -305,25 +309,24 @@ class CreatePostFragment : Fragment() {
 
     // Loop through all child views in the LinearLayout
     for (i in 0 until binding.llPostContents.childCount) {
-      val childView = binding.llPostContents.getChildAt(i)
+      val linearLayout = binding.llPostContents.getChildAt(i)
 
       // Check if the child is a CardView and contains the EditText
-      if (childView is CardView) {
-        val editText = childView.findViewById<EditText>(R.id.etUserInput)
+      if (linearLayout is LinearLayout) {
+        val editText = linearLayout.findViewById<EditText>(R.id.etUserInput)
         if (editText != null) {
           // Get the text from the EditText
           val text = editText.text.toString()
-          Log.d("brobruh", "nih: " + text)
 
           // Update the corresponding postContent item where type matches "${i}_text"
-          val postContentItem = createPostViewModel.postContent.find {
-            it["type"] == "${i}_text"
+          val updatedPostContent = createPostViewModel.postContent.map { post ->
+            if (post["type"] == "${i}_text") {
+              post.toMutableMap().apply {
+                put("value", text)
+              }
+            } else post
           }
-
-          postContentItem?.let { post ->
-            // Update the value for the matching postContent item
-            post["value"] = text
-          }
+          createPostViewModel.postContent = updatedPostContent.toMutableList()
 
           // Also add it to the local list if needed
           list.add(text)

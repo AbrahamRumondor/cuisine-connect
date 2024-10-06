@@ -60,8 +60,11 @@ class ProfileEditFragment : Fragment() {
           return@setOnClickListener
         }
 
+        llLoading.root.visibility = View.VISIBLE
         profileViewModel.updateUser(username, "", "", imageUri) {
+          llLoading.root.visibility = View.GONE
           Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
+          findNavController().navigateUp() // Navigate back to the previous fragment
         }
       }
     }

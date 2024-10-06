@@ -6,6 +6,7 @@ data class User(
     val email: String = "",
     val password: String = "",
     val recipes: List<String> = listOf(),
+    val posts: List<String> = listOf(),
     val image: String = "",
     val follower: List<String> = listOf(),
     val following: List<String> = listOf()

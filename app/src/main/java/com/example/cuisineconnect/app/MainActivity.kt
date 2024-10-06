@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
           R.id.createRecipeFragment -> hideBottomNav()
           R.id.recipeDetailFragment -> hideBottomNav()
           R.id.replyRecipeFragment -> hideBottomNav()
+          R.id.createPostFragment -> hideBottomNav()
           else -> showBottomNav()
         }
       }

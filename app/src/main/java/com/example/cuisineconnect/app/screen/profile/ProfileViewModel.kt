@@ -104,6 +104,7 @@ class ProfileViewModel @Inject constructor(
             db.collection("users").document(user.value.id)
               .update("user_image", link.toString())
               .addOnSuccessListener {
+                result()
                 Log.d("profileViewModel", "User image updated")
               }
               .addOnFailureListener { e ->
@@ -114,8 +115,6 @@ class ProfileViewModel @Inject constructor(
           }
         }
       }
-
-      result()
     }
   }
 

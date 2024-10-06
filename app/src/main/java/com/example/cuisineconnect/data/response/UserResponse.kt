@@ -24,6 +24,10 @@ data class UserResponse(
     @set:PropertyName("user_recipes")
     var recipes: List<String> = listOf(),
 
+    @get:PropertyName("user_posts")
+    @set:PropertyName("user_posts")
+    var posts: List<String> = listOf(),
+
     @get:PropertyName("user_image")
     @set:PropertyName("user_image")
     var image: String = "",
@@ -49,7 +53,8 @@ data class UserResponse(
                 recipes = userResponse.recipes,
                 follower = userResponse.follower,
                 following = userResponse.following,
-                image = userResponse.image
+                image = userResponse.image,
+                posts = userResponse.posts
             )
         }
 
@@ -62,7 +67,8 @@ data class UserResponse(
                 recipes = user.recipes,
                 follower = user.follower,
                 following = user.following,
-                image = user.image
+                image = user.image,
+                posts = user.posts
             )
         }
     }

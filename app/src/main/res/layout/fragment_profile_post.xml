@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".app.screen.profile.post.ProfilePostFragment"
+    tools:listitem="@layout/fragment_profile_post"
+    android:background="@color/white"
+    app:layoutManager="LinearLayoutManager"
+    >
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/white"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
+        tools:listitem="@layout/fragment_my_recipe"/>
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

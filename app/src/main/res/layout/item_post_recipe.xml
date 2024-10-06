@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
-    android:layout_margin="24dp"
+    android:layout_marginVertical="12dp"
+    android:layout_marginHorizontal="24dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     >
@@ -64,7 +65,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="8dp"
         android:text="A Sweet and Sour Dessert?! Under 10$ aokwoakoakwokoawokooakwokoaowkoakowkoao"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -81,7 +82,7 @@
         android:layout_width="100dp"
         android:layout_height="56.25dp"
         android:contentDescription="@string/image"
-        android:paddingEnd="16dp"
+        android:paddingEnd="8dp"
         android:src="@drawable/cc_asset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_user"
@@ -91,7 +92,7 @@
         android:id="@+id/tv_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="8dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis."
@@ -105,8 +106,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,8 +125,8 @@
 
         <ImageView
             android:id="@+id/iv_ic_thumbs"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_thumbs_up_regular"
             />
@@ -149,8 +150,8 @@
 
         <ImageView
             android:id="@+id/iv_ic_reply"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_msg_bubble"
             />
@@ -175,8 +176,8 @@
 
         <ImageView
             android:id="@+id/iv_ic_bookmark"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_bookmark_regular"
             />

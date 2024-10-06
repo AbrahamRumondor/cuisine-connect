@@ -27,4 +27,8 @@ class UserUseCaseImpl @Inject constructor(
     override fun addRecipeToUser(newRecipe: String) {
         userRepository.addRecipeToUser(newRecipe)
     }
+
+    override fun addPostToUser(newPost: String) {
+        userRepository.addPostToUser(newPost)
+    }
 }
