@@ -164,6 +164,11 @@ class CreatePostFragment : Fragment() {
 
   private fun addRecipe(recipeId: String, isFromListener: Boolean, order: Int?) {
     createPostViewModel.getRecipeById(recipeId) { pair ->
+      if (pair == null) {
+        // TODO
+        return@getRecipeById
+      }
+
       val (user, recipe) = pair
 
       // Only add the recipe if it matches the given recipeId

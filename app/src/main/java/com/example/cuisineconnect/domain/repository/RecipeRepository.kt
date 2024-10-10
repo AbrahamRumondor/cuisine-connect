@@ -13,4 +13,5 @@ interface RecipeRepository {
   suspend fun getRecipeByID(recipeId: String): Recipe?
   suspend fun upvoteRecipe(recipeId: String, userId: String)
   suspend fun removeUpvote(recipeId: String, userId: String)
+  suspend fun removeRecipe(recipeId: String)
 }

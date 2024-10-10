@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.collection.myRecipe
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.net.Uri
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
@@ -74,11 +75,26 @@ class MyRecipeRecyclerViewAdapter(
       true
     }
     holder.editRecipe.setOnClickListener {
-      Toast.makeText(
-        myRecipeFragment.root.context,
-        "${item.second.title} edited",
-        Toast.LENGTH_SHORT
-      ).show()
+      val builder = AlertDialog.Builder(myRecipeFragment.root.context)
+      builder.setTitle("Delete Recipe")
+      builder.setMessage("Are you sure you want to delete the recipe?")
+
+      builder.setPositiveButton("Yes") { dialog, _ ->
+        Toast.makeText(
+          myRecipeFragment.root.context,
+          "${item.second.title} deleted",
+          Toast.LENGTH_SHORT
+        ).show()
+
+        recipeListListener?.onRecipeDeleteClicked(item.second.id)
+        dialog.dismiss() // Dismiss the dialog
+      }
+
+      builder.setNegativeButton("No") { dialog, _ ->
+        dialog.dismiss()
+      }
+
+      builder.create().show()
     }
     val uri = Uri.parse(item.second.image)
     Glide.with(myRecipeFragment.root)
@@ -127,6 +143,22 @@ class MyRecipeRecyclerViewAdapter(
   fun updateData(newItems: List<Pair<User?, Recipe>>) {
     recipes = newItems
     notifyItemRangeChanged(0, newItems.size)
+  }
+
+  fun removeData(recipeId: String) {
+    // Find the index of the item with the given recipeId
+    val indexToRemove = recipes.indexOfFirst { it.second.id == recipeId }
+
+    // If the item exists in the list, remove it and notify the adapter
+    if (indexToRemove != -1) {
+      // Convert the list to mutable so we can remove the item
+      val updatedRecipes = recipes.toMutableList()
+      updatedRecipes.removeAt(indexToRemove)
+
+      // Update the list and notify the adapter
+      recipes = updatedRecipes
+      notifyItemRemoved(indexToRemove)
+    }
   }
 
   fun isMyRecipes() {

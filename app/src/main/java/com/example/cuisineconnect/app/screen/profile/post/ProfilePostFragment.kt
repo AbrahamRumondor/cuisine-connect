@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.profile.post
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
+import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentProfilePostBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -82,30 +84,29 @@ class ProfilePostFragment : Fragment() {
   }
 
   private fun setupAdapter() {
+    binding.list.adapter = profilePostAdapter
+
     lifecycleScope.launch {
       profilePostViewModel.list.collectLatest { list ->
-
-        if (binding.list.adapter == null) {
-          binding.list.adapter = profilePostAdapter
-        }
         if (list != null) {
           profilePostAdapter.submitPostNRecipeParts(list.toMutableList())
           profilePostAdapter.addViewModel(createPostViewModel)
         }
       }
-
-      profilePostAdapter.setItemListener(object : RecipeListListener {
-        override fun onRecipeClicked(recipeId: String) {
-          val action =
-            CollectionFragmentDirections.actionCollectionFragmentToRecipeDetailFragment(recipeId)
-          findNavController().navigate(action)
-        }
-
-        override fun onRecipeLongClicked(recipeId: String) {
-//          onRecipeSelected(recipeId)
-        }
-      })
     }
+
+    profilePostAdapter.setItemListener(object : RecipeListListener {
+      override fun onRecipeClicked(recipeId: String) {
+        Log.d("aahdfkfj", "masuk")
+        val action =
+          ProfileFragmentDirections.actionProfileFragmentToRecipeDetailFragment(recipeId)
+        findNavController().navigate(action)
+      }
+
+      override fun onRecipeLongClicked(recipeId: String) {
+        onRecipeSelected(recipeId)
+      }
+    })
   }
 
   fun onRecipeSelected(recipeId: String) {

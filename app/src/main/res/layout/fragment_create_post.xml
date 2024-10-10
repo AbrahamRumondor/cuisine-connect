@@ -9,152 +9,244 @@
 
   <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       >
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         >
 
-      <androidx.appcompat.widget.Toolbar
-          android:id="@+id/toolbar"
+      <androidx.cardview.widget.CardView
+          android:id="@+id/cv_toolbar"
           android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          android:background="@color/white"
-          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          app:cardElevation="4dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
           >
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             >
 
-          <TextView
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Create Post"
-              android:textColor="@android:color/black"
-              android:textSize="18sp"
-              />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              >
 
-          <androidx.appcompat.widget.AppCompatButton
-              android:id="@+id/btn_post"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Post"
-              android:background="@android:color/transparent"
-              android:textAllCaps="false"
-              />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Create Post"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                />
 
-        </LinearLayout>
-      </androidx.appcompat.widget.Toolbar>
-    </androidx.cardview.widget.CardView>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="Post"
+                android:textAllCaps="false"
+                />
 
-    <LinearLayout
-        android:id="@+id/ll_post_contents"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="24dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
-        >
+          </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+      </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+      <LinearLayout
+          android:id="@+id/ll_post_contents"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginVertical="24dp"
+          android:orientation="vertical"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+          >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_post_contents"
-        />
+      </LinearLayout>
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="300dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/ll_post_contents"
+          />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </ScrollView>
+
 
   <LinearLayout
       android:id="@+id/ll_buttons"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginHorizontal="24dp"
       android:orientation="horizontal"
       android:weightSum="3"
+      android:background="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
       >
 
-    <androidx.appcompat.widget.AppCompatButton
+    <LinearLayout
         android:id="@+id/btn_add_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
         android:layout_weight="1"
-        android:background="@drawable/button_radius_profile"
-        android:backgroundTint="@color/cc_light_gray"
-        android:drawableStart="@drawable/ic_fonts"
         android:gravity="center"
-        android:text="text"
-        android:textAllCaps="false"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_fonts"
+          />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="4dp"
+          android:text="Text"
+          />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="8dp"
+        android:background="@color/cc_light_gray"
         />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <LinearLayout
         android:id="@+id/btn_add_image"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:layout_weight="1"
-        android:background="@drawable/button_radius_profile"
-        android:backgroundTint="@color/cc_light_gray"
-        android:drawableStart="@drawable/ic_image"
         android:gravity="center"
-        android:text="image"
-        android:textAllCaps="false"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_image"
+          />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="4dp"
+          android:text="Image"
+          />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="8dp"
+        android:background="@color/cc_light_gray"
         />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <LinearLayout
         android:id="@+id/btn_add_recipe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:layout_weight="1"
-        android:background="@drawable/button_radius_profile"
-        android:backgroundTint="@color/cc_light_gray"
-        android:drawableStart="@drawable/ic_fav_recipe"
         android:gravity="center"
-        android:text="recipe"
-        android:textAllCaps="false"
-        />
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_fav_recipe"
+          />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="4dp"
+          android:text="Recipe"
+          />
+
+    </LinearLayout>
+
+
+    <!--    <androidx.appcompat.widget.AppCompatButton-->
+    <!--        android:id="@+id/btn_add_text"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:background="@drawable/button_radius_profile"-->
+    <!--        android:backgroundTint="@color/cc_light_gray"-->
+    <!--        android:drawableStart="@drawable/ic_fonts"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="text"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        />-->
+
+    <!--    <androidx.appcompat.widget.AppCompatButton-->
+    <!--        android:id="@+id/btn_add_image"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="8dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:background="@drawable/button_radius_profile"-->
+    <!--        android:backgroundTint="@color/cc_light_gray"-->
+    <!--        android:drawableStart="@drawable/ic_image"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="image"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        />-->
+
+    <!--    <androidx.appcompat.widget.AppCompatButton-->
+    <!--        android:id="@+id/btn_add_recipe"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="8dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:background="@drawable/button_radius_profile"-->
+    <!--        android:backgroundTint="@color/cc_light_gray"-->
+    <!--        android:drawableStart="@drawable/ic_fav_recipe"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="recipe"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        />-->
 
   </LinearLayout>
 
-  <include layout="@layout/item_loading"
+  <include
       android:id="@+id/ll_loading"
+      layout="@layout/item_loading"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
       android:visibility="gone"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

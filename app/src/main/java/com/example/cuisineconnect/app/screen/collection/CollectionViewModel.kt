@@ -41,12 +41,12 @@ class CollectionViewModel @Inject constructor(
       userUseCase.getCurrentUser().collectLatest { currentUser ->
         // Use coroutineScope to launch parallel tasks
         coroutineScope {
-          val recipes = currentUser.recipes.map { recipeId ->
+          val recipes = currentUser.recipes.mapNotNull { recipeId ->
             Log.d("brobruh", recipeId)
             async {
-              recipeUseCase.getRecipeByID(recipeId) as Recipe
+              recipeUseCase.getRecipeByID(recipeId) // Fetch recipe
             }
-          }.awaitAll()
+          }.awaitAll().filterNotNull() // Filter out null recipes
 
           val pairList = recipes.map { recipe ->
             val userId = recipe.id.substringBefore("_")
@@ -73,6 +73,12 @@ class CollectionViewModel @Inject constructor(
           }
         }
       }
+    }
+  }
+
+  fun deleteRecipe(recipeId: String) {
+    viewModelScope.launch {
+      recipeUseCase.removeRecipe(recipeId)
     }
   }
 

@@ -30,7 +30,7 @@ class ProfilePostAdapter :
     return when (items[position].second) {
       is Post -> SHOW_POST
       is Recipe -> SHOW_RECIPE
-      else -> throw IllegalArgumentException("Invalid item type")
+      else -> 0
     }
   }
 
@@ -64,7 +64,7 @@ class ProfilePostAdapter :
         createPostViewModel
       )
 
-      second is Recipe && first is User? -> (holder as ItemRecipeViewHolder).bind(
+      second is Recipe? && first is User? -> (holder as ItemRecipeViewHolder).bind(
         first,
         second,
         postNRecipeItemListener

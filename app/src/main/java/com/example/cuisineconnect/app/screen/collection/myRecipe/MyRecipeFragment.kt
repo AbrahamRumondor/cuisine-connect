@@ -104,6 +104,11 @@ class MyRecipeFragment : Fragment() {
       override fun onRecipeLongClicked(recipeId: String) {
         onRecipeSelected(recipeId)
       }
+
+      override fun onRecipeDeleteClicked(recipeId: String) {
+        collectionViewModel.deleteRecipe(recipeId)
+        recipeAdapter.removeData(recipeId)
+      }
     })
   }
 

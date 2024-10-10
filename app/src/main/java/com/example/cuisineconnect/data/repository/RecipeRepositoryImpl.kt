@@ -106,4 +106,20 @@ class RecipeRepositoryImpl @Inject constructor(
     }
   }
 
+  override suspend fun removeRecipe(recipeId: String) {
+    try {
+      // Get a reference to the recipe document
+      val recipeDoc = recipesRef.document(recipeId)
+
+      // Delete the recipe document
+      recipeDoc.delete().await()
+
+      // Log success
+      Timber.tag("RemoveRecipe").d("Recipe $recipeId deleted successfully")
+    } catch (e: Exception) {
+      // Log error if deletion fails
+      Timber.tag("RemoveRecipe").e(e, "Error deleting recipe $recipeId")
+    }
+  }
+
 }

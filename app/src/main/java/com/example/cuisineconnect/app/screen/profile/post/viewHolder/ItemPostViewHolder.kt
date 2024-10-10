@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -26,12 +27,12 @@ class ItemPostViewHolder(
 
   fun bind(
     user: User?,
-    post: Post,
+    post: Post?,
     listener: RecipeListListener?,
     createPostViewModel: CreatePostViewModel?
   ) {
     view.run {
-      if (user != null) {
+      if (user != null && post != null) {
 
         Log.d("lilil", "this is post ${user} and ${post}")
 
@@ -80,7 +81,7 @@ class ItemPostViewHolder(
 
     for (item in currentPostContent) {
       val customCardView = LayoutInflater.from(view.root.context)
-        .inflate(R.layout.item_post_edit_text_input, view.llPostContents, false)
+        .inflate(R.layout.item_loading_layout, view.llPostContents, false)
       view.llPostContents.addView(customCardView)
     }
 
@@ -110,14 +111,13 @@ class ItemPostViewHolder(
 
   private fun addText(text: String, order: Int?) {
     val customCardView = LayoutInflater.from(view.root.context)
-      .inflate(R.layout.item_post_edit_text_input, view.llPostContents, false)
+      .inflate(R.layout.item_post_text_view, view.llPostContents, false)
 
     // Set margins using the new function
     setViewMargins(customCardView, 0, 8)
 
-    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
-    etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-    etUserInput.setText(text)
+    val tvUserInput: TextView = customCardView.findViewById(R.id.tvUserInput)
+    tvUserInput.text = text
 
     if (order != null && order <= view.llPostContents.childCount) {
       view.llPostContents.removeViewAt(order)
@@ -135,7 +135,7 @@ class ItemPostViewHolder(
     setViewMargins(customImageView, 0, 8)
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
-    Glide.with(view.root).load(imageUri).into(imageView)
+    Glide.with(view.root).load(imageUri).placeholder(R.drawable.cc_asset).into(imageView)
 
     if (order != null && order <= view.llPostContents.childCount) {
       view.llPostContents.removeViewAt(order)
@@ -150,7 +150,21 @@ class ItemPostViewHolder(
     order: Int?,
     createPostViewModel: CreatePostViewModel?,
   ) {
+
     createPostViewModel?.getRecipeById(recipeId) { pair ->
+      if (pair == null) {
+        val customCardView = LayoutInflater.from(view.root.context)
+          .inflate(R.layout.item_failed_layout, view.llPostContents, false)
+
+        if (order != null && order <= view.llPostContents.childCount) {
+          view.llPostContents.removeViewAt(order)
+          view.llPostContents.addView(customCardView, order)
+        } else {
+          view.llPostContents.addView(customCardView, view.llPostContents.childCount)
+        }
+        return@getRecipeById
+      }
+
       val (user, recipe) = pair
 
       if (recipe.id == recipeId) {

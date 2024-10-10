@@ -53,6 +53,9 @@
     <action
         android:id="@+id/action_profileFragment_to_profileEditFragment"
         app:destination="@id/profileEditFragment" />
+    <action
+        android:id="@+id/action_profileFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
   </fragment>
   <fragment
       android:id="@+id/savedRecipeFragment"
@@ -105,5 +108,9 @@
       android:id="@+id/profilePostFragment"
       android:name="com.example.cuisineconnect.app.screen.profile.post.ProfilePostFragment"
       android:label="fragment_profile_post"
-      tools:layout="@layout/fragment_profile_post" />
+      tools:layout="@layout/fragment_profile_post" >
+    <action
+        android:id="@+id/action_profilePostFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
+  </fragment>
 </navigation>

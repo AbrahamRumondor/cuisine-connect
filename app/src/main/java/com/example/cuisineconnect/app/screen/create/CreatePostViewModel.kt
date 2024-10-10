@@ -55,7 +55,7 @@ class CreatePostViewModel @Inject constructor(
     imageList.clear()
   }
 
-  fun getRecipeById(recipeId: String, result: (Pair<User, Recipe>) -> Unit) {
+  fun getRecipeById(recipeId: String, result: (Pair<User, Recipe>?) -> Unit) {
     viewModelScope.launch {
       // Fetch the recipe
       val recipe = withContext(Dispatchers.IO) {
@@ -75,7 +75,7 @@ class CreatePostViewModel @Inject constructor(
         user?.let { u ->
           result(Pair(u, r))
         }
-      }
+      } ?: result(null)
     }
   }
 

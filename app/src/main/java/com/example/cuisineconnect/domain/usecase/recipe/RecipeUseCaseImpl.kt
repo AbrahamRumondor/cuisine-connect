@@ -41,4 +41,8 @@ class RecipeUseCaseImpl @Inject constructor(
   override suspend fun removeUpvote(recipeId: String, userId: String) {
     recipeRepository.removeUpvote(recipeId, userId)
   }
+
+  override suspend fun removeRecipe(recipeId: String) {
+    recipeRepository.removeRecipe(recipeId)
+  }
 }

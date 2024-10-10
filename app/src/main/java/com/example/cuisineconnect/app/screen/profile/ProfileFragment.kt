@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
             .placeholder(android.R.drawable.ic_menu_report_image)
             .into(ivUserProfile)
 
-          val posts = Html.fromHtml("<b>${user.recipes.size}</b> posts")
+          val posts = Html.fromHtml("<b>${user.recipes.size}</b> recipes")
           tvPosts.text = posts
           val followers = Html.fromHtml("<b>${user.follower.size}</b> followers")
           tvFollowers.text = followers

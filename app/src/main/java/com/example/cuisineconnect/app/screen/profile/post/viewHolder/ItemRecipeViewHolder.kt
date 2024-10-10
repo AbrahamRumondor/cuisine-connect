@@ -16,9 +16,9 @@ class ItemRecipeViewHolder(
 //    private val itemListener: OrderSummaryItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
-  fun bind(user: User?, recipe: Recipe, listener: RecipeListListener?) {
+  fun bind(user: User?, recipe: Recipe?, listener: RecipeListListener?) {
     view.run {
-      if (user != null) {
+      if (user != null && recipe != null) {
 
         Log.d("lilil", "this is recipe ${user} and ${recipe}")
 
