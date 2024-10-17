@@ -48,6 +48,7 @@ class CollectionViewModel @Inject constructor(
             }
           }.awaitAll().filterNotNull() // Filter out null recipes
 
+          // Create a pair list of User and Recipe asynchronously
           val pairList = recipes.map { recipe ->
             val userId = recipe.id.substringBefore("_")
             async {
@@ -56,13 +57,17 @@ class CollectionViewModel @Inject constructor(
             }
           }.awaitAll() // Await all user fetching tasks
 
-          Log.d("brobruh", pairList.toString())
-          _recipes.value = pairList // Assign the result to _myRecipes
+          // Sort the pair list by recipe date in descending order
+          val sortedPairList = pairList.sortedByDescending { pair ->
+            (pair.second as? Recipe)?.date?.time ?: 0L // Use the date property for sorting
+          }
+
+          Log.d("brobruh", sortedPairList.toString())
+          _recipes.value = sortedPairList // Assign the result to _myRecipes
         }
       }
     }
   }
-
   fun getMyRecipes() {
     getRecipes()
     viewModelScope.launch {

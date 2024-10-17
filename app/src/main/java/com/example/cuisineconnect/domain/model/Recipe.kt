@@ -14,5 +14,7 @@ data class Recipe(
   var upvotes: Map<String, Boolean> = emptyMap(),
   var image: String = "",
   var replyCount: Int = 0,
-  var bookmarkCount: Int = 0
+  var bookmarkCount: Int = 0,
+  var referencedBy: Map<String, Boolean> = emptyMap(),
+  var userId: String = "",
 )

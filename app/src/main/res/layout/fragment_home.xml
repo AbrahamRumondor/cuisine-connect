@@ -7,27 +7,29 @@
     tools:context=".app.screen.home.HomeFragment"
     >
 
-  <TextView
-      android:id="@+id/tv_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="NO NAME"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@id/btn_logout"
-      />
-
-  <androidx.appcompat.widget.AppCompatButton
-      android:id="@+id/btn_logout"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/srl_home"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      android:text="Log out"
-      android:textAllCaps="false"
-      />
+      >
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/white"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
+        tools:listitem="@layout/fragment_my_recipe"
+        />
+
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
   <include
       android:id="@+id/incl_fab"

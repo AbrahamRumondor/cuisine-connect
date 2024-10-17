@@ -30,7 +30,7 @@ class ProfilePostAdapter :
     return when (items[position].second) {
       is Post -> SHOW_POST
       is Recipe -> SHOW_RECIPE
-      else -> 0
+      else -> throw IllegalArgumentException("Invalid view type")
     }
   }
 
@@ -64,7 +64,7 @@ class ProfilePostAdapter :
         createPostViewModel
       )
 
-      second is Recipe? && first is User? -> (holder as ItemRecipeViewHolder).bind(
+      second is Recipe && first is User? -> (holder as ItemRecipeViewHolder).bind(
         first,
         second,
         postNRecipeItemListener
@@ -80,8 +80,12 @@ class ProfilePostAdapter :
 
   fun submitPostNRecipeParts(orderItems: MutableList<Pair<User, Any?>>) {
     Log.d("lililil", "ini list: ${orderItems}")
+    val validItems = orderItems.filter { pair ->
+      pair.second is Post || pair.second is Recipe
+    }
+
     this.items.clear()
-    this.items.addAll(orderItems)
+    this.items.addAll(validItems)
     notifyDataSetChanged()
   }
 
@@ -91,5 +95,23 @@ class ProfilePostAdapter :
 
   fun addViewModel(createPostViewModel: CreatePostViewModel) {
     this.createPostViewModel = createPostViewModel
+  }
+
+  fun removeData(itemId: String, type: String) {
+    val indexToRemove = items.indexOfFirst {
+      when (type) {
+        "recipe" -> it.second is Recipe && (it.second as Recipe).id == itemId
+        "post" -> it.second is Post && (it.second as Post).id == itemId
+        else -> false
+      }
+    }
+
+    if (indexToRemove != -1) {
+      val updatedItems = items.toMutableList()
+      updatedItems.removeAt(indexToRemove)
+
+      items = updatedItems
+      notifyItemRemoved(indexToRemove)
+    }
   }
 }

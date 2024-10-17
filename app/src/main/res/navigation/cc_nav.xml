@@ -16,6 +16,9 @@
     <action
         android:id="@+id/action_homeFragment_to_createPostFragment"
         app:destination="@id/createPostFragment" />
+    <action
+        android:id="@+id/action_homeFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
   </fragment>
   <fragment
       android:id="@+id/searchFragment"

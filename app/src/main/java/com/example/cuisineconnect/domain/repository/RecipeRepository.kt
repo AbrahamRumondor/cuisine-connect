@@ -2,6 +2,7 @@ package com.example.cuisineconnect.domain.repository
 
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.model.Recipe
+import com.example.cuisineconnect.domain.model.User
 import kotlinx.coroutines.flow.StateFlow
 
 interface RecipeRepository {
@@ -14,4 +15,5 @@ interface RecipeRepository {
   suspend fun upvoteRecipe(recipeId: String, userId: String)
   suspend fun removeUpvote(recipeId: String, userId: String)
   suspend fun removeRecipe(recipeId: String)
+  suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User,Recipe>>>
 }

@@ -75,6 +75,7 @@ class CreateRecipeViewModel @Inject constructor(
             db.runTransaction { transaction ->
               val recipe = Recipe(
                 id = recipeId,
+                userId = me.id,
                 title = title,
                 description = description,
                 portion = portion,
@@ -82,6 +83,7 @@ class CreateRecipeViewModel @Inject constructor(
                 image = image,
                 ingredients = ingredients,
                 date = Date(),
+                referencedBy = mapOf(me.id to true)
               )
               val recipeToFirebase = RecipeResponse.transform(recipe)
 

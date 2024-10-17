@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.profile.post.viewHolder
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -55,11 +56,26 @@ class ItemRecipeViewHolder(
           true
         }
         btnEdit.setOnClickListener {
-          Toast.makeText(
-            view.root.context,
-            "${recipe.title} edited",
-            Toast.LENGTH_SHORT
-          ).show()
+          val builder = AlertDialog.Builder(view.root.context)
+          builder.setTitle("Delete Recipe")
+          builder.setMessage("Are you sure you want to delete the recipe?")
+
+          builder.setPositiveButton("Yes") { dialog, _ ->
+            Toast.makeText(
+              view.root.context,
+              "${recipe.title} deleted",
+              Toast.LENGTH_SHORT
+            ).show()
+
+            listener?.onItemDeleteClicked(recipe.id, "recipe")
+            dialog.dismiss() // Dismiss the dialog
+          }
+
+          builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+          }
+
+          builder.create().show()
         }
         val uri = Uri.parse(recipe.image)
         Glide.with(view.root)

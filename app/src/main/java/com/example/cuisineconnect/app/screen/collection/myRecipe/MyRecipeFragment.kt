@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -61,7 +60,7 @@ class MyRecipeFragment : Fragment() {
       }
     }
 
-    binding.root.isNestedScrollingEnabled = true
+//    binding.root.isNestedScrollingEnabled = true
 
     binding.root.setOnRefreshListener {
       refreshContent()
@@ -73,13 +72,9 @@ class MyRecipeFragment : Fragment() {
   private fun refreshContent() {
     lifecycleScope.launch {
       collectionViewModel.getMyRecipes()
-      collectionViewModel.myRecipes.collectLatest {
-        if (it != null) {
-          recipeAdapter.updateData(it)
-          binding.root.isRefreshing = false
-        }
-      }
+      collectionViewModel.myRecipes.value?.let { recipeAdapter.updateData(it) }
     }
+    binding.root.isRefreshing = false
   }
 
   private fun setupAdapter() {
@@ -105,9 +100,9 @@ class MyRecipeFragment : Fragment() {
         onRecipeSelected(recipeId)
       }
 
-      override fun onRecipeDeleteClicked(recipeId: String) {
-        collectionViewModel.deleteRecipe(recipeId)
-        recipeAdapter.removeData(recipeId)
+      override fun onItemDeleteClicked(itemId: String, type: String) {
+        collectionViewModel.deleteRecipe(itemId)
+        recipeAdapter.removeData(itemId)
       }
     })
   }

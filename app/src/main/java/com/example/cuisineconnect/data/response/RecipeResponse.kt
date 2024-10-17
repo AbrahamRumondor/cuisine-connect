@@ -51,7 +51,15 @@ data class RecipeResponse(
 
   @get:PropertyName("recipe_bookmark_count")
   @set:PropertyName("recipe_bookmark_count")
-  var bookmarkCount: Int = 0
+  var bookmarkCount: Int = 0,
+
+  @get:PropertyName("recipe_referenced_by")
+  @set:PropertyName("recipe_referenced_by")
+  var referencedBy: Map<String, Boolean> = emptyMap(),
+
+  @get:PropertyName("recipe_user_id")
+  @set:PropertyName("recipe_user_id")
+  var userId: String = ""
 ) {
 
   constructor() : this("")
@@ -70,7 +78,9 @@ data class RecipeResponse(
         portion = recipeResponse.portion,
         duration = recipeResponse.duration,
         bookmarkCount = recipeResponse.bookmarkCount,
-        replyCount = recipeResponse.replyCount
+        replyCount = recipeResponse.replyCount,
+        referencedBy = recipeResponse.referencedBy,
+        userId = recipeResponse.userId
       )
     }
 
@@ -87,7 +97,9 @@ data class RecipeResponse(
         portion = recipe.portion,
         duration = recipe.duration,
         bookmarkCount = recipe.bookmarkCount,
-        replyCount = recipe.replyCount
+        replyCount = recipe.replyCount,
+        referencedBy = recipe.referencedBy,
+        userId = recipe.userId
       )
     }
   }

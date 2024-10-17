@@ -1,9 +1,8 @@
 package com.example.cuisineconnect.app.screen.profile.post.viewHolder
 
-import android.text.InputType
+import android.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,7 +16,6 @@ import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
-import kotlinx.coroutines.coroutineScope
 import java.text.SimpleDateFormat
 
 class ItemPostViewHolder(
@@ -27,12 +25,12 @@ class ItemPostViewHolder(
 
   fun bind(
     user: User?,
-    post: Post?,
+    post: Post,
     listener: RecipeListListener?,
     createPostViewModel: CreatePostViewModel?
   ) {
     view.run {
-      if (user != null && post != null) {
+      if (user != null) {
 
         Log.d("lilil", "this is post ${user} and ${post}")
 
@@ -48,11 +46,25 @@ class ItemPostViewHolder(
         tvDate.text = formattedDate
 
         btnEdit.setOnClickListener {
-          Toast.makeText(
-            view.root.context,
-            "${post.date} edited",
-            Toast.LENGTH_SHORT
-          ).show()
+          val builder = AlertDialog.Builder(view.root.context)
+          builder.setTitle("Delete Recipe")
+          builder.setMessage("Are you sure you want to delete the recipe?")
+
+          builder.setPositiveButton("Yes") { dialog, _ ->
+            Toast.makeText(
+              view.root.context,
+              "post deleted",
+              Toast.LENGTH_SHORT
+            ).show()
+
+            listener?.onItemDeleteClicked(post.id, "post")
+            dialog.dismiss() // Dismiss the dialog
+          }
+
+          builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+          }
+          builder.show()
         }
 
         restorePostContent(
@@ -135,7 +147,7 @@ class ItemPostViewHolder(
     setViewMargins(customImageView, 0, 8)
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
-    Glide.with(view.root).load(imageUri).placeholder(R.drawable.cc_asset).into(imageView)
+    Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(imageView)
 
     if (order != null && order <= view.llPostContents.childCount) {
       view.llPostContents.removeViewAt(order)
@@ -206,13 +218,22 @@ class ItemPostViewHolder(
     }
   }
 
-  private fun setViewMargins(view: android.view.View, horizontalMarginDp: Int, verticalMarginDp: Int) {
+  private fun setViewMargins(
+    view: android.view.View,
+    horizontalMarginDp: Int,
+    verticalMarginDp: Int
+  ) {
     val density = view.context.resources.displayMetrics.density
     val horizontalMarginInPx = (horizontalMarginDp * density).toInt()
     val verticalMarginInPx = (verticalMarginDp * density).toInt()
 
     val layoutParams = view.layoutParams as LinearLayout.LayoutParams
-    layoutParams.setMargins(horizontalMarginInPx, verticalMarginInPx, horizontalMarginInPx, verticalMarginInPx)
+    layoutParams.setMargins(
+      horizontalMarginInPx,
+      verticalMarginInPx,
+      horizontalMarginInPx,
+      verticalMarginInPx
+    )
     view.layoutParams = layoutParams
   }
 

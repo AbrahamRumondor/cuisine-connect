@@ -2,8 +2,12 @@ package com.example.cuisineconnect.data.repository
 
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.model.Recipe
+import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.RecipeRepository
+import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.firebase.firestore.CollectionReference
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -12,7 +16,8 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class RecipeRepositoryImpl @Inject constructor(
-  @Named("recipesRef") private val recipesRef: CollectionReference
+  @Named("recipesRef") private val recipesRef: CollectionReference,
+  private val userRepository: UserRepository
 ) : RecipeRepository {
 
   private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
@@ -99,7 +104,8 @@ class RecipeRepositoryImpl @Inject constructor(
 
         response.upvotes = upvotes.filterNot { it.key == userId }
         recipeDoc.set(response).await()
-        Timber.tag("RemoveUpvote").d("User $userId removed upvote from recipe $recipeId successfully")
+        Timber.tag("RemoveUpvote")
+          .d("User $userId removed upvote from recipe $recipeId successfully")
       }
     } catch (e: Exception) {
       Timber.tag("RemoveUpvote").e(e, "Error removing upvote from recipe $recipeId by user $userId")
@@ -108,18 +114,52 @@ class RecipeRepositoryImpl @Inject constructor(
 
   override suspend fun removeRecipe(recipeId: String) {
     try {
-      // Get a reference to the recipe document
-      val recipeDoc = recipesRef.document(recipeId)
+      val userId = recipeId.substringBefore("_")
 
-      // Delete the recipe document
+      val user = userRepository.getUserByUserId(userId)
+      if (user == null) {
+        Timber.tag("RemoveRecipe").e("User with id $userId not found, aborting recipe deletion")
+        return
+      }
+
+      val updatedRecipes = user.recipes.filterNot { recipe -> recipe == recipeId }
+      userRepository.storeUser(userId, user.copy(recipes = updatedRecipes))
+
+      val recipeDoc = recipesRef.document(recipeId)
       recipeDoc.delete().await()
 
-      // Log success
       Timber.tag("RemoveRecipe").d("Recipe $recipeId deleted successfully")
     } catch (e: Exception) {
-      // Log error if deletion fails
       Timber.tag("RemoveRecipe").e(e, "Error deleting recipe $recipeId")
     }
+  }
+
+  override suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User, Recipe>>> {
+    val _recipesFlow = MutableStateFlow<List<Pair<User, Recipe>>>(emptyList())
+
+    val user = userRepository.getUserByUserId(userId) ?: return _recipesFlow
+
+    val recipesList = user.recipes.map { recipeIdWithUser ->
+      val authorId = recipeIdWithUser.substringBefore("_")
+
+      coroutineScope {
+        val authorDeferred = async { userRepository.getUserByUserId(authorId) }
+        val recipeDeferred = async { getRecipeByID(recipeIdWithUser) }
+
+        val author = authorDeferred.await()
+        val recipe = recipeDeferred.await()
+
+        // Return a Pair if both are non-null
+        if (author != null && recipe != null) {
+          Pair(author, recipe)
+        } else {
+          null
+        }
+      }
+    }.filterNotNull() // Remove any null results
+
+    _recipesFlow.value = recipesList
+    return _recipesFlow
   }
 
 }

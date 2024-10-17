@@ -3,6 +3,7 @@ package com.example.cuisineconnect.domain.usecase.post
 import com.example.cuisineconnect.data.response.PostResponse
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.Reply
+import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.PostRepository
 import com.example.cuisineconnect.domain.repository.RecipeRepository
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
@@ -40,4 +41,11 @@ class PostUseCaseImpl @Inject constructor(
     postRepository.downVotePost(postId, userId, result)
   }
 
+  override suspend fun removePost(postId: String) {
+    postRepository.removePost(postId)
+  }
+
+  override suspend fun getPostsForHome(userId: String): StateFlow<List<Pair<User, Post>>> {
+    return postRepository.getPostsForHome(userId)
+  }
 }

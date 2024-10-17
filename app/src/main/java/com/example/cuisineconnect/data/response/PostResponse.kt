@@ -27,7 +27,16 @@ data class PostResponse(
 
   @get:PropertyName("post_bookmark_count")
   @set:PropertyName("post_bookmark_count")
-  var bookmarkCount: Int = 0
+  var bookmarkCount: Int = 0,
+
+  @get:PropertyName("post_referenced_by")
+  @set:PropertyName("post_referenced_by")
+  var referencedBy: Map<String, Boolean> = emptyMap(),
+
+  @get:PropertyName("post_user_id")
+  @set:PropertyName("post_user_id")
+  var userId: String = ""
+
 ) {
 
   constructor() : this("")
@@ -40,7 +49,9 @@ data class PostResponse(
         upvotes = postResponse.upvotes,
         bookmarkCount = postResponse.bookmarkCount,
         replyCount = postResponse.replyCount,
-        postContent = postResponse.postContent
+        postContent = postResponse.postContent,
+        referencedBy = postResponse.referencedBy,
+        userId = postResponse.userId
       )
     }
 
@@ -51,7 +62,9 @@ data class PostResponse(
         upvotes = post.upvotes,
         bookmarkCount = post.bookmarkCount,
         replyCount = post.replyCount,
-        postContent = post.postContent
+        postContent = post.postContent,
+        referencedBy = post.referencedBy,
+        userId = post.userId
       )
     }
   }

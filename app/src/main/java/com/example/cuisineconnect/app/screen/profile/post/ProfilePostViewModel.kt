@@ -37,7 +37,7 @@ class ProfilePostViewModel @Inject constructor(
     getUser()
   }
 
-  private fun getUser() {
+  fun getUser() {
     viewModelScope.launch {
       _user.value = userUseCase.getCurrentUser().value
       currentUser = _user.value
@@ -73,17 +73,33 @@ class ProfilePostViewModel @Inject constructor(
         val combinedList = recipes + posts
 
         // Sort the combined list by date in descending order
-        val sortedList = combinedList.sortedByDescending { pair ->
-          when (val item = pair.second) {
-            is Recipe -> item.date // Assuming Recipe has a 'date' property
-            is Post -> item.date // Assuming Post has a 'date' property
-            else -> Date(0) // Default to the earliest date if the type is unknown
+        val sortedList = combinedList
+          .filter { pair ->
+            pair.second is Recipe || pair.second is Post
           }
-        }
+          .sortedByDescending { pair ->
+            when (val item = pair.second) {
+              is Recipe -> item.date.time // Assuming Recipe has a 'date' property of type Date
+              is Post -> item.date.time // Assuming Post has a 'date' property of type Date
+              else -> 0L // This won't be used since non-Recipe/Post are filtered
+            }
+          }
 
         // Update the StateFlow with the sorted list
         _list.value = sortedList
       }
+    }
+  }
+
+  fun deletePost(postId: String) {
+    viewModelScope.launch {
+      postUseCase.removePost(postId)
+    }
+  }
+
+  fun deleteRecipe(recipeId: String) {
+    viewModelScope.launch {
+      recipeUseCase.removeRecipe(recipeId)
     }
   }
 

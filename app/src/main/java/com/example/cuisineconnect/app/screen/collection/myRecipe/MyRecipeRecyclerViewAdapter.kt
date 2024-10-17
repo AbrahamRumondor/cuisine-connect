@@ -20,7 +20,6 @@ import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -86,7 +85,7 @@ class MyRecipeRecyclerViewAdapter(
           Toast.LENGTH_SHORT
         ).show()
 
-        recipeListListener?.onRecipeDeleteClicked(item.second.id)
+        recipeListListener?.onItemDeleteClicked(item.second.id, "recipe")
         dialog.dismiss() // Dismiss the dialog
       }
 

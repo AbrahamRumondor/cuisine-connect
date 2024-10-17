@@ -113,8 +113,10 @@ class CreatePostViewModel @Inject constructor(
       // Ensure that all image uploads and post content updates are completed before saving
       val post = PostResponse().copy(
         id = id,
+        userId = user.value.id,
         date = Date(),
-        postContent = updatedPostContent
+        postContent = updatedPostContent,
+        referencedBy = mapOf(user.value.id to true)
       )
 
       postUseCase.setPost(id, post, result)

@@ -2,6 +2,7 @@ package com.example.cuisineconnect.domain.usecase.recipe
 
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.model.Recipe
+import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -44,5 +45,9 @@ class RecipeUseCaseImpl @Inject constructor(
 
   override suspend fun removeRecipe(recipeId: String) {
     recipeRepository.removeRecipe(recipeId)
+  }
+
+  override suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User, Recipe>>> {
+    return recipeRepository.getRecipesForHome(userId)
   }
 }

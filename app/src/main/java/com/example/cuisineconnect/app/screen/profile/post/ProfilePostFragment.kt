@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeListListener
-import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
@@ -104,12 +103,20 @@ class ProfilePostFragment : Fragment() {
       }
 
       override fun onRecipeLongClicked(recipeId: String) {
-        onRecipeSelected(recipeId)
+        onRecipeLongClickSelected(recipeId)
+      }
+
+      override fun onItemDeleteClicked(itemId: String, type: String) {
+        when (type) {
+          "post" -> profilePostViewModel.deletePost(itemId)
+          "recipe" -> profilePostViewModel.deleteRecipe(itemId)
+        }
+        profilePostAdapter.removeData(itemId, type)
       }
     })
   }
 
-  fun onRecipeSelected(recipeId: String) {
+  fun onRecipeLongClickSelected(recipeId: String) {
     // Pass the selected recipeId back to CreatePostFragment
     val bundle = Bundle().apply {
       putString("recipeId", recipeId)
@@ -133,6 +140,6 @@ class ProfilePostFragment : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    profilePostViewModel.getPostNRecipeOfUser()
+    profilePostViewModel.getUser()
   }
 }
