@@ -123,10 +123,11 @@
 
         <ImageButton
             android:id="@+id/btn_settings"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ll_profile"
+            app:layout_constraintBottom_toTopOf="@id/ll_profile"
+
             android:background="@drawable/ic_settings"
             android:layout_marginHorizontal="24dp"
             android:textAllCaps="false"

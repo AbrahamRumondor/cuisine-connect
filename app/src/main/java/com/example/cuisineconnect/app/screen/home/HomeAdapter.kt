@@ -14,8 +14,6 @@ import com.example.cuisineconnect.data.pagingSource.FeedItem.PostItem
 import com.example.cuisineconnect.data.pagingSource.FeedItem.RecipeItem
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
-import com.example.cuisineconnect.domain.model.Post
-import com.example.cuisineconnect.domain.model.Recipe
 
 class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedItemComparator) {
 
@@ -60,7 +58,8 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
                 (holder as ItemRecipeViewHolder).bind(
                     item.user,
                     item.recipe,
-                    postNRecipeItemListener
+                    postNRecipeItemListener,
+                    createPostViewModel
                 )
             }
             null -> {

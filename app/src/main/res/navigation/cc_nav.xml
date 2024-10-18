@@ -24,7 +24,11 @@
       android:id="@+id/searchFragment"
       android:name="com.example.cuisineconnect.app.screen.search.SearchFragment"
       android:label="fragment_search"
-      tools:layout="@layout/fragment_search" />
+      tools:layout="@layout/fragment_search" >
+    <action
+        android:id="@+id/action_searchFragment_to_searchPromptFragment"
+        app:destination="@id/searchPromptFragment" />
+  </fragment>
   <fragment
       android:id="@+id/collectionFragment"
       android:name="com.example.cuisineconnect.app.screen.collection.CollectionFragment"
@@ -116,4 +120,9 @@
         android:id="@+id/action_profilePostFragment_to_recipeDetailFragment"
         app:destination="@id/recipeDetailFragment" />
   </fragment>
+  <fragment
+      android:id="@+id/searchPromptFragment"
+      android:name="com.example.cuisineconnect.app.screen.search.SearchPromptFragment"
+      android:label="fragment_search_prompt"
+      tools:layout="@layout/fragment_search_prompt" />
 </navigation>

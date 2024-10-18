@@ -3,6 +3,7 @@ package com.example.cuisineconnect.app.screen.profile
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -85,7 +86,8 @@ class ProfileFragment : Fragment() {
   }
 
   private fun showPopupMenu(view: View, userId: String) {
-    val popupMenu = PopupMenu(context, view)
+    val popupMenuStyle = ContextThemeWrapper(view.context, R.style.CustomPopupMenu)
+    val popupMenu = PopupMenu(popupMenuStyle, view)
     popupMenu.menuInflater.inflate(R.menu.settings, popupMenu.menu)
 
     popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->

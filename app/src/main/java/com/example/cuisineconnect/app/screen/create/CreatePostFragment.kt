@@ -38,6 +38,7 @@ class CreatePostFragment : Fragment() {
   private val createPostViewModel: CreatePostViewModel by viewModels()
 
   private var imageUri: Uri? = null
+  private var imageToReplaceIndex: Int? = null
 
   var SELECT_PICTURE: Int = 200
 
@@ -131,6 +132,10 @@ class CreatePostFragment : Fragment() {
         )
       )
     }
+
+    binding.svPost.post {
+      binding.svPost.fullScroll(View.FOCUS_DOWN)
+    }
   }
 
   private fun addImage(imageUri: String, isFromListener: Boolean, order: Int?) {
@@ -138,19 +143,28 @@ class CreatePostFragment : Fragment() {
     val customImageView = LayoutInflater.from(context)
       .inflate(R.layout.item_post_image_view, binding.llPostContents, false)
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
+
+    // Load image into the ImageView
     context?.let { Glide.with(it).load(imageUri).into(imageView) }
 
+    // Set a click listener to allow replacing the image
+    imageView.setOnClickListener {
+      imageToReplaceIndex = order ?: binding.llPostContents.indexOfChild(customImageView)
+      val intent = Intent()
+      intent.type = "image/*"
+      intent.action = Intent.ACTION_GET_CONTENT
+      startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE)
+    }
+
+    // Add the image to the correct position in the layout
     if (order != null && order <= binding.llPostContents.childCount) {
       binding.llPostContents.removeViewAt(order)
       binding.llPostContents.addView(customImageView, order)
     } else {
-      binding.llPostContents.addView(
-        customImageView, binding.llPostContents.childCount
-      )
+      binding.llPostContents.addView(customImageView, binding.llPostContents.childCount)
     }
-//    binding.llPostContents.addView(customImageView)
 
-    // Store the image URI in postContent
+    // Store the image URI in postContent if this is a new addition
     if (isFromListener) {
       Log.d("lololol", "add image")
       createPostViewModel.postContent.add(
@@ -159,6 +173,10 @@ class CreatePostFragment : Fragment() {
           "value" to imageUri
         )
       )
+    }
+
+    binding.svPost.post {
+      binding.svPost.fullScroll(View.FOCUS_DOWN)
     }
   }
 
@@ -224,6 +242,10 @@ class CreatePostFragment : Fragment() {
           )
         }
       }
+
+      binding.svPost.post {
+        binding.svPost.fullScroll(View.FOCUS_DOWN)
+      }
     }
   }
 
@@ -275,18 +297,28 @@ class CreatePostFragment : Fragment() {
     super.onActivityResult(requestCode, resultCode, data)
 
     if (resultCode == RESULT_OK) {
-      // compare the resultCode with the
-      // SELECT_PICTURE constant
-
       if (requestCode == SELECT_PICTURE) {
-        // Get the url of the image from data
         imageUri = data?.data
         if (null != imageUri) {
-          // update the preview image in the layout
-//          IVPreviewImage.setImageURI(selectedImageUri)
           imageUri?.let {
-            createPostViewModel.imageList.add(it)
-            addImage(it.toString(), true, null)
+            // Check if we are replacing an existing image
+            imageToReplaceIndex?.let { index ->
+              // Replace the image in the layout and update the ViewModel content
+              createPostViewModel.postContent[index] = mutableMapOf(
+                "type" to "${index}_image",
+                "value" to it.toString()
+              )
+
+              // Replace the existing image in the UI
+              addImage(it.toString(), false, index)
+
+              // Reset the image replacement index
+              imageToReplaceIndex = null
+            } ?: run {
+              // If it's a new image, just add it
+              createPostViewModel.imageList.add(it)
+              addImage(it.toString(), true, null)
+            }
           }
         }
       }

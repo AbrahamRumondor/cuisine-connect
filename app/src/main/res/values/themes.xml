@@ -26,4 +26,9 @@
     <item name="fabSize">normal</item>
     <item name="android:scaleType">centerCrop</item>
   </style>
+
+  <style name="CustomPopupMenu" parent="ThemeOverlay.AppCompat.Light">
+    <!-- Set the background color to white -->
+    <item name="android:popupBackground">@android:color/white</item>
+  </style>
 </resources>

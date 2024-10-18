@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
 
     setupView()
     loadData()
+    adapter.addViewModel(createPostViewModel)
 
     binding.run {
       inclFab.fabOpenOptions.setOnClickListener {
@@ -119,7 +120,6 @@ class HomeFragment : Fragment() {
     lifecycleScope.launch {
       mainActivityViewModel.postsNRecipesList.collectLatest {
         adapter.submitData(it)
-        adapter.addViewModel(createPostViewModel)
       }
     }
   }

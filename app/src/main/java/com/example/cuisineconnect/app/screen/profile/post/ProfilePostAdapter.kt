@@ -13,7 +13,6 @@ import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
-import dagger.hilt.android.AndroidEntryPoint
 
 class ProfilePostAdapter :
   RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -67,7 +66,8 @@ class ProfilePostAdapter :
       second is Recipe && first is User? -> (holder as ItemRecipeViewHolder).bind(
         first,
         second,
-        postNRecipeItemListener
+        postNRecipeItemListener,
+        createPostViewModel
       )
 
       else -> throw IllegalArgumentException("Invalid item type")
