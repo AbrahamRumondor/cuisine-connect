@@ -9,4 +9,5 @@ interface UserUseCase {
   suspend fun storeUser(uid: String, user: User)
   fun addRecipeToUser(newRecipe: String)
   fun addPostToUser(newPost: String)
+  suspend fun getUsersStartingWith(prefix: String): List<User>
 }

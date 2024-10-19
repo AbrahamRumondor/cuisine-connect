@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.data.repository
 
+import android.util.Log
 import com.example.cuisineconnect.data.response.UserResponse
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.UserRepository
@@ -38,15 +39,15 @@ class UserRepositoryImpl @Inject constructor(
   }
 
   override suspend fun getUserByUserId(userId: String): User? {
-      return try {
-        val snapshot = usersRef.document(userId).get().await()
-        val user = snapshot.toObject(UserResponse::class.java)?.let { UserResponse.transform(it) }
+    return try {
+      val snapshot = usersRef.document(userId).get().await()
+      val user = snapshot.toObject(UserResponse::class.java)?.let { UserResponse.transform(it) }
 
-        user
-      } catch (e: Exception) {
-        null
-      }
+      user
+    } catch (e: Exception) {
+      null
     }
+  }
 
   override suspend fun storeUser(uid: String, user: User) {
     val currentUser = usersRef.document(uid)
@@ -86,6 +87,27 @@ class UserRepositoryImpl @Inject constructor(
         // Handle failure
         println("Error adding recipe: ${e.message}")
       }
+  }
+
+  override suspend fun getUsersStartingWith(prefix: String): List<User> {
+    return try {
+      val querySnapshot = usersRef
+        .orderBy("user_name")
+        .startAt(prefix)
+        .endAt(prefix + "\uf8ff") // This ensures we get all names starting with the prefix
+        .get()
+        .await()
+
+      // Map the results to the User model
+      querySnapshot.toObjects(UserResponse::class.java)
+        .map {
+          Log.d("UserRepositoryImpl", it.toString())
+          UserResponse.transform(it)
+        }
+    } catch (e: Exception) {
+      Timber.tag("UserRepositoryImpl").e(e, "Error fetching users with prefix: $prefix")
+      emptyList()
+    }
   }
 
 }

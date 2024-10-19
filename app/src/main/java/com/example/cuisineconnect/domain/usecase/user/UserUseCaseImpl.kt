@@ -31,4 +31,8 @@ class UserUseCaseImpl @Inject constructor(
     override fun addPostToUser(newPost: String) {
         userRepository.addPostToUser(newPost)
     }
+
+    override suspend fun getUsersStartingWith(prefix: String): List<User> {
+        return userRepository.getUsersStartingWith(prefix)
+    }
 }
