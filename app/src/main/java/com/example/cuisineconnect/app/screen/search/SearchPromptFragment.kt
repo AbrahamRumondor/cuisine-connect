@@ -14,7 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.cuisineconnect.app.listener.OnClickItemListener
+import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
+import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentSearchPromptBinding
+import com.example.cuisineconnect.domain.model.Reply
+import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,9 +43,27 @@ class SearchPromptFragment : Fragment() {
 
     binding.list.adapter = searchPromptAdapter
     observeSearchResults() // Observe combined search results
+    setAdapterButtons()
 
     return binding.root
   }
+
+  private fun setAdapterButtons() {
+    searchPromptAdapter.setItemListener(object : OnClickItemListener {
+
+      override fun onUserClicked(user: User) {
+        val action =
+          SearchPromptFragmentDirections.actionSearchPromptFragmentToOtherProfileFragment(user.id)
+        findNavController().navigate(action)
+      }
+
+      override fun onPromptClicked(prompt: String) {
+        super.onPromptClicked(prompt)
+      }
+
+    })
+  }
+
 
   private fun searchBarWatcher() {
     binding.etSearch.addTextChangedListener(object : TextWatcher {

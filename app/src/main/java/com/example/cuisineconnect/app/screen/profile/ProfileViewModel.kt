@@ -38,6 +38,9 @@ class ProfileViewModel @Inject constructor(
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
 
+  private val _otherUser: MutableStateFlow<User> = MutableStateFlow(User())
+  val otherUser: StateFlow<User> = _otherUser
+
   init {
     getUser()
   }
@@ -46,6 +49,15 @@ class ProfileViewModel @Inject constructor(
     viewModelScope.launch {
       _user.value = userUseCase.getCurrentUser().value
       currentUser = _user.value
+    }
+  }
+
+  fun getUser(userId: String) {
+    viewModelScope.launch {
+      val user = userUseCase.getUserByUserId(userId)
+      user?.let {
+        _otherUser.value = it
+      }
     }
   }
 

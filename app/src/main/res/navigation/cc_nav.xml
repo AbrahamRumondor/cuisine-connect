@@ -124,5 +124,25 @@
       android:id="@+id/searchPromptFragment"
       android:name="com.example.cuisineconnect.app.screen.search.SearchPromptFragment"
       android:label="fragment_search_prompt"
-      tools:layout="@layout/fragment_search_prompt" />
+      tools:layout="@layout/fragment_search_prompt" >
+    <action
+        android:id="@+id/action_searchPromptFragment_to_otherProfileFragment"
+        app:destination="@id/otherProfileFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/otherProfileFragment"
+      android:name="com.example.cuisineconnect.app.screen.profile.OtherProfileFragment"
+      android:label="OtherProfileFragment" >
+    <argument
+        android:name="userId"
+        app:argType="string"
+        app:nullable="true" />
+    <action
+        android:id="@+id/action_otherProfileFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/otherProfilePostFragment"
+      android:name="com.example.cuisineconnect.app.screen.profile.post.OtherProfilePostFragment"
+      android:label="OtherProfilePostFragment" />
 </navigation>
