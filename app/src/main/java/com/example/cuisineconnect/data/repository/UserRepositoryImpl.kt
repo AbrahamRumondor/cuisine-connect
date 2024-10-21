@@ -2,6 +2,7 @@ package com.example.cuisineconnect.data.repository
 
 import android.util.Log
 import com.example.cuisineconnect.data.response.UserResponse
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.android.gms.tasks.Task
@@ -86,6 +87,46 @@ class UserRepositoryImpl @Inject constructor(
       .addOnFailureListener { e ->
         // Handle failure
         println("Error adding recipe: ${e.message}")
+      }
+  }
+
+  override fun followUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback) {
+    // Add targetUserId to the current user's following list
+    usersRef.document(currentUserId)
+      .update("user_following", FieldValue.arrayUnion(targetUserId))
+      .addOnSuccessListener {
+        // Add currentUserId to the target user's follower list
+        usersRef.document(targetUserId)
+          .update("user_follower", FieldValue.arrayUnion(currentUserId))
+          .addOnSuccessListener {
+            callback.onSuccess()  // Trigger success callback
+          }
+          .addOnFailureListener { e ->
+            callback.onFailure("Error adding follower: ${e.message}")  // Trigger failure callback
+          }
+      }
+      .addOnFailureListener { e ->
+        callback.onFailure("Error following user: ${e.message}")  // Trigger failure callback
+      }
+  }
+
+  override fun unfollowUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback) {
+    // Remove targetUserId from the current user's following list
+    usersRef.document(currentUserId)
+      .update("user_following", FieldValue.arrayRemove(targetUserId))
+      .addOnSuccessListener {
+        // Remove currentUserId from the target user's follower list
+        usersRef.document(targetUserId)
+          .update("user_follower", FieldValue.arrayRemove(currentUserId))
+          .addOnSuccessListener {
+            callback.onSuccess()  // Trigger success callback
+          }
+          .addOnFailureListener { e ->
+            callback.onFailure("Error removing follower: ${e.message}")  // Trigger failure callback
+          }
+      }
+      .addOnFailureListener { e ->
+        callback.onFailure("Error unfollowing user: ${e.message}")  // Trigger failure callback
       }
   }
 

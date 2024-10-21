@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.domain.usecase.user
 
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.AuthRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
@@ -34,5 +35,17 @@ class UserUseCaseImpl @Inject constructor(
 
     override suspend fun getUsersStartingWith(prefix: String): List<User> {
         return userRepository.getUsersStartingWith(prefix)
+    }
+
+    override fun followUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback) {
+        userRepository.followUser(currentUserId, targetUserId, callback)
+    }
+
+    override fun unfollowUser(
+        currentUserId: String,
+        targetUserId: String,
+        callback: TwoWayCallback
+    ) {
+        userRepository.unfollowUser(currentUserId, targetUserId, callback)
     }
 }

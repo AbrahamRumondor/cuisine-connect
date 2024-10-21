@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.MainApplication
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
@@ -59,6 +60,10 @@ class ProfileViewModel @Inject constructor(
         _otherUser.value = it
       }
     }
+  }
+
+  fun isAlreadyFollowing(): Boolean {
+    return user.value.following.contains(otherUser.value.id)
   }
 
   fun updateUser(
@@ -147,6 +152,14 @@ class ProfileViewModel @Inject constructor(
         Log.e("FirebaseStorage", "Upload Failed", e)
         result(null)
       }
+  }
+
+  fun followUser(callback: TwoWayCallback) {
+    userUseCase.followUser(user.value.id, otherUser.value.id, callback)
+  }
+
+  fun unFollowUser(callback: TwoWayCallback) {
+    userUseCase.unfollowUser(user.value.id, otherUser.value.id, callback)
   }
 
 }
