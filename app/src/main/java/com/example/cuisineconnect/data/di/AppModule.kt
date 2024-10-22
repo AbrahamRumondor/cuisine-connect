@@ -78,4 +78,11 @@ object AppModule {
   fun providePostsRef(): CollectionReference {
     return Firebase.firestore.collection("posts")
   }
+
+  @Provides
+  @Singleton
+  @Named("hashtagsRef")
+  fun provideHashtagsRef(): CollectionReference {
+    return Firebase.firestore.collection("hashtags")
+  }
 }
