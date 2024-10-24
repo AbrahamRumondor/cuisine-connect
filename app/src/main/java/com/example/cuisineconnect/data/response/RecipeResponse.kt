@@ -25,9 +25,9 @@ data class RecipeResponse(
   @set:PropertyName("recipe_upvotes")
   var upvotes: Map<String, Boolean> = emptyMap(),
 
-  @get:PropertyName("recipe_category")
-  @set:PropertyName("recipe_category")
-  var category: List<String> = listOf(),
+  @get:PropertyName("recipe_hashtags")
+  @set:PropertyName("recipe_hashtags")
+  var hashtags: List<String> = listOf(),
 
   @get:PropertyName("recipe_image")
   @set:PropertyName("recipe_image")
@@ -72,7 +72,7 @@ data class RecipeResponse(
         ingredients = recipeResponse.ingredients,
         date = recipeResponse.date,
         upvotes = recipeResponse.upvotes,
-        category = recipeResponse.category,
+        hashtags = recipeResponse.hashtags,
         image = recipeResponse.image,
         description = recipeResponse.description,
         portion = recipeResponse.portion,
@@ -91,7 +91,7 @@ data class RecipeResponse(
         ingredients = recipe.ingredients,
         date = recipe.date,
         upvotes = recipe.upvotes,
-        category = recipe.category,
+        hashtags = recipe.hashtags,
         image = recipe.image,
         description = recipe.description,
         portion = recipe.portion,

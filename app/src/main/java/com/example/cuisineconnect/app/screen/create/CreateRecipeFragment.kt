@@ -242,7 +242,11 @@ class CreateRecipeFragment : Fragment() {
         // Debounce by adding a small delay before executing search
         searchRunnable = Runnable {
           if (query.isNotEmpty()) {
-            searchHashtags(query)
+            val trimmedQuery = query.trim()
+            val formattedQuery =
+              if (trimmedQuery.startsWith("#")) trimmedQuery else "#$trimmedQuery"
+
+            searchHashtags(formattedQuery)
           } else {
             clearHashtagList()
           }

@@ -83,7 +83,8 @@ class CreateRecipeViewModel @Inject constructor(
                 image = image,
                 ingredients = ingredients,
                 date = Date(),
-                referencedBy = mapOf(me.id to true)
+                referencedBy = mapOf(me.id to true),
+                hashtags = hashtags
               )
               val recipeToFirebase = RecipeResponse.transform(recipe)
 
