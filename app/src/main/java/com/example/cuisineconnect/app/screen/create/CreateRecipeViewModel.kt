@@ -6,13 +6,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cuisineconnect.domain.callbacks.FirestoreCallback
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.StepResponse
+import com.example.cuisineconnect.domain.callbacks.FirestoreCallback
+import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Step
 import com.example.cuisineconnect.domain.model.User
+import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
 import com.example.cuisineconnect.domain.usecase.step.StepUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
@@ -21,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Calendar
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
@@ -32,6 +35,8 @@ class CreateRecipeViewModel @Inject constructor(
   private val stepUseCase: StepUseCase,
   private val recipeUseCase: RecipeUseCase,
   private val userUseCase: UserUseCase,
+  private val hashtagUseCase: HashtagUseCase,
+  private val applicationContext: Context
 ) : ViewModel() {
 
   private val storageReference = FirebaseStorage.getInstance().reference
@@ -57,16 +62,11 @@ class CreateRecipeViewModel @Inject constructor(
     steps: List<Step>,
     ingredients: List<String>,
     imageUri: Uri?,
-//    category: List<String>,
+    hashtags: List<String>,
     onResult: (msg: Int?) -> Unit
   ) {
     getUserFromDB(object : FirestoreCallback {
       override fun onSuccess(user: User?) {
-
-//        if (NetworkUtils.isConnectedToNetwork.value == false) {
-//          onResult(R.string.no_internet)
-//          return
-//        }
 
         user?.let { me ->
           try {
@@ -95,7 +95,6 @@ class CreateRecipeViewModel @Inject constructor(
               // Update reference to steps collection under the recipe
               val stepRefs = steps.map { step ->
                 val newStep = step.copy(id = getRecipeStepDocumentId(recipe.id))
-
                 db.collection("recipes").document(recipe.id)
                   .collection("steps").document(newStep.id) to newStep
               }
@@ -103,18 +102,14 @@ class CreateRecipeViewModel @Inject constructor(
               // Save Steps
               stepRefs.forEachIndexed { index, (ref, step) ->
                 val stepResponse = StepResponse.transform(step)
-
-                transaction.set(
-                  db.collection("recipes").document(recipe.id).collection("steps")
-                    .document(step.id), stepResponse
-                )
+                transaction.set(ref, stepResponse)
               }
 
               userUseCase.addRecipeToUser(recipeId)
 
             }.addOnSuccessListener {
-              imageUri?.let {
-                uploadImage(imageUri) { link ->
+              imageUri?.let { uri ->
+                uploadImage(uri) { link ->
                   if (link != null) {
                     // Update the recipe document with the image link
                     db.collection("recipes").document(recipeId)
@@ -132,6 +127,12 @@ class CreateRecipeViewModel @Inject constructor(
                 }
               }
 
+              if (hashtags.isNotEmpty()) {
+                hashtags.forEach {
+                  addNewHashtag(it, recipeId)
+                }
+              }
+
               Log.d("createRecipeViewModel", "success")
               onResult(null)
             }.addOnFailureListener { e ->
@@ -140,7 +141,7 @@ class CreateRecipeViewModel @Inject constructor(
             }
           } catch (e: Exception) {
             Timber.tag("createRecipeViewModel")
-              .d("transaction faled: %s", e.message)
+              .d("transaction failed: %s", e.message)
             onResult(R.string.save_failed_2)
           }
         }
@@ -151,6 +152,7 @@ class CreateRecipeViewModel @Inject constructor(
       }
     })
   }
+
 
   private fun uploadImage(imageUri: Uri, result: (Uri?) -> Unit) {
     // Unique name for the image
@@ -189,6 +191,40 @@ class CreateRecipeViewModel @Inject constructor(
 
   private fun getRecipeStepDocumentId(recipeId: String): String {
     return recipeUseCase.getRecipeStepDocID(recipeId)
+  }
+
+  fun addNewHashtag(tag: String, itemId: String) {
+    val currentTimeMillis = System.currentTimeMillis()
+    val flooredTimeMillis = floorToHour(currentTimeMillis) // Round to the nearest hour
+
+    hashtagUseCase.addHashtag(tag.lowercase(), itemId, flooredTimeMillis, 1) { success, exception ->
+      if (success) {
+        Toast.makeText(applicationContext, "Hashtag added successfully!", Toast.LENGTH_SHORT).show()
+      } else {
+        // Handle the failure case, such as showing an error message
+        exception?.let {
+          Toast.makeText(
+            applicationContext,
+            "Failed to add hashtag: ${it.message}",
+            Toast.LENGTH_SHORT
+          ).show()
+        }
+      }
+    }
+  }
+
+  private fun floorToHour(timeInMillis: Long): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = timeInMillis // Use the setter method to update the time
+    calendar.set(Calendar.MINUTE, 0)  // Set the minute to 0
+    calendar.set(Calendar.SECOND, 0)  // Set the second to 0
+    calendar.set(Calendar.MILLISECOND, 0)  // Set the millisecond to 0
+
+    return calendar.timeInMillis // Return the floored time in milliseconds
+  }
+
+  fun searchTags(query: String, callback: (List<Hashtag>, Exception?) -> Unit) {
+    hashtagUseCase.searchHashtags(query, callback)
   }
 
 }

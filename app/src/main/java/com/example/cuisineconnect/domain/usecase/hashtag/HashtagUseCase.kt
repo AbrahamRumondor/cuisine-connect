@@ -1,9 +1,22 @@
 package com.example.cuisineconnect.domain.usecase.hashtag
 
 import com.example.cuisineconnect.app.listener.TrendingHashtagsCallback
+import com.example.cuisineconnect.domain.model.Hashtag
 
 interface HashtagUseCase {
-  fun updateHashtagWithScore(hashtagBody: String, newTimestamp: Long, increment: Int)
+  fun updateHashtagWithScore(
+    hashtagBody: String,
+    itemId: String,
+    newTimestamp: Long,
+    increment: Int
+  )
+
   fun getTrendingHashtags(callback: TrendingHashtagsCallback)
-  fun addHashtag(hashtagBody: String, callback: (Boolean, Exception?) -> Unit)
+  fun addHashtag(
+    hashtagBody: String, itemId: String,
+    newTimestamp: Long,
+    increment: Int, callback: (Boolean, Exception?) -> Unit
+  )
+
+  fun searchHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit)
 }

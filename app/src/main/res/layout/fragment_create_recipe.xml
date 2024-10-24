@@ -33,24 +33,24 @@
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="H,1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+        android:layout_margin="20dp"
         android:visibility="gone"
-      />
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="@string/add_image"
         android:background="@drawable/button_radius"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/add_image"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_image"
         />
 
@@ -69,9 +69,9 @@
           android:id="@+id/et_title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
           android:hint="Judul: ..."
           android:inputType="text"
-          android:background="@android:color/transparent"
           android:padding="8dp"
           />
     </androidx.cardview.widget.CardView>
@@ -91,9 +91,9 @@
           android:id="@+id/et_description"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:background="@android:color/transparent"
           android:hint="Description..."
           android:inputType="textMultiLine"
-          android:background="@android:color/transparent"
           android:minHeight="48dp"
           android:padding="8dp"
           app:layout_constraintVertical_chainStyle="packed"
@@ -127,19 +127,19 @@
         app:layout_constraintStart_toEndOf="@id/tv_duration"
         app:layout_constraintTop_toTopOf="@id/tv_porsi_label"
         >
-    <EditText
-        android:id="@+id/et_portion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_margin="10dp"
-        android:hint="[... people]"
-        android:textColor="#000"
-        android:background="@android:color/transparent"
-        android:textSize="16sp"
-        />
-    </androidx.cardview.widget.CardView>
 
+      <EditText
+          android:id="@+id/et_portion"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="10dp"
+          android:background="@android:color/transparent"
+          android:hint="[... people]"
+          android:inputType="text"
+          android:textColor="#000"
+          android:textSize="16sp"
+          />
+    </androidx.cardview.widget.CardView>
 
 
     <!-- Lama Memasak Label -->
@@ -148,11 +148,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+        android:layout_marginTop="10dp"
         android:paddingEnd="8dp"
         android:text="Lama memasak:"
         android:textColor="#000"
         android:textSize="16sp"
-        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_portion"
         />
@@ -167,17 +167,18 @@
         app:layout_constraintStart_toEndOf="@id/tv_duration"
         app:layout_constraintTop_toTopOf="@id/tv_duration"
         >
-    <EditText
-        android:id="@+id/et_duration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_margin="10dp"
-        android:hint=""
-        android:textColor="#000"
-        android:textSize="16sp"
-        android:background="@android:color/transparent"
-        />
+
+      <EditText
+          android:id="@+id/et_duration"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="10dp"
+          android:background="@android:color/transparent"
+          android:hint=""
+          android:inputType="text"
+          android:textColor="#000"
+          android:textSize="16sp"
+          />
     </androidx.cardview.widget.CardView>
 
 
@@ -196,8 +197,8 @@
         android:id="@+id/ll_ingre_btns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_ingre_container"
@@ -207,8 +208,8 @@
           android:id="@+id/btn_add_ingre"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Add"
           android:layout_marginHorizontal="5dp"
+          android:text="Add"
           app:layout_constraintStart_toStartOf="parent"
           />
 
@@ -236,8 +237,8 @@
         android:id="@+id/ll_step_btns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_step_container"
@@ -247,8 +248,8 @@
           android:id="@+id/btn_add_step"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Add"
           android:layout_marginHorizontal="5dp"
+          android:text="Add"
           app:layout_constraintStart_toStartOf="parent"
           />
 
@@ -262,7 +263,70 @@
           />
     </LinearLayout>
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_step_btns"
+        >
 
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="8dp"
+
+          >
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:singleLine="true"
+            app:singleSelection="false"
+            />
+
+
+        <EditText
+            android:id="@+id/et_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Put your tags..."
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            />
+
+      </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tag_list"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="@id/cv_tags"
+        app:layout_constraintStart_toStartOf="@id/cv_tags"
+        app:layout_constraintTop_toBottomOf="@id/cv_tags"
+        tools:listitem="@layout/item_tag_list"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_tags"
+        />
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

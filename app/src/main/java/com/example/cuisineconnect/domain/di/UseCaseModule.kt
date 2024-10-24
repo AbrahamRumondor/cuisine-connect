@@ -5,6 +5,8 @@ import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.category.CategoryUseCase
 import com.example.cuisineconnect.domain.usecase.category.CategoryUseCaseImpl
+import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
+import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCaseImpl
 import com.example.cuisineconnect.domain.usecase.ingredient.IngredientUseCase
 import com.example.cuisineconnect.domain.usecase.post.PostUseCase
 import com.example.cuisineconnect.domain.usecase.post.PostUseCaseImpl
@@ -72,4 +74,10 @@ abstract class UseCaseModule {
   abstract fun providePostUseCase(
     postUseCaseImpl: PostUseCaseImpl
   ): PostUseCase
+
+  @Binds
+  @ViewModelScoped
+  abstract fun provideHashtagUseCase(
+    hashtagUseCaseImpl: HashtagUseCaseImpl
+  ): HashtagUseCase
 }

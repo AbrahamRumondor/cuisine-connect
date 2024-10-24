@@ -4,8 +4,9 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
-import android.util.Log
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +17,14 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
+import com.example.cuisineconnect.domain.model.Hashtag
+import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.UUID
 
 @AndroidEntryPoint
 class CreateRecipeFragment : Fragment() {
@@ -35,11 +38,15 @@ class CreateRecipeFragment : Fragment() {
   private var imageUri: Uri? = null
   private val storageReference = FirebaseStorage.getInstance().reference
 
-  var SELECT_PICTURE: Int = 200
+  private var currentHashtag = ""
+
+  private val SELECT_PICTURE = 200
+
+  // HashtagAdapter
+  private lateinit var hashtagAdapter: HashtagAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
   }
 
   override fun onCreateView(
@@ -51,6 +58,7 @@ class CreateRecipeFragment : Fragment() {
 
     binding.run {
       setupToolbar()
+      setupRecyclerView() // Initialize the RecyclerView and adapter
 
       btnAddIngre.setOnClickListener {
         addNewIngredient()
@@ -65,6 +73,7 @@ class CreateRecipeFragment : Fragment() {
 
       btnSubmitStep.setOnClickListener {
         val steps = createRecipeViewModel.toSteps(getSteps())
+        val hashtags = getAllHashtags()
 
         createRecipeViewModel.saveRecipeInDatabase(
           title = etTitle.text.toString(),
@@ -74,7 +83,8 @@ class CreateRecipeFragment : Fragment() {
           image = imageUri.toString(),
           ingredients = getIngredients(),
           steps = steps,
-          imageUri = imageUri
+          imageUri = imageUri,
+          hashtags = hashtags
         ) { text ->
           if (text == null) {
             Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
@@ -87,12 +97,13 @@ class CreateRecipeFragment : Fragment() {
 
       btnAddImage.setOnClickListener {
         val i = Intent()
-        i.setType("image/*")
-        i.setAction(Intent.ACTION_GET_CONTENT)
+        i.type = "image/*"
+        i.action = Intent.ACTION_GET_CONTENT
 
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
       }
 
+      setupTagsBar()
     }
     return binding.root
   }
@@ -101,66 +112,30 @@ class CreateRecipeFragment : Fragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (resultCode == RESULT_OK) {
-      // compare the resultCode with the
-      // SELECT_PICTURE constant
-
-      if (requestCode == SELECT_PICTURE) {
-        // Get the url of the image from data
-        imageUri = data?.data
-        if (null != imageUri) {
-          // update the preview image in the layout
-//          IVPreviewImage.setImageURI(selectedImageUri)
-          Glide.with(this)
-            .load(imageUri)   // Load the image URL into the ImageView
-            .into(binding.ivImage)
-          binding.ivImage.visibility = View.VISIBLE
-        }
+    if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+      imageUri = data?.data
+      if (null != imageUri) {
+        Glide.with(this)
+          .load(imageUri)
+          .into(binding.ivImage)
+        binding.ivImage.visibility = View.VISIBLE
       }
     }
   }
-
-//  private fun uploadImage() {
-//    if (imageUri != null) {
-//      // Unique name for the image
-//      val fileName = UUID.randomUUID().toString()
-//      val ref = storageReference.child("images/$fileName")
-//
-//      ref.putFile(imageUri!!)
-//        .addOnSuccessListener {
-//          // Get download URL and display it
-//          ref.downloadUrl.addOnSuccessListener { uri ->
-//            Log.d("FirebaseStorage", "Image URL: $uri")
-//            Glide.with(binding.root.context)
-//              .load(uri)   // Load the image URL into the ImageView
-//              .into(binding.ivImage)
-//            binding.ivImage.visibility = View.VISIBLE
-//            Toast.makeText(binding.root.context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
-//            // TODO UPDATE KE FIRESTORE
-//          }
-//        }
-//        .addOnFailureListener { e ->
-//          Log.e("FirebaseStorage", "Upload Failed", e)
-//          Toast.makeText(binding.root.context, "Upload Failed", Toast.LENGTH_SHORT).show()
-//        }
-//    } else {
-//      Toast.makeText(binding.root.context, "No Image Selected", Toast.LENGTH_SHORT).show()
-//    }
-//  }
 
   private fun setupToolbar() {
     (activity as? AppCompatActivity)?.apply {
       setSupportActionBar(binding.toolbar)
       supportActionBar?.apply {
-        setDisplayHomeAsUpEnabled(true) // Enable the back button
+        setDisplayHomeAsUpEnabled(true)
         setDisplayShowHomeEnabled(true)
-        title = "Create Recipe" // Set title for the toolbar
+        title = "Create Recipe"
       }
     }
 
     // Handle back button click
     binding.toolbar.setNavigationOnClickListener {
-      findNavController().navigateUp() // This uses Navigation Component to go back
+      findNavController().navigateUp()
     }
   }
 
@@ -192,59 +167,153 @@ class CreateRecipeFragment : Fragment() {
   }
 
   private fun getSteps(): List<String> {
-    Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
-
     val list = mutableListOf<String>()
-
-    for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
+    for (i in 0 until (binding.llStepContainer.childCount)) {
       val childView = binding.llStepContainer.getChildAt(i)
-
-      // Check if the child is a CardView and contains the EditText
       if (childView is CardView) {
         val editText = childView.findViewById<EditText>(R.id.etUserInput)
-        if (editText != null && !editText.text.isNullOrEmpty()) {
-          val text = editText.text.toString()
-          list.add(text)
-          Log.d("brobruh", "step: ${editText.layout.text}")
+        if (!editText.text.isNullOrEmpty()) {
+          list.add(editText.text.toString())
         }
       }
     }
-
     return list
   }
 
   private fun getIngredients(): List<String> {
-    Log.d("brobruh", "${(binding.llIngreContainer?.childCount ?: 0)}")
     val list = mutableListOf<String>()
-
-    for (i in 0 until (binding.llIngreContainer.childCount ?: 0)) {
+    for (i in 0 until (binding.llIngreContainer.childCount)) {
       val childView = binding.llIngreContainer.getChildAt(i)
-
-      // Check if the child is a CardView and contains the EditText
       if (childView is CardView) {
         val editText = childView.findViewById<EditText>(R.id.etUserInput)
-        if (editText != null) {
-          list.add(editText.layout.text.toString())
+        if (!editText.text.isNullOrEmpty()) {
+          list.add(editText.text.toString())
         }
       }
     }
     return list
   }
 
-  private fun printAllStep() {
-    Log.d("brobruh", "${(binding.llStepContainer?.childCount ?: 0)}")
-
-    for (i in 0 until (binding.llStepContainer.childCount ?: 0)) {
-      val childView = binding.llStepContainer.getChildAt(i)
-
-      // Check if the child is a CardView and contains the EditText
-      if (childView is CardView) {
-        val editText = childView.findViewById<EditText>(R.id.etUserInput)
-        if (editText != null) {
-          Log.d("brobruh", "step: ${editText.layout.text}")
+  // RecyclerView setup for hashtags
+  private fun setupRecyclerView() {
+    hashtagAdapter = HashtagAdapter(mutableListOf()) { hashtag ->
+      if (hashtag.id == "create_new") {
+        hashtag.apply {
+          body = currentHashtag
+          id = ""
         }
+      }
+      addHashtagChip(hashtag.body)
+      Toast.makeText(context, "Clicked on: #${hashtag.body}", Toast.LENGTH_SHORT).show()
+    }
+
+    binding.rvTagList.apply {
+      layoutManager = LinearLayoutManager(requireContext()) // Use requireContext() in fragment
+      adapter = hashtagAdapter
+    }
+  }
+
+  private fun updateHashtags(hashtags: List<Hashtag>) {
+    hashtagAdapter.updateHashtags(hashtags)
+  }
+
+  private fun clearHashtagList() {
+    hashtagAdapter.updateHashtags(emptyList()) // Clear the adapter list
+  }
+
+  private fun setupTagsBar() {
+    // Add debounced text change listener
+    binding.etTags.addTextChangedListener(object : TextWatcher {
+      private var searchRunnable: Runnable? = null
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        val query = s.toString().trim()
+        binding.root.post {
+          binding.root.smoothScrollTo(0, binding.root.bottom)
+        }
+
+        // Cancel any existing search to debounce
+        searchRunnable?.let {
+          binding.etTags.removeCallbacks(it)
+        }
+
+        // Debounce by adding a small delay before executing search
+        searchRunnable = Runnable {
+          if (query.isNotEmpty()) {
+            searchHashtags(query)
+          } else {
+            clearHashtagList()
+          }
+        }
+        binding.etTags.postDelayed(searchRunnable, 300) // 300ms delay
+      }
+
+      override fun afterTextChanged(s: Editable?) {}
+    })
+  }
+
+  private fun searchHashtags(query: String) {
+    currentHashtag = query
+
+    createRecipeViewModel.searchTags(query) { hashtags, exception ->
+      if (exception == null) {
+        updateHashtags(hashtags)
+      } else {
+        Toast.makeText(
+          context,
+          "Failed to fetch hashtags: ${exception.message}",
+          Toast.LENGTH_SHORT
+        ).show()
       }
     }
   }
 
+  private fun addHashtagChip(hashtag: String) {
+    // Check if the chip already exists
+    if (!chipExists(hashtag)) {
+      // Create a new chip
+      val chip = Chip(context).apply {
+        text = "$hashtag"
+        isCloseIconVisible = true // Enable close icon to remove chip
+        setOnCloseIconClickListener { removeChip(this) }
+      }
+
+      // Add chip to the ChipGroup
+      binding.cgChips.addView(chip)
+
+
+      // Clear the EditText after adding the chip
+      binding.etTags.setText("") // Clear the input after adding the chip
+      binding.etTags.requestFocus() // Set focus back to the EditText
+    } else {
+      Toast.makeText(context, "Hashtag already added", Toast.LENGTH_SHORT).show()
+    }
+  }
+
+  // Method to check if chip already exists
+  private fun chipExists(hashtag: String): Boolean {
+    for (i in 0 until binding.cgChips.childCount) {
+      val chip = binding.cgChips.getChildAt(i) as Chip
+      if (chip.text.toString().equals("$hashtag", ignoreCase = true)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  // Method to remove chip
+  private fun removeChip(chip: Chip) {
+    binding.cgChips.removeView(chip)
+  }
+
+  private fun getAllHashtags(): List<String> {
+    val hashtags = mutableListOf<String>()
+    for (i in 0 until binding.cgChips.childCount) {
+      val chip = binding.cgChips.getChildAt(i) as Chip
+      hashtags.add(chip.text.toString()) // Collect the hashtag text from each chip
+    }
+    return hashtags
+  }
 }

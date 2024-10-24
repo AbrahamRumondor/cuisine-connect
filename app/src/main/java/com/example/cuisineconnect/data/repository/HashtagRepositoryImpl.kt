@@ -2,6 +2,7 @@ package com.example.cuisineconnect.data.repository
 
 import com.example.cuisineconnect.app.listener.TrendingHashtagsCallback
 import com.example.cuisineconnect.data.response.HashtagResponse
+import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.repository.HashtagRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
@@ -12,7 +13,12 @@ class HashtagRepositoryImpl @Inject constructor(
   @Named("hashtagsRef") private val hashtagRef: CollectionReference // Changed from `usersRef` to `hashtagsRef`
 ) : HashtagRepository {
 
-  override fun updateHashtagWithScore(hashtagBody: String, newTimestamp: Long, increment: Int) {
+  override fun updateHashtagWithScore(
+    hashtagBody: String,
+    itemId: String,
+    newTimestamp: Long,
+    increment: Int
+  ) {
     hashtagRef.whereEqualTo("hashtag_body", hashtagBody)
       .get()
       .addOnSuccessListener { snapshot ->
@@ -21,6 +27,7 @@ class HashtagRepositoryImpl @Inject constructor(
           val document = snapshot.documents.first()
           val hashtag = document.toObject(HashtagResponse::class.java)
           val currentTimestamps = hashtag?.timeStamps?.toMutableMap() ?: mutableMapOf()
+          val currentListId = hashtag?.listId?.toMutableList() ?: mutableListOf()
 
           // Remove timestamps older than 24 hours
           val currentTime = System.currentTimeMillis()
@@ -34,14 +41,20 @@ class HashtagRepositoryImpl @Inject constructor(
           currentTimestamps[newTimestamp.toString()] =
             currentTimestamps.getOrDefault(newTimestamp.toString(), 0) + increment
 
+          // Ensure itemId is added only once
+          if (!currentListId.contains(itemId)) {
+            currentListId.add(itemId)
+          }
+
           // Calculate the new total score
           val newTotalScore = currentTimestamps.values.sum()
 
-          // Update Firestore with the new timestamps and total score
+          // Update Firestore with the new timestamps, total score, and updated listId
           hashtagRef.document(document.id).update(
             mapOf(
               "hashtag_timestamps" to currentTimestamps, // Use string-keyed timestamps
-              "hashtag_total_score" to newTotalScore
+              "hashtag_total_score" to newTotalScore,
+              "hashtag_list_id" to currentListId // Update the listId with the new item
             )
           ).addOnSuccessListener {
             println("Hashtag updated successfully.")
@@ -75,23 +88,75 @@ class HashtagRepositoryImpl @Inject constructor(
       }
   }
 
-  override fun addHashtag(hashtagBody: String, callback: (Boolean, Exception?) -> Unit) {
-    // Create a new HashtagResponse object
-    val newHashtag = HashtagResponse(
-      body = hashtagBody,
-      timeStamps = emptyMap(),
-      totalScore = 0
-    )
+  override fun addHashtag(
+    hashtagBody: String,
+    itemId: String,
+    newTimestamp: Long,
+    increment: Int,
+    callback: (Boolean, Exception?) -> Unit
+  ) {
+    // Check if the hashtag already exists
+    hashtagRef.whereEqualTo("hashtag_body", hashtagBody)
+      .get()
+      .addOnSuccessListener { snapshot ->
+        if (!snapshot.isEmpty) {
+          // If the hashtag exists, get the document ID
+          val document = snapshot.documents.first()
+          // Attempt to update the hashtag with the new score
+          updateHashtagWithScore(hashtagBody, itemId, newTimestamp, increment)
+          callback(true, null) // Indicate that the hashtag was updated
+        } else {
+          // If the hashtag does not exist, create a new one
+          val newHashtag = HashtagResponse(
+            id = hashtagRef.document().id, // Firestore will generate an ID if you use .add()
+            body = hashtagBody,
+            timeStamps = emptyMap(), // Use empty map for timeStamps if it's intended to be updated later
+            totalScore = 0
+          )
 
-    // Add the new hashtag to Firestore
-    hashtagRef.add(newHashtag)
-      .addOnSuccessListener { documentReference ->
-        println("Hashtag added with ID: ${documentReference.id}")
-        callback(true, null) // Successfully added
+          // Add the new hashtag to Firestore
+          hashtagRef.add(newHashtag)
+            .addOnSuccessListener { documentReference ->
+              // After adding, update the hashtag with the score
+              updateHashtagWithScore(hashtagBody, itemId, newTimestamp, increment)
+              callback(true, null) // Successfully added and updated
+            }
+            .addOnFailureListener { e ->
+              println("Error adding hashtag: ${e.message}")
+              callback(false, e) // Handle the error
+            }
+        }
       }
       .addOnFailureListener { e ->
-        println("Error adding hashtag: ${e.message}")
+        println("Error checking for existing hashtag: ${e.message}")
         callback(false, e) // Handle the error
+      }
+  }
+
+  override fun searchHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit) {
+    hashtagRef
+      .orderBy("hashtag_body")
+      .startAt(query)
+      .endAt(query + "\uf8ff")
+      .get()
+      .addOnSuccessListener { snapshot ->
+        val hashtagList = snapshot.documents.mapNotNull { document ->
+          document.toObject(HashtagResponse::class.java)?.let { HashtagResponse.transform(it) }
+        }
+
+        // Add a special item for creating a new hashtag
+        if (hashtagList.isEmpty()) {
+          val createNewHashtag = Hashtag(
+            id = "create_new", // Special ID
+            body = "Create new hashtag"
+          )
+          callback(hashtagList + createNewHashtag, null)
+        } else {
+          callback(hashtagList, null)
+        }
+      }
+      .addOnFailureListener { e ->
+        callback(emptyList(), e)
       }
   }
 }

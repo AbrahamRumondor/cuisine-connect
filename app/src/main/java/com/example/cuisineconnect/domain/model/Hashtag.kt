@@ -8,5 +8,6 @@ data class Hashtag(
   var id: String = "",
   var body: String = "",
   var timeStamps: Map<String, Int> = emptyMap(),
-  var totalScore: Int = 0
+  var totalScore: Int = 0,
+  var listId: List<String> = emptyList()
 )

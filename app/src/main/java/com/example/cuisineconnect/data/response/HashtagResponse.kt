@@ -1,7 +1,6 @@
 package com.example.cuisineconnect.data.response
 
 import com.example.cuisineconnect.domain.model.Hashtag
-import com.example.cuisineconnect.domain.model.Step
 import com.google.firebase.firestore.PropertyName
 
 data class HashtagResponse(
@@ -19,7 +18,12 @@ data class HashtagResponse(
 
   @get:PropertyName("hashtag_total_score")
   @set:PropertyName("hashtag_total_score")
-  var totalScore: Int = 0
+  var totalScore: Int = 0,
+
+  @get:PropertyName("hashtag_list_id")
+  @set:PropertyName("hashtag_list_id")
+  var listId: List<String> = emptyList()
+
 ) {
 
   constructor() : this("")
@@ -29,8 +33,9 @@ data class HashtagResponse(
       return Hashtag(
         id = hashtagResponse.id,
         body = hashtagResponse.body,
-        timeStamps = hashtagResponse.timeStamps.mapKeys { it.key.toLong() }, // Convert keys back to Long
-        totalScore = hashtagResponse.totalScore
+        timeStamps = hashtagResponse.timeStamps.mapKeys { it.key }, // Convert keys back to Long
+        totalScore = hashtagResponse.totalScore,
+        listId = hashtagResponse.listId
       )
     }
 
@@ -38,8 +43,10 @@ data class HashtagResponse(
       return HashtagResponse(
         id = hashtag.id,
         body = hashtag.body,
-        timeStamps = hashtag.timeStamps.mapKeys { it.key.toString() }, // Convert keys to String for Firestore
-        totalScore = hashtag.totalScore
+        timeStamps = hashtag.timeStamps.mapKeys { it.key }, // Convert keys to String for Firestore
+        totalScore = hashtag.totalScore,
+        listId = hashtag.listId
+
       )
     }
   }
