@@ -47,7 +47,7 @@ class RecipeRepositoryImpl @Inject constructor(
   }
 
   override fun getRecipeDocID(userId: String): String {
-    return "${userId}_${recipesRef.document().id}"
+    return "${userId}_${recipesRef.document().id}_r"
   }
 
   override fun getRecipeStepDocID(recipeId: String): String {

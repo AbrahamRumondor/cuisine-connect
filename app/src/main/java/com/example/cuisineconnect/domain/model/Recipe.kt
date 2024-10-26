@@ -9,7 +9,7 @@ data class Recipe(
   var portion: Int = 0,
   var duration: Int = 0,
   var ingredients: List<String> = listOf(),
-  var hashtags: List<String> = listOf(),
+  var hashtags: List<String> = emptyList(),
   var date: Date = Date(),
   var upvotes: Map<String, Boolean> = emptyMap(),
   var image: String = "",
@@ -17,4 +17,5 @@ data class Recipe(
   var bookmarkCount: Int = 0,
   var referencedBy: Map<String, Boolean> = emptyMap(),
   var userId: String = "",
+  var recipeTitleSplit: List<String> = listOf()
 )

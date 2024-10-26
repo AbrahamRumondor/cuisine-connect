@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.OnClickItemListener
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
@@ -58,7 +59,9 @@ class SearchPromptFragment : Fragment() {
       }
 
       override fun onPromptClicked(prompt: String) {
-        super.onPromptClicked(prompt)
+        val action =
+          SearchPromptFragmentDirections.actionSearchPromptFragmentToSearchResultFragment(prompt)
+        findNavController().navigate(action)
       }
 
     })
@@ -66,23 +69,34 @@ class SearchPromptFragment : Fragment() {
 
 
   private fun searchBarWatcher() {
+    binding.ivSearchIcon.setImageResource(R.drawable.ic_bnv_search)
+    binding.ivSearchIcon.setOnClickListener {
+      binding.etSearch.setText("") // Clears the text
+    }
+
+    // Watch for changes in the search bar text
     binding.etSearch.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        // No action needed
+        // No action needed here
       }
 
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        // No action needed
+        // No action needed here
       }
 
       override fun afterTextChanged(s: Editable?) {
         s?.let { query ->
-          searchPromptViewModel.updatePrompt(query.toString()) // Update prompt in ViewModel
+          // Toggle icon based on text presence
+          if (query.isEmpty()) {
+            binding.ivSearchIcon.setImageResource(R.drawable.ic_bnv_search)
+          } else {
+            binding.ivSearchIcon.setImageResource(R.drawable.ic_close)
+          }
+          searchPromptViewModel.updatePrompt(query.toString()) // Update ViewModel with query
         }
       }
     })
   }
-
   private fun observeSearchResults() {
     lifecycleScope.launch {
       searchPromptViewModel.searchResults.collectLatest { results ->
@@ -107,11 +121,11 @@ class SearchPromptFragment : Fragment() {
   }
 
   private fun focusSearchBar() {
-    // Request focus on the EditText
     binding.etSearch.requestFocus()
 
-    // Show the keyboard programmatically
-    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-    imm?.showSoftInput(binding.etSearch, InputMethodManager.SHOW_IMPLICIT)
+    binding.etSearch.post {
+      val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+      imm?.showSoftInput(binding.etSearch, InputMethodManager.SHOW_IMPLICIT)
+    }
   }
 }

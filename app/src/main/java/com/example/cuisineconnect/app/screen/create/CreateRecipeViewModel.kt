@@ -84,7 +84,8 @@ class CreateRecipeViewModel @Inject constructor(
                 ingredients = ingredients,
                 date = Date(),
                 referencedBy = mapOf(me.id to true),
-                hashtags = hashtags
+                hashtags = hashtags,
+                recipeTitleSplit = title.split(" ").map { it.lowercase() }
               )
               val recipeToFirebase = RecipeResponse.transform(recipe)
 

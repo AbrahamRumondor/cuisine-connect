@@ -298,7 +298,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:hint="Put your tags..."
-            android:inputType="textMultiLine"
+            android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintVertical_chainStyle="packed"
             />

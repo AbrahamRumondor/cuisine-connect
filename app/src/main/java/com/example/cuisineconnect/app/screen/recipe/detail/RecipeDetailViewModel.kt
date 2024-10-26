@@ -83,24 +83,37 @@ class RecipeDetailViewModel @Inject constructor(
   }
 
   fun makeDetailRecipe(
-    recipe: Recipe?, user: User?, ingredients: List<String>?, steps: List<Step>?
+    recipe: Recipe?,
+    user: User?,
+    ingredients: List<String>?,
+    steps: List<Step>?,
   ): MutableList<Any>? {
     if (user == null || recipe == null) return null
-    val detailRecipe = mutableListOf(
+
+    val detailRecipe = mutableListOf<Any>(
       "Header" to recipe,
       user,
       "Estimation" to recipe,
       "Bahan-bahan"
     )
 
+    // Add ingredients if available
     if (ingredients != null) {
       detailRecipe.addAll(ingredients)
     }
+
     detailRecipe.add("Langkah-langkah")
+
+    // Add steps if available
     if (steps != null) {
       detailRecipe.addAll(steps)
     }
-    detailRecipe.add(true) // add bottom spacing
+
+    if (recipe.hashtags.isNotEmpty()) {
+      detailRecipe.add(recipe.hashtags)
+    }
+
+    detailRecipe.add(true) // Add bottom spacing
 
     return detailRecipe
   }

@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.recipe.detail
 
+import RecipeDetailTagsViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +16,11 @@ import com.example.cuisineconnect.databinding.RecipeDetailEstimationBinding
 import com.example.cuisineconnect.databinding.RecipeDetailHeaderBinding
 import com.example.cuisineconnect.databinding.RecipeDetailIngredientBinding
 import com.example.cuisineconnect.databinding.RecipeDetailStepBinding
+import com.example.cuisineconnect.databinding.RecipeDetailTagsBinding
 import com.example.cuisineconnect.databinding.SubTitleBinding
 import com.example.cuisineconnect.databinding.UserHorizontalBinding
 import com.example.cuisineconnect.databinding.ViewBottomSpaceBinding
+import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.Ingredient
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Step
@@ -35,7 +38,8 @@ class RecipeDetailAdapter :
   private val SHOW_SUB_TITLE = 3
   private val SHOW_INGREDIENT = 4
   private val SHOW_STEP = 5
-  private val SHOW_SPACING = 6
+  private val SHOW_TAGS = 6
+  private val SHOW_SPACING = 7
 
   override fun getItemViewType(position: Int): Int {
     return when (val item = items[position]) {
@@ -44,16 +48,13 @@ class RecipeDetailAdapter :
       is User -> SHOW_USER
       is String -> {
         when (item) {
-          "Bahan-bahan", "Langkah-langkah" ->
-            SHOW_SUB_TITLE
-
-          else ->
-            SHOW_INGREDIENT
+          "Bahan-bahan", "Langkah-langkah" -> SHOW_SUB_TITLE
+          else -> SHOW_INGREDIENT
         }
       }
 
       is Pair<*, *> -> {  // Use Pair<*, *> to allow any type of Pair
-        val pair = item as Pair<String, Recipe>  // Explicitly cast to Pair<String, Recipe>
+        val pair = item as Pair<String, Recipe>
         when (pair.first) {
           "Header" -> SHOW_HEADER
           "Estimation" -> SHOW_ESTIMATION
@@ -62,6 +63,9 @@ class RecipeDetailAdapter :
       }
 
       is Boolean -> SHOW_SPACING
+      is List<*> -> { // Check if the list contains hashtags
+        if (item.firstOrNull() is String) SHOW_TAGS else throw IllegalArgumentException("Invalid list type")
+      }
 
       else -> throw IllegalArgumentException("Invalid item type")
     }
@@ -69,7 +73,6 @@ class RecipeDetailAdapter :
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
-
     return when (viewType) {
       SHOW_HEADER -> {
         val bindingHeader = RecipeDetailHeaderBinding.inflate(inflater, parent, false)
@@ -101,6 +104,11 @@ class RecipeDetailAdapter :
         RecipeDetailUserViewHolder(bindingUser)
       }
 
+      SHOW_TAGS -> {
+        val bindingTags = RecipeDetailTagsBinding.inflate(inflater, parent, false)
+        RecipeDetailTagsViewHolder(bindingTags)
+      }
+
       SHOW_SPACING -> {
         val bindingSpacing = ViewBottomSpaceBinding.inflate(inflater, parent, false)
         ViewBottomSpacingViewHolder(bindingSpacing)
@@ -110,23 +118,19 @@ class RecipeDetailAdapter :
     }
   }
 
-
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     when (val item = items[position]) {
       is Step -> (holder as RecipeDetailStepViewHolder).bind(item)
       is String -> {
         when (item) {
-          "Bahan-bahan", "Langkah-langkah" ->
-            (holder as RecipeDetailSubTitleViewHolder).bind(item)
-
-          else ->
-            (holder as RecipeDetailIngredientViewHolder).bind(item)
+          "Bahan-bahan", "Langkah-langkah" -> (holder as RecipeDetailSubTitleViewHolder).bind(item)
+          else -> (holder as RecipeDetailIngredientViewHolder).bind(item)
         }
       }
 
       is User -> (holder as RecipeDetailUserViewHolder).bind(item)
       is Pair<*, *> -> {
-        val pair = item as Pair<String, Recipe>  // Explicitly cast to Pair<String, Recipe>
+        val pair = item as Pair<String, Recipe>
         when (pair.first) {
           "Header" -> (holder as RecipeDetailHeaderViewHolder).bind(pair.second)
           "Estimation" -> (holder as RecipeDetailEstimationViewHolder).bind(pair.second)
@@ -135,19 +139,17 @@ class RecipeDetailAdapter :
       }
 
       is Boolean -> (holder as ViewBottomSpacingViewHolder).bind()
-
+      is List<*> -> (holder as RecipeDetailTagsViewHolder).bind(item as List<String>)
       else -> throw IllegalArgumentException("Invalid item type")
     }
   }
 
-
-  override fun getItemCount(): Int {
-    return items.size
-  }
+  override fun getItemCount(): Int = items.size
 
   fun submitRecipeParts(orderItems: MutableList<Any>) {
     this.items.clear()
     this.items.addAll(orderItems)
+    notifyDataSetChanged()  // Call notifyDataSetChanged to refresh the list
   }
 
   fun setItemListener(detailRecipeItemListener: DetailRecipeItemListener) {

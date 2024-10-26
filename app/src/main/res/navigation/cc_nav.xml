@@ -128,6 +128,9 @@
     <action
         android:id="@+id/action_searchPromptFragment_to_otherProfileFragment"
         app:destination="@id/otherProfileFragment" />
+    <action
+        android:id="@+id/action_searchPromptFragment_to_searchResultFragment"
+        app:destination="@id/searchResultFragment" />
   </fragment>
   <fragment
       android:id="@+id/otherProfileFragment"
@@ -145,4 +148,13 @@
       android:id="@+id/otherProfilePostFragment"
       android:name="com.example.cuisineconnect.app.screen.profile.post.OtherProfilePostFragment"
       android:label="OtherProfilePostFragment" />
+  <fragment
+      android:id="@+id/searchResultFragment"
+      android:name="com.example.cuisineconnect.app.screen.search.SearchResultFragment"
+      android:label="fragment_search_result"
+      tools:layout="@layout/fragment_search_result" >
+    <argument
+        android:name="query"
+        app:argType="string" />
+  </fragment>
 </navigation>

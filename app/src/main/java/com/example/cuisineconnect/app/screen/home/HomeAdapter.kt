@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -45,6 +46,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("homeAdapter", " item ${getItem(position)}")
         when (val item = getItem(position)) {
             is PostItem -> {
                 (holder as ItemPostViewHolder).bind(

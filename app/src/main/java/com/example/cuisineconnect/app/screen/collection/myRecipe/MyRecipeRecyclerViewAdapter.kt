@@ -60,7 +60,7 @@ class MyRecipeRecyclerViewAdapter(
       recipeListListener?.onRecipeClicked(item.second.id)
       Toast.makeText(
         myRecipeFragment.root.context,
-        "you touched ${item.second.title} 😳",
+        "you clicked ${item.second.title}",
         Toast.LENGTH_SHORT
       ).show()
     }
@@ -68,7 +68,7 @@ class MyRecipeRecyclerViewAdapter(
       recipeListListener?.onRecipeLongClicked(item.second.id)
       Toast.makeText(
         myRecipeFragment.root.context,
-        "you long touched ${item.second.title} 😳😳😳",
+        "you long clicked ${item.second.title}",
         Toast.LENGTH_SHORT
       ).show()
       true

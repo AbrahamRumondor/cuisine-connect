@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.create
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -116,13 +118,12 @@ class CreatePostFragment : Fragment() {
       binding.llPostContents.removeViewAt(order)
       binding.llPostContents.addView(customCardView, order)
     } else {
-      binding.llPostContents.addView(
-        customCardView, binding.llPostContents.childCount
-      )
+      binding.llPostContents.addView(customCardView, binding.llPostContents.childCount)
     }
-//    binding.llPostContents.addView(customCardView)
 
     etUserInput.setText(text)
+
+    // If the function is called by a listener, add text content to ViewModel
     if (isFromListener) {
       Log.d("lololol", "add text")
       createPostViewModel.postContent.add(
@@ -133,8 +134,16 @@ class CreatePostFragment : Fragment() {
       )
     }
 
+    // Scroll to the bottom of the ScrollView first, then focus on the EditText
     binding.svPost.post {
       binding.svPost.fullScroll(View.FOCUS_DOWN)
+
+      // Request focus on the new EditText and show the keyboard after scrolling
+      etUserInput.requestFocus()
+      etUserInput.post {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
+      }
     }
   }
 
@@ -175,9 +184,10 @@ class CreatePostFragment : Fragment() {
       )
     }
 
-    binding.svPost.post {
+    // Introduce a delay before scrolling to the bottom
+    binding.llPostContents.postDelayed({
       binding.svPost.fullScroll(View.FOCUS_DOWN)
-    }
+    }, 100) // Adjust the delay as necessary
   }
 
   private fun addRecipe(recipeId: String, isFromListener: Boolean, order: Int?) {

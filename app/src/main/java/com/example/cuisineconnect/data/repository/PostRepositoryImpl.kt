@@ -48,7 +48,7 @@ class PostRepositoryImpl @Inject constructor(
   }
 
   override fun getPostDocID(userId: String): String {
-    return "${userId}_${postsRef.document().id}" // renamed recipesRef to postsRef
+    return "${userId}_${postsRef.document().id}_p" // renamed recipesRef to postsRef
   }
 
   override suspend fun setPost(

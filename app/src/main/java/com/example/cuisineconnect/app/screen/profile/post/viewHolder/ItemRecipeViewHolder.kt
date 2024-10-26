@@ -50,7 +50,7 @@ class ItemRecipeViewHolder(
           listener?.onRecipeClicked(recipe.id)
           Toast.makeText(
             view.root.context,
-            "you touched ${recipe.title} 😳",
+            "you clicked ${recipe.title}",
             Toast.LENGTH_SHORT
           ).show()
         }
@@ -59,7 +59,7 @@ class ItemRecipeViewHolder(
           listener?.onRecipeLongClicked(recipe.id)
           Toast.makeText(
             view.root.context,
-            "you long touched ${recipe.title} 😳😳😳",
+            "you long clicked ${recipe.title}",
             Toast.LENGTH_SHORT
           ).show()
           true

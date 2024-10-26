@@ -27,7 +27,7 @@ data class RecipeResponse(
 
   @get:PropertyName("recipe_hashtags")
   @set:PropertyName("recipe_hashtags")
-  var hashtags: List<String> = listOf(),
+  var hashtags: List<String> = emptyList(),
 
   @get:PropertyName("recipe_image")
   @set:PropertyName("recipe_image")
@@ -59,7 +59,11 @@ data class RecipeResponse(
 
   @get:PropertyName("recipe_user_id")
   @set:PropertyName("recipe_user_id")
-  var userId: String = ""
+  var userId: String = "",
+
+  @get:PropertyName("recipe_title_split")
+  @set:PropertyName("recipe_title_split")
+  var recipeTitleSplit: List<String> = listOf()
 ) {
 
   constructor() : this("")
@@ -80,7 +84,8 @@ data class RecipeResponse(
         bookmarkCount = recipeResponse.bookmarkCount,
         replyCount = recipeResponse.replyCount,
         referencedBy = recipeResponse.referencedBy,
-        userId = recipeResponse.userId
+        userId = recipeResponse.userId,
+        recipeTitleSplit = recipeResponse.recipeTitleSplit
       )
     }
 
@@ -99,7 +104,8 @@ data class RecipeResponse(
         bookmarkCount = recipe.bookmarkCount,
         replyCount = recipe.replyCount,
         referencedBy = recipe.referencedBy,
-        userId = recipe.userId
+        userId = recipe.userId,
+        recipeTitleSplit = recipe.recipeTitleSplit
       )
     }
   }
