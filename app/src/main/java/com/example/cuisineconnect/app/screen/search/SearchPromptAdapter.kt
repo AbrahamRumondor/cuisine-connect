@@ -80,6 +80,11 @@ class SearchPromptAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     notifyDataSetChanged()
   }
 
+  fun clearItems() {
+    this.items.clear()
+    notifyDataSetChanged()
+  }
+
   // Set listener for posts and recipes
   fun setItemListener(onClickItemListener: OnClickItemListener) {
     this.onClickItemListener = onClickItemListener

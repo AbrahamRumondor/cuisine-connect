@@ -61,16 +61,40 @@ class SearchPromptFragment : Fragment() {
       override fun onPromptClicked(prompt: String) {
         val currentText = binding.etSearch.text.toString().trim()
 
-        val updatedText = if (currentText.isEmpty()) {
-          prompt // If no text, just add the prompt
-        } else {
-          "$currentText $prompt" // Append prompt to the existing text with a space
+        // Split the current text into words
+        val words = currentText.split(" ").toMutableList()
+
+        // Get the last word from the current text
+        val lastWord = words.lastOrNull() ?: ""
+
+        // Check if the last word matches the prompt exactly (case-insensitively)
+        if (lastWord.equals(prompt, ignoreCase = true)) {
+          // Clear the adapter items if the last word is the same as the prompt
+          binding.etSearch.setText(currentText + " ") // Append a space
+          binding.etSearch.setSelection(currentText.length + 1) // Move cursor to the end of the text
+          searchPromptAdapter.submitItems(mutableListOf(""))
+          return // Do nothing if the last word is the same as the prompt
         }
 
-        binding.etSearch.setText(updatedText)
+        // If the last word is a prefix of the prompt, replace it
+        if (prompt.startsWith(lastWord, ignoreCase = true)) {
+          // Replace the last word with the prompt
+          words[words.size - 1] = prompt
+        } else {
+          // Append the prompt if the last word does not match
+          words.add(prompt)
+        }
+
+        // Join the words back into a single string
+        var updatedText = words.joinToString(" ")
+
+        // Set the updated text to the EditText and move the cursor to the end
+        updatedText += " "
+        binding.etSearch.setText(updatedText) // Append a space
         binding.etSearch.setSelection(updatedText.length) // Move cursor to the end of the text
 
-        searchPromptViewModel.updatePrompt(updatedText)
+        // Update the view model (if necessary)
+        searchPromptAdapter.submitItems(mutableListOf(""))
       }
     })
   }
@@ -100,7 +124,12 @@ class SearchPromptFragment : Fragment() {
           } else {
             binding.ivSearchIcon.setImageResource(R.drawable.ic_close)
           }
-          searchPromptViewModel.updatePrompt(query.toString()) // Update ViewModel with query
+
+          // Split the current text into words and get the last word
+          val lastWord = query.toString().split(" ").lastOrNull() ?: ""
+
+          // Update the ViewModel with the last word only
+          searchPromptViewModel.updatePrompt(lastWord)
         }
       }
     })
