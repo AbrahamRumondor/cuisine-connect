@@ -59,11 +59,19 @@ class SearchPromptFragment : Fragment() {
       }
 
       override fun onPromptClicked(prompt: String) {
-        val action =
-          SearchPromptFragmentDirections.actionSearchPromptFragmentToSearchResultFragment(prompt)
-        findNavController().navigate(action)
-      }
+        val currentText = binding.etSearch.text.toString().trim()
 
+        val updatedText = if (currentText.isEmpty()) {
+          prompt // If no text, just add the prompt
+        } else {
+          "$currentText $prompt" // Append prompt to the existing text with a space
+        }
+
+        binding.etSearch.setText(updatedText)
+        binding.etSearch.setSelection(updatedText.length) // Move cursor to the end of the text
+
+        searchPromptViewModel.updatePrompt(updatedText)
+      }
     })
   }
 
@@ -97,6 +105,7 @@ class SearchPromptFragment : Fragment() {
       }
     })
   }
+
   private fun observeSearchResults() {
     lifecycleScope.launch {
       searchPromptViewModel.searchResults.collectLatest { results ->
@@ -126,6 +135,29 @@ class SearchPromptFragment : Fragment() {
     binding.etSearch.post {
       val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
       imm?.showSoftInput(binding.etSearch, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    // Set an OnEditorActionListener to detect when the "Enter" key is pressed
+    binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+      // Check if the action is equivalent to pressing the "Enter" key
+      if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH ||
+        actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
+        actionId == android.view.inputmethod.EditorInfo.IME_ACTION_GO
+      ) {
+
+        // Get the current text in the search bar
+        val query = binding.etSearch.text.toString()
+
+        if (query.isNotEmpty()) {
+          // Navigate to the SearchResultFragment with the search query
+          val action =
+            SearchPromptFragmentDirections.actionSearchPromptFragmentToSearchResultFragment(query)
+          findNavController().navigate(action)
+        }
+        true // Return true to consume the action
+      } else {
+        false // Return false to let other actions process
+      }
     }
   }
 }

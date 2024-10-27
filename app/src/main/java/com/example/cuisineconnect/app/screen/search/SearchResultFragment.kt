@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.map
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.home.HomeAdapter
 import com.example.cuisineconnect.databinding.FragmentSearchResultBinding
@@ -52,12 +53,12 @@ class SearchResultFragment : Fragment() {
 
     adapter.setItemListener(object : RecipeListListener {
       override fun onRecipeClicked(recipeId: String) {
-//        val action = SearchFragmentDirections.actionSearchResultFragmentToRecipeDetailFragment(recipeId)
-//        findNavController().navigate(action)
+        val action = SearchResultFragmentDirections.actionSearchResultFragmentToRecipeDetailFragment(recipeId)
+        findNavController().navigate(action)
       }
 
       override fun onRecipeLongClicked(recipeId: String) {
-        // Implement any specific behavior for long click, if required
+        onRecipeLongClickSelected(recipeId)
       }
 
       override fun onItemDeleteClicked(itemId: String, type: String) {
@@ -100,5 +101,27 @@ class SearchResultFragment : Fragment() {
     val titleString = titles.joinToString(" ")
 
     return Pair(hashtags, titleString) // Return the Pair of hashtags and joined title string
+  }
+
+  fun onRecipeLongClickSelected(recipeId: String) {
+    // Pass the selected recipeId back to CreatePostFragment
+    val bundle = Bundle().apply {
+      putString("recipeId", recipeId)
+    }
+    requireActivity().supportFragmentManager.setFragmentResult("requestKey", bundle)
+
+    // Navigate back to CreatePostFragment
+    navigateBackToCreatePostFragment()
+  }
+
+  private fun navigateBackToCreatePostFragment() {
+    val navController = findNavController()
+
+    val success = navController.popBackStack(R.id.createPostFragment, false)
+
+    if (!success) {
+      // If CreatePostFragment is not in the back stack, handle it appropriately
+      // You may navigate back to a specific fragment or show an error message
+    }
   }
 }

@@ -156,5 +156,8 @@
     <argument
         android:name="query"
         app:argType="string" />
+    <action
+        android:id="@+id/action_searchResultFragment_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
   </fragment>
 </navigation>

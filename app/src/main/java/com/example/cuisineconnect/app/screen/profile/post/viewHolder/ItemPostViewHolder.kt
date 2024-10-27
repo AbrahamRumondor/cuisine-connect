@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.profile.post.viewHolder
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -157,6 +158,24 @@ class ItemPostViewHolder(
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
     Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(imageView)
+
+    // Set click listener to open the image in full screen
+    imageView.setOnClickListener {
+      // Create and display a dialog to show the full image
+      val dialog = Dialog(view.root.context)
+      dialog.setContentView(R.layout.dialog_full_image)
+
+      val fullImageView = dialog.findViewById<ImageView>(R.id.iv_full_image)
+      Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(fullImageView)
+
+      // Set dialog layout parameters to fill 90-95% of the screen
+      val params = dialog.window?.attributes
+      params?.width = (view.root.context.resources.displayMetrics.widthPixels * 0.90).toInt() // 95% of screen width
+      params?.height = (view.root.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
+      dialog.window?.attributes = params
+
+      dialog.show()
+    }
 
     if (order != null && order <= view.llPostContents.childCount) {
       view.llPostContents.removeViewAt(order)
