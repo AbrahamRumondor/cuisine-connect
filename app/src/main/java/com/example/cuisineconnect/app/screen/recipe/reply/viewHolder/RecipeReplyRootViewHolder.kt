@@ -1,12 +1,13 @@
 package com.example.cuisineconnect.app.screen.recipe.reply.viewHolder
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
+import com.example.cuisineconnect.app.screen.recipe.reply.ReplyRecipeViewModel
 import com.example.cuisineconnect.databinding.ReplyRecipeRootBinding
+import com.example.cuisineconnect.domain.callbacks.ReplyCountCallback
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
 
@@ -15,25 +16,18 @@ class RecipeReplyRootViewHolder(
   private val itemListener: RecipeReplyItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
-  fun bind(position: Int, user: User?, reply: Reply?) {
+  fun bind(position: Int, user: User?, reply: Reply?, viewModel: ReplyRecipeViewModel) {
     view.run {
-
-      Log.d("brobruh", "${user} dan ${reply}")
-
       if (reply != null && user != null) {
-
         tvUsername.text = user.name
-
         Glide.with(root)
           .load(user.image)
           .placeholder(android.R.drawable.ic_menu_report_image)
           .into(ivUserProfile)
 
-        llUser.setOnClickListener {
-          itemListener?.onProfilePictureClicked(user.id)
-        }
+        llUser.setOnClickListener { itemListener?.onProfilePictureClicked(user.id) }
 
-        // contents
+        // Contents
         tvBody.text = reply.body
         tvReplyUpvote.text = reply.upvotes.toString()
 
@@ -47,25 +41,49 @@ class RecipeReplyRootViewHolder(
           upvoteLogic(reply, user)
         }
 
-        // replies
+        // Replies
         tvBtnReply.setOnClickListener {
           itemListener?.onReplyInputClicked(position, reply.id, user)
         }
+
         if (reply.repliesId.isEmpty()) {
           llShowReply.visibility = View.INVISIBLE
         } else {
-          val replies = "view ${reply.repliesId.size} replies"
-          if (tvShowReply.text != "Hide replies") tvShowReply.text = replies
           llShowReply.visibility = View.VISIBLE
+
+          val replyCountCallback = object : ReplyCountCallback {
+            override fun onReplyCountRetrieved(count: Int) {
+              // Only update the reply count if it's not currently showing "Hide replies"
+              if (tvShowReply.text != "Hide replies") {
+                val repliesText = "view $count replies"
+                tvShowReply.text = repliesText
+              }
+            }
+
+            override fun onError(e: Exception) {
+              if (tvShowReply.text != "Hide replies") {
+                tvShowReply.text = "Error loading replies"
+              }
+            }
+          }
+
+// Fetch total reply count with callback
+          viewModel.fetchTotalReplyCount(
+            getRecipeIdFromReplyId(reply.id),
+            reply.id,
+            replyCountCallback
+          )
+
           llShowReply.setOnClickListener {
             if (tvShowReply.text == "Hide replies") {
-              tvShowReply.text = replies
+              // Change text back to the number of replies when hiding
+              tvShowReply.text = "view ${reply.repliesId.size} replies"
               itemListener?.onReplyListSecondClicked(position, reply.id, reply.repliesId)
-              return@setOnClickListener
+            } else {
+              // Change text to "Hide replies" when showing the replies
+              tvShowReply.text = "Hide replies"
+              itemListener?.onReplyListClicked(position, reply.id, reply.repliesId)
             }
-            val text = "Hide replies"
-            tvShowReply.text = text
-            itemListener?.onReplyListClicked(position, reply.id, reply.repliesId)
           }
         }
       }
@@ -81,5 +99,10 @@ class RecipeReplyRootViewHolder(
       tvReplyUpvote.text = reply.upvotes.size.toString()
     }
     return upVoted
+  }
+
+  fun getRecipeIdFromReplyId(replyId: String): String {
+    val parts = replyId.split("_")
+    return if (parts.size >= 2) "${parts[0]}_${parts[1]}" else replyId
   }
 }

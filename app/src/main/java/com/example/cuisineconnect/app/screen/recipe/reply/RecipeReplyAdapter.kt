@@ -17,6 +17,7 @@ class RecipeReplyAdapter :
 
   private var items: MutableList<Triple<User?, Reply, User?>> = mutableListOf()
   private var recipeReplyItemListener: RecipeReplyItemListener? = null
+  private var viewModel: ReplyRecipeViewModel? = null
 
   private val ROOT_REPLY = 0
   private val CHILD_REPLY = 1
@@ -48,7 +49,11 @@ class RecipeReplyAdapter :
     val item = items[position]
     when (items[position].second.isRoot) {
 
-      ROOT_REPLY -> (holder as RecipeReplyRootViewHolder).bind(position, item.first, item.second)
+      ROOT_REPLY -> viewModel?.let {
+        (holder as RecipeReplyRootViewHolder).bind(position, item.first, item.second,
+          it
+        )
+      }
 
       CHILD_REPLY -> (holder as RecipeReplyChildViewHolder).bind(position, item.first, item.second, item.third)
 
@@ -91,6 +96,10 @@ class RecipeReplyAdapter :
     val pair = items[position]
     items[position] = pair.copy(second = updatedReply)
     notifyItemChanged(position)
+  }
+
+  fun submitViewmodel(viewModel: ReplyRecipeViewModel) {
+    this.viewModel = viewModel
   }
 
   fun setItemListener(recipeReplyItemListener: RecipeReplyItemListener) {

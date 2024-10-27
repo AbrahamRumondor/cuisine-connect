@@ -153,4 +153,28 @@ class ReplyRepositoryImpl @Inject constructor(
     }
   }
 
+  override suspend fun getTotalReplyCount(recipeId: String, replyId: String): Int {
+    val repliesRef = recipesRef.document(recipeId).collection("replies")
+
+    // Initial count to hold the number of replies at the current level
+    var totalCount = 0
+
+    // Fetch all replies with parentId equal to the given replyId
+    val currentLevelReplies = repliesRef
+      .whereEqualTo("reply_parent_id", replyId)
+      .get()
+      .await()
+      .toObjects(ReplyResponse::class.java)
+
+    // Count direct replies to this reply
+    totalCount += currentLevelReplies.size
+
+    // For each direct reply, recursively fetch its replies and add to the total count
+    for (reply in currentLevelReplies) {
+      totalCount += getTotalReplyCount(recipeId, reply.id) // Recursive call
+    }
+
+    return totalCount
+  }
+
 }

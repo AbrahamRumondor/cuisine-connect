@@ -12,4 +12,5 @@ interface ReplyRepository {
   fun getChildReplyDocID(recipeId: String, rootReplyId: String): String
   suspend fun upvoteReply(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit)
   suspend fun removeUpvote(recipeId: String, repliedId: String, userId: String, result: (Reply) -> Unit)
+  suspend fun getTotalReplyCount(recipeId: String, replyId: String): Int
 }

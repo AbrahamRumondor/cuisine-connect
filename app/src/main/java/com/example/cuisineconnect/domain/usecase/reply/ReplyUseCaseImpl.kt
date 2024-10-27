@@ -52,5 +52,9 @@ class ReplyUseCaseImpl @Inject constructor(
     replyRepository.removeUpvote(recipeId, repliedId, userId, result)
   }
 
+  override suspend fun getTotalReplyCount(recipeId: String, replyId: String): Int {
+    return replyRepository.getTotalReplyCount(recipeId, replyId)
+  }
+
 
 }

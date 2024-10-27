@@ -1,11 +1,13 @@
 package com.example.cuisineconnect.app.screen.recipe.reply
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -43,6 +45,7 @@ class ReplyRecipeFragment : Fragment() {
 
     val recipeId = args.recipeId
     recipeId?.let {
+      recipeReplyAdapter.submitViewmodel(replyRecipeViewModel)
       replyRecipeViewModel.getRepliesByRecipe(it, null)
       populateRepliesAdapter(it)
       setupSendButton(it)
@@ -72,6 +75,8 @@ class ReplyRecipeFragment : Fragment() {
                 replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
               }
               etInputReply.text.clear()
+              clReplyOther.visibility = View.GONE
+              rootReply = Triple(true, "", 0)
             }
           }
         }
@@ -137,6 +142,14 @@ class ReplyRecipeFragment : Fragment() {
           val text = "Replying to ${user.name}"
           tvReplyOtherUser.text = text
           clReplyOther.visibility = View.VISIBLE
+
+          // Assuming you have an EditText for the reply input
+          etInputReply.requestFocus() // Request focus on the input field
+
+          // Show the keyboard
+          val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+          imm?.showSoftInput(etInputReply, InputMethodManager.SHOW_IMPLICIT)
+
           btnClose.setOnClickListener {
             clReplyOther.visibility = View.GONE
             rootReply = Triple(true, "", 0)

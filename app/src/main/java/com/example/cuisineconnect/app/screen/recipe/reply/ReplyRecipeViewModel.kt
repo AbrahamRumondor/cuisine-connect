@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.data.response.ReplyResponse
+import com.example.cuisineconnect.domain.callbacks.ReplyCountCallback
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
@@ -80,7 +81,7 @@ class ReplyRecipeViewModel @Inject constructor(
     userReplies: List<Triple<User?, Reply, User?>>
   ): List<Triple<User?, Reply, User?>> {
     // Sort replies by date, descending
-    val sortedUserReplies = userReplies.sortedByDescending { it.second.date }
+    val sortedUserReplies = userReplies.sortedBy { it.second.date }
 
     // Group replies by their parentId
     val replyMap = sortedUserReplies.groupBy { it.second.parentId }
@@ -211,6 +212,17 @@ class ReplyRecipeViewModel @Inject constructor(
   fun downVoteReply(recipeId: String, replyId: String, userId: String, result: (Reply) -> Unit) {
     viewModelScope.launch {
       replyUseCase.downVoteReply(recipeId, replyId, userId, result)
+    }
+  }
+
+  fun fetchTotalReplyCount(recipeId: String, replyId: String, callback: ReplyCountCallback) {
+    viewModelScope.launch {
+      try {
+        val count = replyUseCase.getTotalReplyCount(recipeId, replyId)
+        callback.onReplyCountRetrieved(count) // Use the callback to pass the count
+      } catch (e: Exception) {
+        callback.onError(e) // Call error if any
+      }
     }
   }
 
