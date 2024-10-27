@@ -159,4 +159,22 @@ class HashtagRepositoryImpl @Inject constructor(
         callback(emptyList(), e)
       }
   }
+
+  override fun findSearchPromptHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit) {
+    hashtagRef
+      .orderBy("hashtag_body")
+      .startAt(query)
+      .endAt(query + "\uf8ff")
+      .get()
+      .addOnSuccessListener { snapshot ->
+        val hashtagList = snapshot.documents.mapNotNull { document ->
+          document.toObject(HashtagResponse::class.java)?.let { HashtagResponse.transform(it) }
+        }
+          callback(hashtagList, null)
+      }
+      .addOnFailureListener { e ->
+        callback(emptyList(), e)
+      }
+  }
+
 }

@@ -19,4 +19,5 @@ interface HashtagUseCase {
   )
 
   fun searchHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit)
+  fun findSearchPromptHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit)
 }

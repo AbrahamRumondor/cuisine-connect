@@ -61,6 +61,16 @@ class SearchPromptFragment : Fragment() {
       override fun onPromptClicked(prompt: String) {
         val currentText = binding.etSearch.text.toString().trim()
 
+        // Check if the current text matches any of the specified phrases
+        if (prompt in listOf(
+            "No hashtags found",
+            "No users found",
+            "Type something to search..."
+          )
+        ) {
+          return
+        }
+
         // Split the current text into words
         val words = currentText.split(" ").toMutableList()
 
@@ -91,7 +101,7 @@ class SearchPromptFragment : Fragment() {
         // Set the updated text to the EditText and move the cursor to the end
         updatedText += " "
         binding.etSearch.setText(updatedText) // Append a space
-        binding.etSearch.setSelection(updatedText.length) // Move cursor to the end of the text
+        binding.etSearch.setSelection(updatedText.length) // Move cursor to the end
 
         // Update the view model (if necessary)
         searchPromptAdapter.submitItems(mutableListOf(""))

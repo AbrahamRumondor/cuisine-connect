@@ -109,18 +109,18 @@ class SearchResultPagingSource(
   override val keyReuseSupported: Boolean = true // Enable key reuse
 
   private suspend fun fetchCommonHashtagIds(hashtags: List<String>): List<String> {
-    val commonIds = mutableSetOf<String>()
-
+    // Return an empty list if no hashtags are provided
     if (hashtags.isEmpty()) return emptyList()
 
     // Fetch IDs for the first hashtag
-    val firstHashtagIds = fetchHashtagIds(hashtags[0])
-    commonIds.addAll(firstHashtagIds)
+    val firstHashtagIds = fetchHashtagIds(hashtags[0]).toSet()
 
     // Intersect with IDs for the rest of the hashtags
+    var commonIds = firstHashtagIds
+
     for (hashtag in hashtags.drop(1)) {
-      val currentIds = fetchHashtagIds(hashtag)
-      commonIds.retainAll(currentIds) // Keep only common IDs
+      val currentIds = fetchHashtagIds(hashtag).toSet()
+      commonIds = commonIds.intersect(currentIds) // Keep only common IDs
     }
 
     return commonIds.toList()
@@ -144,9 +144,11 @@ class SearchResultPagingSource(
     filteredRecipeHashtags: List<String>,
     pageSize: Int
   ): List<RecipeResponse> {
-    val allRecipes = mutableListOf<RecipeResponse>()
+    // Create sets to hold recipes fetched by title and hashtags
+    val recipesByTitle = mutableSetOf<RecipeResponse>()
+    val recipesByHashtags = mutableSetOf<RecipeResponse>()
 
-    // Fetch recipes by title
+    // Fetch recipes by title if provided
     if (!title.isNullOrEmpty()) {
       val titleKeywords = title.split(" ").map { it.lowercase() }
       val titleRecipesQuery = recipesRef
@@ -154,27 +156,30 @@ class SearchResultPagingSource(
         .get()
         .await()
 
-      val titleRecipes = titleRecipesQuery.toObjects(RecipeResponse::class.java)
-      allRecipes.addAll(titleRecipes)
+      recipesByTitle.addAll(titleRecipesQuery.toObjects(RecipeResponse::class.java))
     }
 
-    // Fetch recipes by hashtags
+    // Fetch recipes by hashtags if any hashtags are provided
     if (filteredRecipeHashtags.isNotEmpty()) {
       for (recipeId in filteredRecipeHashtags) {
         val recipeSnapshot = recipesRef.document(recipeId).get().await()
         recipeSnapshot.toObject(RecipeResponse::class.java)?.let {
-          allRecipes.add(it)
+          recipesByHashtags.add(it)
         }
       }
     }
 
-    // Remove duplicates based on recipe ID
-    val uniqueRecipes = allRecipes.associateBy { it.id }.values.toList()
+    // Determine the common recipes
+    val commonRecipes = when {
+      title.isNullOrEmpty() && filteredRecipeHashtags.isEmpty() -> emptySet() // No search parameters
+      title.isNullOrEmpty() -> recipesByHashtags // Only hashtags provided
+      filteredRecipeHashtags.isEmpty() -> recipesByTitle // Only title provided
+      else -> recipesByTitle.intersect(recipesByHashtags) // Both provided
+    }
 
     // Apply pagination limit after deduplication
-    return uniqueRecipes.take(pageSize)
+    return commonRecipes.take(pageSize).toList()
   }
-
 }
 
 //class SearchResultPagingSource(

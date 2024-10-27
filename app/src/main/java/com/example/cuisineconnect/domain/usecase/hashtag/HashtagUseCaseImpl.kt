@@ -34,4 +34,11 @@ class HashtagUseCaseImpl @Inject constructor(
   override fun searchHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit) {
     hashtagRepository.searchHashtags(query, callback)
   }
+
+  override fun findSearchPromptHashtags(
+    query: String,
+    callback: (List<Hashtag>, Exception?) -> Unit
+  ) {
+    hashtagRepository.findSearchPromptHashtags(query, callback)
+  }
 }
