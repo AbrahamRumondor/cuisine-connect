@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
-import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.databinding.FragmentReplyRecipeBinding
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
@@ -43,8 +42,8 @@ class ReplyRecipeFragment : Fragment() {
 
     setupToolbar()
 
-    val recipeId = args.recipeId
-    recipeId?.let {
+    val itemId = args.itemId
+    itemId?.let {
       recipeReplyAdapter.submitViewmodel(replyRecipeViewModel)
       replyRecipeViewModel.getRepliesByRecipe(it, null)
       populateRepliesAdapter(it)
@@ -54,7 +53,7 @@ class ReplyRecipeFragment : Fragment() {
     return binding.root
   }
 
-  private fun setupSendButton(recipeId: String) {
+  private fun setupSendButton(itemId: String) {
     binding.run {
       flBtnSend.setOnClickListener {
         val inputText = etInputReply.text.toString().trim()
@@ -63,16 +62,16 @@ class ReplyRecipeFragment : Fragment() {
           lifecycleScope.launch {
             replyRecipeViewModel.user.collectLatest { user ->
               replyRecipeViewModel.setReply(
-                recipeId,
+                itemId,
                 replyRecipeViewModel.createReplyResponse(
-                  repliesId = rootReply.second.ifEmpty { recipeId },
+                  repliesId = rootReply.second.ifEmpty { itemId },
                   body = inputText,
                   userId = user.id,
-                  recipeId = recipeId,
+                  itemId = itemId,
                 ),
                 isNewReply = true
               ) {
-                replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
+                replyRecipeViewModel.getRepliesByRecipe(itemId, "")
               }
               etInputReply.text.clear()
               clReplyOther.visibility = View.GONE
@@ -102,7 +101,7 @@ class ReplyRecipeFragment : Fragment() {
     }
   }
 
-  private fun populateRepliesAdapter(recipeId: String) {
+  private fun populateRepliesAdapter(itemId: String) {
     lifecycleScope.launch {
       // Combine the recipe, user, and steps into a single flow
       replyRecipeViewModel.replies.collectLatest { replies ->
@@ -116,23 +115,23 @@ class ReplyRecipeFragment : Fragment() {
         }
       }
     }
-    setRecipeReplyAdapterButtons(recipeId)
+    setRecipeReplyAdapterButtons(itemId)
   }
 
-  private fun setRecipeReplyAdapterButtons(recipeId: String) {
+  private fun setRecipeReplyAdapterButtons(itemId: String) {
     recipeReplyAdapter.setItemListener(object : RecipeReplyItemListener {
       override fun onProfilePictureClicked(userId: String) {
 //        TODO("Not yet implemented")
       }
 
       override fun onUpvoteClicked(position: Int, reply: Reply, userId: String) {
-        replyRecipeViewModel.upvoteReply(recipeId, reply.id, userId) { replied ->
+        replyRecipeViewModel.upvoteReply(itemId, reply.id, userId) { replied ->
           recipeReplyAdapter.updateReplyAtPosition(position, replied.copy(isRoot = reply.isRoot))
         }
       }
 
       override fun onDownVoteClicked(position: Int, reply: Reply, userId: String) {
-        replyRecipeViewModel.downVoteReply(recipeId, reply.id, userId) { replied ->
+        replyRecipeViewModel.downVoteReply(itemId, reply.id, userId) { replied ->
           recipeReplyAdapter.updateReplyAtPosition(position, replied.copy(isRoot = reply.isRoot))
         }
       }
@@ -159,7 +158,7 @@ class ReplyRecipeFragment : Fragment() {
       }
 
       override fun onReplyListClicked(position: Int, replyId: String, repliesId: List<String>) {
-        replyRecipeViewModel.getRepliesByRecipe(recipeId, replyId)
+        replyRecipeViewModel.getRepliesByRecipe(itemId, replyId)
       }
 
       override fun onReplyListSecondClicked(
@@ -168,7 +167,7 @@ class ReplyRecipeFragment : Fragment() {
         repliesId: List<String>
       ) {
         replyRecipeViewModel.openedReply.removeIf { it == replyId }
-        replyRecipeViewModel.getRepliesByRecipe(recipeId, "")
+        replyRecipeViewModel.getRepliesByRecipe(itemId, "")
       }
     })
   }

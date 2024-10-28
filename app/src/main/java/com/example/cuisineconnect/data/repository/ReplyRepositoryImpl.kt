@@ -1,5 +1,7 @@
 package com.example.cuisineconnect.data.repository
 
+import android.util.Log
+import androidx.paging.LOG_TAG
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.ReplyResponse
 import com.example.cuisineconnect.domain.model.Reply
@@ -15,14 +17,21 @@ import javax.inject.Named
 
 class ReplyRepositoryImpl @Inject constructor(
   @Named("recipesRef") private val recipesRef: CollectionReference,
+  @Named("postsRef") private val postsRef: CollectionReference,
 ) : ReplyRepository {
 
   private val _replies = MutableStateFlow<List<Reply>>(emptyList())
   private val replies: StateFlow<List<Reply>> = _replies
 
-  override suspend fun getRepliesByRecipe(recipeId: String): StateFlow<List<Reply>> {
+  // Determine the correct reference based on ID suffix
+  private fun getReference(id: String): CollectionReference {
+    return if (id.startsWith("r_")) recipesRef else postsRef
+  }
+
+  override suspend fun getRepliesByRecipeOrPost(id: String): StateFlow<List<Reply>> {
     return try {
-      val snapshot = recipesRef.document(recipeId)
+      val ref = getReference(id)
+      val snapshot = ref.document(id)
         .collection("replies")
         .get()
         .await()
@@ -32,40 +41,34 @@ class ReplyRepositoryImpl @Inject constructor(
       }
 
       _replies.value = repliesList
-
       replies
     } catch (e: Exception) {
-      Timber.e(e, "Error fetching replies for recipe: $recipeId")
+      Timber.e(e, "Error fetching replies for ID: $id")
       _replies.value = emptyList()
-
       replies
     }
   }
 
-  override fun getRecipeReplyDocID(recipeId: String): String {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
-
-    return "${recipeId}_${repliesRef.document(recipeId).collection("replies").document().id}"
+  override fun getReplyDocID(id: String): String {
+    val repliesRef = getReference(id).document(id).collection("replies")
+    return "${id}_${repliesRef.document().id}"
   }
 
-  override fun getChildReplyDocID(recipeId: String, rootReplyId: String): String {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
-
-    return "${rootReplyId}_${repliesRef.document(rootReplyId).collection("replies").document().id}"
+  override fun getChildReplyDocID(id: String, rootReplyId: String): String {
+    val repliesRef = getReference(id).document(id).collection("replies")
+    return "${rootReplyId}_${repliesRef.document().id}"
   }
 
-  override fun setReply(recipeId: String, replyId: String, replyResponse: ReplyResponse, isNewReply: Boolean) {
-    val recipeDocRef = recipesRef.document(recipeId)
-    val repliesRef = recipeDocRef.collection("replies")
+  override fun setReply(id: String, replyId: String, replyResponse: ReplyResponse, isNewReply: Boolean) {
+    val ref = getReference(id)
+    val docRef = ref.document(id)
+    val repliesRef = docRef.collection("replies")
 
-    // First, set the reply in the "replies" collection
     repliesRef.document(replyId).set(replyResponse)
       .addOnSuccessListener {
         Timber.tag("TEST").d("SUCCESS ON reply INSERTION, $replyResponse")
-
         if (isNewReply) {
-          // Now increment the recipe's replyCount by 1
-          recipeDocRef.update("recipe_reply_count", FieldValue.increment(1))
+          docRef.update("reply_count", FieldValue.increment(1))
             .addOnSuccessListener {
               Timber.tag("TEST").d("Successfully incremented reply count")
             }
@@ -79,102 +82,84 @@ class ReplyRepositoryImpl @Inject constructor(
       }
   }
 
-  override suspend fun getReplyById(recipeId: String, replyId: String): Reply? {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
+  override suspend fun getReplyById(id: String, replyId: String): Reply? {
+    val ref = getReference(id)
+    val repliesRef = ref.document(id).collection("replies")
 
     return try {
       val snapshot = repliesRef.document(replyId).get().await()
-      val reply =
-        snapshot.toObject(ReplyResponse::class.java)?.let { ReplyResponse.transform(it) }
-
-      reply
+      snapshot.toObject(ReplyResponse::class.java)?.let { ReplyResponse.transform(it) }
     } catch (e: Exception) {
+      Timber.e(e, "Error fetching reply by ID: $replyId for ID: $id")
       null
     }
   }
 
-  override suspend fun upvoteReply(
-    recipeId: String,
-    repliedId: String,
-    userId: String,
-    result: (Reply) -> Unit
-  ) {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
+  override suspend fun upvoteReply(id: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
+    val ref = getReference(id)
+    val repliesRef = ref.document(id).collection("replies")
 
     try {
-      val recipeDoc = repliesRef.document(repliedId)
-      val snapshot = recipeDoc.get().await()
+      val replyDoc = repliesRef.document(repliedId)
+      val snapshot = replyDoc.get().await()
       val replyResponse = snapshot.toObject(ReplyResponse::class.java)
-      Timber.tag("Upvote").d("DAH MASUK NIH DI REPO")
 
       replyResponse?.let { response ->
         val upvotes = response.upvotes.toMutableMap()
-        upvotes[userId] = true // Mark the user's upvote as true
-
+        upvotes[userId] = true
         response.upvotes = upvotes
-        recipeDoc.set(response).await()
-        Timber.tag("Upvote").d("User $userId upvoted recipe $repliedId successfully")
+
+        replyDoc.set(response).await()
+        Timber.tag("Upvote").d("User $userId upvoted reply $repliedId successfully")
         result(ReplyResponse.transform(response))
       }
     } catch (e: Exception) {
-      Timber.tag("Upvote").e(e, "Error upvoting recipe $repliedId by user $userId")
+      Timber.tag("Upvote").e(e, "Error upvoting reply $repliedId for ID: $id by user $userId")
     }
-
   }
 
-  // New method to remove an upvote
-  override suspend fun removeUpvote(
-    recipeId: String,
-    repliedId: String,
-    userId: String,
-    result: (Reply) -> Unit
-  ) {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
+  override suspend fun removeUpvote(id: String, repliedId: String, userId: String, result: (Reply) -> Unit) {
+    val ref = getReference(id)
+    val repliesRef = ref.document(id).collection("replies")
 
     try {
-      val recipeDoc = repliesRef.document(repliedId)
-      val snapshot = recipeDoc.get().await()
+      val replyDoc = repliesRef.document(repliedId)
+      val snapshot = replyDoc.get().await()
       val replyResponse = snapshot.toObject(ReplyResponse::class.java)
-      Timber.tag("Upvote").d("DAH MASUK NIH DI REPO DOWNVOTE")
 
-      Timber.tag("Upvote").d("kenapa cok ${replyResponse}")
       replyResponse?.let { response ->
         val upvotes = response.upvotes.toMutableMap()
+        upvotes.remove(userId)
+        response.upvotes = upvotes
 
-        response.upvotes = upvotes.filterNot { it.key == userId }
-        recipeDoc.set(response).await()
-        Timber.tag("RemoveUpvote")
-          .d("User $userId removed upvote from recipe $repliedId successfully")
+        replyDoc.set(response).await()
+        Timber.tag("RemoveUpvote").d("User $userId removed upvote from reply $repliedId successfully")
         result(ReplyResponse.transform(response))
       }
     } catch (e: Exception) {
-      Timber.tag("RemoveUpvote")
-        .e(e, "Error removing upvote from recipe $repliedId by user $userId")
+      Timber.tag("RemoveUpvote").e(e, "Error removing upvote from reply $repliedId for ID: $id by user $userId")
     }
   }
 
-  override suspend fun getTotalReplyCount(recipeId: String, replyId: String): Int {
-    val repliesRef = recipesRef.document(recipeId).collection("replies")
+  override suspend fun getTotalReplyCount(id: String, replyId: String): Int {
+    val ref = getReference(id)
+    val repliesRef = ref.document(id).collection("replies")
 
-    // Initial count to hold the number of replies at the current level
     var totalCount = 0
-
-    // Fetch all replies with parentId equal to the given replyId
     val currentLevelReplies = repliesRef
       .whereEqualTo("reply_parent_id", replyId)
       .get()
       .await()
       .toObjects(ReplyResponse::class.java)
 
-    // Count direct replies to this reply
     totalCount += currentLevelReplies.size
-
-    // For each direct reply, recursively fetch its replies and add to the total count
     for (reply in currentLevelReplies) {
-      totalCount += getTotalReplyCount(recipeId, reply.id) // Recursive call
+      Log.d("replyRepoImpl", "reply: $reply")
+
+      totalCount += getTotalReplyCount(id, reply.id)
     }
 
+    Log.d("replyRepoImpl", "ini: $totalCount")
     return totalCount
   }
-
 }

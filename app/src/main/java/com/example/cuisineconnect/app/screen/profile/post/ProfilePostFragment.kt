@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
@@ -94,7 +95,7 @@ class ProfilePostFragment : Fragment() {
       }
     }
 
-    profilePostAdapter.setItemListener(object : RecipeListListener {
+    profilePostAdapter.setItemListener(object : ItemListListener {
       override fun onRecipeClicked(recipeId: String) {
         Log.d("aahdfkfj", "masuk")
         val action =

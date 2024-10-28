@@ -69,7 +69,7 @@ class RecipeReplyRootViewHolder(
 
 // Fetch total reply count with callback
           viewModel.fetchTotalReplyCount(
-            getRecipeIdFromReplyId(reply.id),
+            getItemIdFromReplyId(reply.id),
             reply.id,
             replyCountCallback
           )
@@ -101,8 +101,7 @@ class RecipeReplyRootViewHolder(
     return upVoted
   }
 
-  fun getRecipeIdFromReplyId(replyId: String): String {
-    val parts = replyId.split("_")
-    return if (parts.size >= 2) "${parts[0]}_${parts[1]}" else replyId
+  private fun getItemIdFromReplyId(replyId: String): String {
+    return replyId.split("_").take(3).joinToString("_").ifEmpty { replyId }
   }
 }

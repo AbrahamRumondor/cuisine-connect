@@ -47,7 +47,7 @@ class RecipeRepositoryImpl @Inject constructor(
   }
 
   override fun getRecipeDocID(userId: String): String {
-    return "${userId}_${recipesRef.document().id}_r"
+    return "r_${userId}_${recipesRef.document().id}"
   }
 
   override fun getRecipeStepDocID(recipeId: String): String {
@@ -114,7 +114,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
   override suspend fun removeRecipe(recipeId: String) {
     try {
-      val userId = recipeId.substringBefore("_")
+      val userId = recipeId.substringAfter("_").substringBefore("_")
 
       val user = userRepository.getUserByUserId(userId)
       if (user == null) {
@@ -140,7 +140,7 @@ class RecipeRepositoryImpl @Inject constructor(
     val user = userRepository.getUserByUserId(userId) ?: return _recipesFlow
 
     val recipesList = user.recipes.map { recipeIdWithUser ->
-      val authorId = recipeIdWithUser.substringBefore("_")
+      val authorId = recipeIdWithUser.substringAfter("_").substringBefore("_")
 
       coroutineScope {
         val authorDeferred = async { userRepository.getUserByUserId(authorId) }

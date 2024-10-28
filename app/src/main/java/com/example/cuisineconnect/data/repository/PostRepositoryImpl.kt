@@ -48,7 +48,7 @@ class PostRepositoryImpl @Inject constructor(
   }
 
   override fun getPostDocID(userId: String): String {
-    return "${userId}_${postsRef.document().id}_p" // renamed recipesRef to postsRef
+    return "p_${userId}_${postsRef.document().id}" // renamed recipesRef to postsRef
   }
 
   override suspend fun setPost(
@@ -128,7 +128,7 @@ class PostRepositoryImpl @Inject constructor(
       val postDoc = postsRef.document(postId)
 
       // Extract userId from postId (assuming postId is formatted as userId_postId)
-      val userId = postId.substringBefore("_")
+      val userId = postId.substringAfter("_").substringBefore("_")
 
       // Get the current user
       val user = userRepository.getUserByUserId(userId)
@@ -159,7 +159,7 @@ class PostRepositoryImpl @Inject constructor(
 
     // Get the list of post IDs with associated user IDs
     val postsList = user.posts.map { postIdWithUser ->
-      val authorId = postIdWithUser.substringBefore("_")
+      val authorId = postIdWithUser.substringAfter("_").substringBefore("_")
 
       // Perform the necessary asynchronous tasks concurrently
       coroutineScope {

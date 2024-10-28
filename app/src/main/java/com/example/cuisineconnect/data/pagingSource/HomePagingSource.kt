@@ -41,7 +41,7 @@ class HomePagingSource(
         lastPostSnapshots[userId] = postsResult.documents.lastOrNull()
 
         for (post in posts) {
-          val postUser = usersRef.document(post.id.substringBefore("_")).get().await()
+          val postUser = usersRef.document(post.id.substringAfter("_").substringBefore("_")).get().await()
             .toObject(UserResponse::class.java)
           postUser?.let {
             Log.d("borborbor", "gas")
@@ -63,7 +63,7 @@ class HomePagingSource(
         lastRecipeSnapshots[userId] = recipesResult.documents.lastOrNull()
 
         for (recipe in recipes) {
-          val recipeUser = usersRef.document(recipe.id.substringBefore("_")).get().await()
+          val recipeUser = usersRef.document(recipe.id.substringAfter("_").substringBefore("_")).get().await()
             .toObject(UserResponse::class.java)
           recipeUser?.let {
             feedItems.add(

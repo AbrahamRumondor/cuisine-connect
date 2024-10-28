@@ -36,8 +36,8 @@ class SearchResultPagingSource(
       Log.d("searchResultPagingSource", "commonHashtags:: $commonHashtagIds")
 
       // Create a filtered list of hashtags that start with 'p' or 'r'
-      val filteredPostHashtags = commonHashtagIds.filter { it.endsWith("_p") }
-      val filteredRecipeHashtags = commonHashtagIds.filter { it.endsWith("_r") }
+      val filteredPostHashtags = commonHashtagIds.filter { it.startsWith("p_") }
+      val filteredRecipeHashtags = commonHashtagIds.filter { it.startsWith("r_") }
 
       // Fetch posts based on filtered hashtag IDs (no title filtering for posts)
       if (title.isNullOrEmpty()) {
@@ -47,7 +47,7 @@ class SearchResultPagingSource(
           val post = postSnapshot.toObject(PostResponse::class.java)
 
           post?.let {
-            val postUser = usersRef.document(it.id.substringBefore("_")).get().await()
+            val postUser = usersRef.document(it.id.substringAfter("_").substringBefore("_")).get().await()
               .toObject(UserResponse::class.java)
             postUser?.let { user ->
               feedItems.add(
@@ -65,7 +65,7 @@ class SearchResultPagingSource(
 
       // Add unique recipes to feedItems
       for (recipe in uniqueRecipes) {
-        val recipeUser = usersRef.document(recipe.id.substringBefore("_")).get().await()
+        val recipeUser = usersRef.document(recipe.id.substringAfter("_").substringBefore("_")).get().await()
           .toObject(UserResponse::class.java)
         recipeUser?.let { user ->
           feedItems.add(

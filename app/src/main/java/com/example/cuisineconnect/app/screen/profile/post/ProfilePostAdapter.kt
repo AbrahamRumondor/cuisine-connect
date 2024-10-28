@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemPostViewHolder
@@ -20,7 +21,7 @@ class ProfilePostAdapter :
   private var createPostViewModel: CreatePostViewModel? = null
 
   private var items: MutableList<Pair<Any?, Any?>> = mutableListOf()
-  private var postNRecipeItemListener: RecipeListListener? = null
+  private var postNRecipeItemListener: ItemListListener? = null
 
   private val SHOW_RECIPE = 0
   private val SHOW_POST = 1
@@ -89,7 +90,7 @@ class ProfilePostAdapter :
     notifyDataSetChanged()
   }
 
-  fun setItemListener(postNRecipeItemListener: RecipeListListener) {
+  fun setItemListener(postNRecipeItemListener: ItemListListener) {
     this.postNRecipeItemListener = postNRecipeItemListener
   }
 

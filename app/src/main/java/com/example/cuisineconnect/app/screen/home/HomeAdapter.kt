@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemPostViewHolder
@@ -18,7 +19,7 @@ import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 
 class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedItemComparator) {
 
-    private var postNRecipeItemListener: RecipeListListener? = null
+    private var postNRecipeItemListener: ItemListListener? = null
     private var createPostViewModel: CreatePostViewModel? = null
 
     override fun getItemViewType(position: Int): Int {
@@ -72,7 +73,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
         }
     }
 
-    fun setItemListener(postNRecipeItemListener: RecipeListListener) {
+    fun setItemListener(postNRecipeItemListener: ItemListListener) {
         this.postNRecipeItemListener = postNRecipeItemListener
     }
 

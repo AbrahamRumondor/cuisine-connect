@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
@@ -25,7 +26,7 @@ class ItemRecipeViewHolder(
   fun bind(
     user: User?,
     recipe: Recipe?,
-    listener: RecipeListListener?,
+    listener: ItemListListener?,
     createPostViewModel: CreatePostViewModel?
   ) {
     view.run {

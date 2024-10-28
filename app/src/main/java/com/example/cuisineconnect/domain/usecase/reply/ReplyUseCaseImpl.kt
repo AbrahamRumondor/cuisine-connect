@@ -9,52 +9,50 @@ import javax.inject.Inject
 class ReplyUseCaseImpl @Inject constructor(
   private val replyRepository: ReplyRepository
 ) : ReplyUseCase {
-  override suspend fun getRepliesByRecipe(recipeId: String): StateFlow<List<Reply>> {
-    return replyRepository.getRepliesByRecipe(recipeId)
+  override suspend fun getRepliesByRecipeOrPost(id: String): StateFlow<List<Reply>> {
+    return replyRepository.getRepliesByRecipeOrPost(id)
   }
 
-  override suspend fun getReplyById(recipeId: String, replyId: String): Reply? {
-    return replyRepository.getReplyById(recipeId, replyId)
+  override suspend fun getReplyById(id: String, replyId: String): Reply? {
+    return replyRepository.getReplyById(id, replyId)
   }
 
   override fun setReply(
-    recipeId: String,
+    id: String,
     replyId: String,
     replyResponse: ReplyResponse,
     isNewReply: Boolean
   ) {
-    replyRepository.setReply(recipeId, replyId, replyResponse, isNewReply)
+    replyRepository.setReply(id, replyId, replyResponse, isNewReply)
   }
 
-  override fun getRecipeReplyDocID(recipeId: String): String {
-    return replyRepository.getRecipeReplyDocID(recipeId)
+  override fun getReplyDocID(id: String): String {
+    return replyRepository.getReplyDocID(id)
   }
 
-  override fun getChildReplyDocID(recipeId: String, rootReplyId: String): String {
-    return replyRepository.getChildReplyDocID(recipeId, rootReplyId)
+  override fun getChildReplyDocID(id: String, rootReplyId: String): String {
+    return replyRepository.getChildReplyDocID(id, rootReplyId)
   }
 
   override suspend fun upvoteReply(
-    recipeId: String,
+    id: String,
     repliedId: String,
     userId: String,
     result: (Reply) -> Unit
   ) {
-    replyRepository.upvoteReply(recipeId, repliedId, userId, result)
+    replyRepository.upvoteReply(id, repliedId, userId, result)
   }
 
-  override suspend fun downVoteReply(
-    recipeId: String,
+  override suspend fun removeUpvote(
+    id: String,
     repliedId: String,
     userId: String,
     result: (Reply) -> Unit
   ) {
-    replyRepository.removeUpvote(recipeId, repliedId, userId, result)
+    replyRepository.removeUpvote(id, repliedId, userId, result)
   }
 
-  override suspend fun getTotalReplyCount(recipeId: String, replyId: String): Int {
-    return replyRepository.getTotalReplyCount(recipeId, replyId)
+  override suspend fun getTotalReplyCount(itemId: String, replyId: String): Int {
+    return replyRepository.getTotalReplyCount(itemId, replyId)
   }
-
-
 }

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.map
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.home.HomeAdapter
 import com.example.cuisineconnect.databinding.FragmentSearchResultBinding
@@ -51,7 +52,7 @@ class SearchResultFragment : Fragment() {
   private fun setupRecyclerView() {
     binding.list.adapter = adapter  // Assuming `list` is the RecyclerView ID in `FragmentSearchResultBinding`
 
-    adapter.setItemListener(object : RecipeListListener {
+    adapter.setItemListener(object : ItemListListener {
       override fun onRecipeClicked(recipeId: String) {
         val action = SearchResultFragmentDirections.actionSearchResultFragmentToRecipeDetailFragment(recipeId)
         findNavController().navigate(action)

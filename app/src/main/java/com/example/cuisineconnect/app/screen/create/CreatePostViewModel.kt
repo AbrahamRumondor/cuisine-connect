@@ -64,7 +64,7 @@ class CreatePostViewModel @Inject constructor(
 
       // If recipe is not null, fetch the user
       val user = recipe?.let {
-        val userId = it.id.substringBefore("_")
+        val userId = it.id.substringAfter("_").substringBefore("_")
         withContext(Dispatchers.IO) {
           userUseCase.getUserByUserId(userId)
         }

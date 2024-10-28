@@ -50,7 +50,7 @@ class CollectionViewModel @Inject constructor(
 
           // Create a pair list of User and Recipe asynchronously
           val pairList = recipes.map { recipe ->
-            val userId = recipe.id.substringBefore("_")
+            val userId = recipe.id.substringAfter("_").substringBefore("_")
             async {
               val user = userUseCase.getUserByUserId(userId)
               Pair(user, recipe) // Create the Pair asynchronously

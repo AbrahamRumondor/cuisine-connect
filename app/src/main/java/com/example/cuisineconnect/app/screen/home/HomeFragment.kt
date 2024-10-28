@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivityViewModel
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
@@ -93,7 +94,7 @@ class HomeFragment : Fragment() {
   private fun setupView() {
     binding.list.adapter = adapter
 
-    adapter.setItemListener(object : RecipeListListener {
+    adapter.setItemListener(object : ItemListListener {
       override fun onRecipeClicked(recipeId: String) {
         Log.d("aahdfkfj", "masuk")
         val action =
@@ -111,6 +112,12 @@ class HomeFragment : Fragment() {
           "recipe" -> mainActivityViewModel.deleteRecipe(itemId)
         }
 //        adapter.removeData(itemId, type)
+      }
+
+      override fun onPostClicked(postId: String) {
+        val action =
+          HomeFragmentDirections.actionHomeFragmentToPostDetailFragment2(postId)
+        findNavController().navigate(action)
       }
     })
 

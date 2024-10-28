@@ -19,6 +19,9 @@
     <action
         android:id="@+id/action_homeFragment_to_recipeDetailFragment"
         app:destination="@id/recipeDetailFragment" />
+    <action
+        android:id="@+id/action_homeFragment_to_postDetailFragment2"
+        app:destination="@id/postDetailFragment2" />
   </fragment>
   <fragment
       android:id="@+id/searchFragment"
@@ -88,7 +91,7 @@
       android:label="fragment_reply_recipe"
       tools:layout="@layout/fragment_reply_recipe">
     <argument
-        android:name="recipeId"
+        android:name="itemId"
         app:argType="string"
         app:nullable="true" />
   </fragment>
@@ -159,5 +162,17 @@
     <action
         android:id="@+id/action_searchResultFragment_to_recipeDetailFragment"
         app:destination="@id/recipeDetailFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/postDetailFragment2"
+      android:name="com.example.cuisineconnect.app.screen.post.PostDetailFragment"
+      android:label="fragment_post_detail"
+      tools:layout="@layout/fragment_post_detail" >
+    <argument
+        android:name="postId"
+        app:argType="string" />
+    <action
+        android:id="@+id/action_postDetailFragment2_to_replyRecipeFragment"
+        app:destination="@id/replyRecipeFragment" />
   </fragment>
 </navigation>

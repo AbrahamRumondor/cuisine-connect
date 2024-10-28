@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
@@ -31,7 +32,7 @@ class ItemPostViewHolder(
   fun bind(
     user: User?,
     post: Post,
-    listener: RecipeListListener?,
+    listener: ItemListListener?,
     createPostViewModel: CreatePostViewModel?
   ) {
     view.run {
@@ -40,6 +41,10 @@ class ItemPostViewHolder(
         Log.d("lilil", "this is post ${user} and ${post}")
 
         tvUsername.text = user.name
+
+        root.setOnClickListener {
+          listener?.onPostClicked(post.id)
+        }
 
         Glide.with(root)
           .load(user.image)
@@ -136,7 +141,7 @@ class ItemPostViewHolder(
       .inflate(R.layout.item_post_text_view, view.llPostContents, false)
 
     // Set margins using the new function
-    setViewMargins(customCardView, 0, 8)
+    setViewMargins(customCardView, 0, 4)
 
     val tvUserInput: TextView = customCardView.findViewById(R.id.tvUserInput)
     tvUserInput.text = text
@@ -154,7 +159,7 @@ class ItemPostViewHolder(
       .inflate(R.layout.item_post_image_view, view.llPostContents, false)
 
     // Set margins using the new function
-    setViewMargins(customImageView, 0, 8)
+    setViewMargins(customImageView, 4, 4)
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
     Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(imageView)
@@ -217,7 +222,7 @@ class ItemPostViewHolder(
         )
 
         // Set margins using the new function
-        setViewMargins(viewRecipe.root, 4, 8)
+        setViewMargins(viewRecipe.root, 4, 4)
 
         viewRecipe.run {
           tvTitle.text = recipe.title

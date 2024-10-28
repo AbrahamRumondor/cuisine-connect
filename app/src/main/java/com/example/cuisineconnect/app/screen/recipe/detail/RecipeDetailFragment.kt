@@ -127,7 +127,7 @@ class RecipeDetailFragment : Fragment() {
   private fun fetchUserNRecipe(recipeId: String?) {
     if (recipeId.isNullOrEmpty()) return
 
-    val userId = recipeId.substringBefore("_")
+    val userId = recipeId.substringAfter("_").substringBefore("_")
     recipeDetailViewModel.fetchUser(userId)
     recipeDetailViewModel.fetchRecipe(recipeId)
     recipeDetailViewModel.fetchSteps(recipeId)
