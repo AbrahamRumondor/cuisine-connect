@@ -104,7 +104,7 @@ class ItemRecipeViewHolder(
 
         tvUpvoteCount.text = recipe.upvotes.size.toString()
         tvReplyCount.text = recipe.replyCount.toString()
-        tvBookmarkCount.text = recipe.bookmarkCount.toString()
+        tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
 //                ivOrderAdd.setOnClickListener {
 //                    itemListener?.onAddItemClicked(position, menu.id)

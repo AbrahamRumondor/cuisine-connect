@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentRecipeDetailBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
@@ -71,16 +72,16 @@ class RecipeDetailFragment : Fragment() {
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
 
-          setupUpvoteButton(recipe, user, recipeId)
+          currentUser?.let {
+            setupUpvoteButton(recipe, it, recipeId)
 
-          if (recipeId.contains(user.id)) {
-            ivIcBookmark.visibility = View.INVISIBLE
-            tvBookmarkCount.visibility = View.INVISIBLE
-          } else {
-            ivIcBookmark.visibility = View.VISIBLE
-            tvBookmarkCount.visibility = View.VISIBLE
-            ivIcBookmark.setOnClickListener {
-              // Handle bookmark action here
+            if (recipeId.contains(it.id)) {
+              ivIcBookmark.visibility = View.INVISIBLE
+              tvBookmarkCount.visibility = View.INVISIBLE
+            } else {
+              ivIcBookmark.visibility = View.VISIBLE
+              tvBookmarkCount.visibility = View.VISIBLE
+              tvBookmarkCount.text = recipe.bookmarks.size.toString()
             }
           }
 
@@ -135,14 +136,25 @@ class RecipeDetailFragment : Fragment() {
 
   private fun setupUpvoteButton(recipe: Recipe, user: User, recipeId: String) {
     val isUpvoted = recipe.upvotes[user.id] == true
+    val isBookmarked = recipe.bookmarks[user.id] == true
 
     updateUpvoteIcon(isUpvoted)
+    updateBookmarkIcon(isBookmarked)
+
 
     binding.llUpvote.setOnClickListener {
       if (isUpvoted) {
         handleDownvote(recipeId, user.id)
       } else {
         handleUpvote(recipeId, user.id)
+      }
+    }
+
+    binding.llBookmark.setOnClickListener {
+      if (isBookmarked) {
+        handleRemoveBookmark(recipe.id, user.id)
+      } else {
+        handleAddBookmark(recipe.id, user.id)
       }
     }
   }
@@ -165,5 +177,21 @@ class RecipeDetailFragment : Fragment() {
 
   private fun showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
+  }
+
+  private fun updateBookmarkIcon(isBookmarked: Boolean) {
+    binding.ivIcBookmark.setImageResource(
+      if (isBookmarked) R.drawable.ic_bookmark_solid else R.drawable.ic_bookmark_regular
+    )
+  }
+
+  private fun handleAddBookmark(postId: String, userId: String) {
+    recipeDetailViewModel.addToBookmark(postId, userId)
+    showToast("Added to bookmarks")
+  }
+
+  private fun handleRemoveBookmark(postId: String, userId: String) {
+    recipeDetailViewModel.removeFromBookmark(postId, userId)
+    showToast("Removed from bookmarks")
   }
 }

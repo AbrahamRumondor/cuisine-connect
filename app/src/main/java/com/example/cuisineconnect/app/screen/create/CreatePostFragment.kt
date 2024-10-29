@@ -214,7 +214,7 @@ class CreatePostFragment : Fragment() {
           tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
-          tvBookmarkCount.text = recipe.bookmarkCount.toString()
+          tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
           val dateFormat = SimpleDateFormat("MMM dd")
           val formattedDate = dateFormat.format(recipe.date)

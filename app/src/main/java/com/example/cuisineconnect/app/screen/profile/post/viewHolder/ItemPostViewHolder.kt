@@ -88,7 +88,7 @@ class ItemPostViewHolder(
 
         tvUpvoteCount.text = post.upvotes.size.toString()
         tvReplyCount.text = post.replyCount.toString()
-        tvBookmarkCount.text = post.bookmarkCount.toString()
+        tvBookmarkCount.text = post.bookmarks.size.toString()
 
 //                ivOrderAdd.setOnClickListener {
 //                    itemListener?.onAddItemClicked(position, menu.id)
@@ -229,7 +229,7 @@ class ItemPostViewHolder(
           tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
-          tvBookmarkCount.text = recipe.bookmarkCount.toString()
+          tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
           val dateFormat = SimpleDateFormat("MMM dd")
           val formattedDate = dateFormat.format(recipe.date)

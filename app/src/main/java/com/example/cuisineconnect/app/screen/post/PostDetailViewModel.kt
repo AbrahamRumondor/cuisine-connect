@@ -101,4 +101,24 @@ class PostDetailViewModel @Inject constructor(
       postUseCase.downVotePost(recipeId, userId, result)
     }
   }
+
+  fun addToBookmark(
+    postId: String,
+    userId: String,
+    result: (Post) -> Unit
+  ) {
+    viewModelScope.launch {
+      postUseCase.addToBookmark(postId, userId, result)
+    }
+  }
+
+  fun removeFromBookmark(
+    postId: String,
+    userId: String,
+    result: (Post) -> Unit
+  ) {
+    viewModelScope.launch {
+      postUseCase.removeFromBookmark(postId, userId, result)
+    }
+  }
 }

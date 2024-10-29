@@ -50,4 +50,16 @@ class RecipeUseCaseImpl @Inject constructor(
   override suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User, Recipe>>> {
     return recipeRepository.getRecipesForHome(userId)
   }
+
+  override suspend fun addToBookmark(recipeId: String, userId: String, result: (Recipe) -> Unit) {
+    recipeRepository.addToBookmark(recipeId, userId, result)
+  }
+
+  override suspend fun removeFromBookmark(
+    recipeId: String,
+    userId: String,
+    result: (Recipe) -> Unit
+  ) {
+    recipeRepository.removeFromBookmark(recipeId, userId, result)
+  }
 }

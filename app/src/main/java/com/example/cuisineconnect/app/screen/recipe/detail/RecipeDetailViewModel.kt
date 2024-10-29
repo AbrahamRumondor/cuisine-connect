@@ -132,4 +132,26 @@ class RecipeDetailViewModel @Inject constructor(
     }
   }
 
+  fun addToBookmark(
+    recipeId: String,
+    userId: String
+  ) {
+    viewModelScope.launch {
+      recipeUseCase.addToBookmark(recipeId, userId) {
+        fetchRecipe(recipeId)
+      }
+    }
+  }
+
+  fun removeFromBookmark(
+    recipeId: String,
+    userId: String,
+  ) {
+    viewModelScope.launch {
+      recipeUseCase.removeFromBookmark(recipeId, userId) {
+        fetchRecipe(recipeId)
+      }
+    }
+  }
+
 }

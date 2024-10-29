@@ -48,4 +48,12 @@ class PostUseCaseImpl @Inject constructor(
   override suspend fun getPostsForHome(userId: String): StateFlow<List<Pair<User, Post>>> {
     return postRepository.getPostsForHome(userId)
   }
+
+  override suspend fun removeFromBookmark(postId: String, userId: String, result: (Post) -> Unit) {
+    postRepository.removeFromBookmark(postId, userId, result)
+  }
+
+  override suspend fun addToBookmark(postId: String, userId: String, result: (Post) -> Unit) {
+    postRepository.addToBookmark(postId, userId, result)
+  }
 }

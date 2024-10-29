@@ -96,8 +96,8 @@ class PostContentRenderer(
 
       // Set dialog layout parameters to fill 90-95% of the screen
       val params = dialog.window?.attributes
-      params?.width = (container.context.resources.displayMetrics.widthPixels * 0.90).toInt() // 95% of screen width
-      params?.height = (container.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
+      params?.width = (container.context.resources.displayMetrics.widthPixels * 0.80).toInt() // 95% of screen width
+      params?.height = (container.context.resources.displayMetrics.heightPixels * 0.80).toInt() // 95% of screen height
       dialog.window?.attributes = params
 
       dialog.show()
@@ -150,7 +150,7 @@ class PostContentRenderer(
           tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
-          tvBookmarkCount.text = recipe.bookmarkCount.toString()
+          tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
           val dateFormat = SimpleDateFormat("MMM dd")
           val formattedDate = dateFormat.format(recipe.date)

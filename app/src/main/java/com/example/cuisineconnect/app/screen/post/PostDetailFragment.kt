@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentPostDetailBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
@@ -67,11 +68,23 @@ class PostDetailFragment : Fragment() {
           // Render the post content
           postContentRenderer.renderPostContent(post.postContent)
 
-          setupUpvoteButton(post, user)
-
           tvUsername.text = user.name
           tvUniqueUsername.text = "@${user.name}"
           tvDate.text = getRelativeTime(post.date)
+
+          currentUser?.let {
+            setupUpvoteButton(post, it)
+
+            if (post.id.contains(it.id)) {
+              ivIcBookmark.visibility = View.GONE
+              tvBookmarkCount.visibility = View.GONE
+            } else {
+              ivIcBookmark.visibility = View.VISIBLE
+              tvBookmarkCount.visibility = View.VISIBLE
+              tvBookmarkCount.text = post.bookmarks.size.toString()
+            }
+
+          }
 
           Glide.with(binding.root)
             .load(user.image)   // Load the image URL into the ImageView
@@ -124,14 +137,24 @@ class PostDetailFragment : Fragment() {
 
   private fun setupUpvoteButton(post: Post, user: User) {
     val isUpvoted = post.upvotes[user.id] == true
+    val isBookmarked = post.bookmarks[user.id] == true
 
     updateUpvoteIcon(isUpvoted)
+    updateBookmarkIcon(isBookmarked)
 
     binding.llUpvote.setOnClickListener {
       if (isUpvoted) {
         handleDownvote(post.id, user.id)
       } else {
         handleUpvote(post.id, user.id)
+      }
+    }
+
+    binding.llBookmark.setOnClickListener {
+      if (isBookmarked) {
+        handleRemoveBookmark(post.id, user.id)
+      } else {
+        handleAddBookmark(post.id, user.id)
       }
     }
   }
@@ -158,5 +181,25 @@ class PostDetailFragment : Fragment() {
 
   private fun showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
+  }
+
+  private fun updateBookmarkIcon(isBookmarked: Boolean) {
+    binding.ivIcBookmark.setImageResource(
+      if (isBookmarked) R.drawable.ic_bookmark_solid else R.drawable.ic_bookmark_regular
+    )
+  }
+
+  private fun handleAddBookmark(postId: String, userId: String) {
+    postDetailViewModel.addToBookmark(postId, userId) {
+      loadPostDetails(postId) // Refresh post details to update the bookmark state
+      showToast("Added to bookmarks")
+    }
+  }
+
+  private fun handleRemoveBookmark(postId: String, userId: String) {
+    postDetailViewModel.removeFromBookmark(postId, userId) {
+      loadPostDetails(postId) // Refresh post details to update the bookmark state
+      showToast("Removed from bookmarks")
+    }
   }
 }

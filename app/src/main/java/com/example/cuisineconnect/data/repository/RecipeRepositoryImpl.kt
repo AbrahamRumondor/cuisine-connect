@@ -162,4 +162,53 @@ class RecipeRepositoryImpl @Inject constructor(
     return _recipesFlow
   }
 
+  // Add these methods inside RecipeRepositoryImpl
+
+  override suspend fun addToBookmark(
+    recipeId: String,
+    userId: String,
+    result: (Recipe) -> Unit
+  ) {
+    try {
+      val recipeDoc = recipesRef.document(recipeId)
+      val snapshot = recipeDoc.get().await()
+      val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
+
+      recipeResponse?.let { response ->
+        val bookmarks = response.bookmarks.toMutableMap()
+        bookmarks[userId] = true // Add the user to bookmarks
+
+        response.bookmarks = bookmarks
+        recipeDoc.set(response).await()
+        Timber.tag("Bookmark").d("User $userId bookmarked recipe $recipeId successfully")
+        result(RecipeResponse.transform(response))
+      }
+    } catch (e: Exception) {
+      Timber.tag("Bookmark").e(e, "Error bookmarking recipe $recipeId by user $userId")
+    }
+  }
+
+  override suspend fun removeFromBookmark(
+    recipeId: String,
+    userId: String,
+    result: (Recipe) -> Unit
+  ) {
+    try {
+      val recipeDoc = recipesRef.document(recipeId)
+      val snapshot = recipeDoc.get().await()
+      val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
+
+      recipeResponse?.let { response ->
+        val bookmarks = response.bookmarks.toMutableMap()
+        bookmarks.remove(userId) // Remove the user from bookmarks
+
+        response.bookmarks = bookmarks
+        recipeDoc.set(response).await()
+        Timber.tag("RemoveBookmark").d("User $userId removed bookmark from recipe $recipeId successfully")
+        result(RecipeResponse.transform(response))
+      }
+    } catch (e: Exception) {
+      Timber.tag("RemoveBookmark").e(e, "Error removing bookmark from recipe $recipeId by user $userId")
+    }
+  }
 }

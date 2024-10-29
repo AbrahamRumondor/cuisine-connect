@@ -15,5 +15,16 @@ interface RecipeRepository {
   suspend fun upvoteRecipe(recipeId: String, userId: String)
   suspend fun removeUpvote(recipeId: String, userId: String)
   suspend fun removeRecipe(recipeId: String)
-  suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User,Recipe>>>
+  suspend fun getRecipesForHome(userId: String): StateFlow<List<Pair<User, Recipe>>>
+  suspend fun addToBookmark(
+    recipeId: String,
+    userId: String,
+    result: (Recipe) -> Unit
+  )
+
+  suspend fun removeFromBookmark(
+    recipeId: String,
+    userId: String,
+    result: (Recipe) -> Unit
+  )
 }

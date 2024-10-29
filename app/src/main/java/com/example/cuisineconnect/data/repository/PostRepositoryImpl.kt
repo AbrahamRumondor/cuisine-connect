@@ -183,4 +183,51 @@ class PostRepositoryImpl @Inject constructor(
     return _postsFlow
   }
 
+  override suspend fun addToBookmark(
+    postId: String,
+    userId: String,
+    result: (Post) -> Unit
+  ) {
+    try {
+      val postDoc = postsRef.document(postId)
+      val snapshot = postDoc.get().await()
+      val postResponse = snapshot.toObject(PostResponse::class.java)
+
+      postResponse?.let { response ->
+        val bookmarks = response.bookmarks.toMutableMap()
+        bookmarks[userId] = true // Add the user to bookmarks
+
+        response.bookmarks = bookmarks
+        postDoc.set(response).await()
+        Timber.tag("Bookmark").d("User $userId bookmarked post $postId successfully")
+        result(PostResponse.transform(response))
+      }
+    } catch (e: Exception) {
+      Timber.tag("Bookmark").e(e, "Error bookmarking post $postId by user $userId")
+    }
+  }
+
+  override suspend fun removeFromBookmark(
+    postId: String,
+    userId: String,
+    result: (Post) -> Unit
+  ) {
+    try {
+      val postDoc = postsRef.document(postId)
+      val snapshot = postDoc.get().await()
+      val postResponse = snapshot.toObject(PostResponse::class.java)
+
+      postResponse?.let { response ->
+        val bookmarks = response.bookmarks.toMutableMap()
+        bookmarks.remove(userId) // Remove the user from bookmarks
+
+        response.bookmarks = bookmarks
+        postDoc.set(response).await()
+        Timber.tag("RemoveBookmark").d("User $userId removed bookmark from post $postId successfully")
+        result(PostResponse.transform(response))
+      }
+    } catch (e: Exception) {
+      Timber.tag("RemoveBookmark").e(e, "Error removing bookmark from post $postId by user $userId")
+    }
+  }
 }

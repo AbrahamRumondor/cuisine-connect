@@ -81,6 +81,20 @@
                 />
           </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="Jan xx"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cv_profile"
+            app:layout_constraintBottom_toBottomOf="@id/cv_profile"
+            />
+
           <!-- Username and Details Layout -->
           <LinearLayout
               android:id="@+id/ll_username"
@@ -124,31 +138,6 @@
             app:layout_constraintTop_toBottomOf="@id/ll_username"
             />
 
-        <!-- Buttons Layout -->
-        <LinearLayout
-            android:id="@+id/ll_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_post_contents"
-            >
-
-          <TextView
-              android:id="@+id/tv_date"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:gravity="start"
-              android:text="Jan xx"
-              android:textSize="16sp"
-              android:textColor="@android:color/black"
-              />
-        </LinearLayout>
-
       </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
@@ -179,6 +168,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="30dp"
+          android:layout_weight="1"
           android:gravity="center"
           android:orientation="horizontal"
           >
@@ -197,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="98"
+            android:text="-"
             />
       </LinearLayout>
 
@@ -208,6 +198,7 @@
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="30dp"
           android:gravity="center"
+          android:layout_weight="1"
           android:orientation="horizontal"
           >
 
@@ -225,16 +216,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="98"
+            android:text="-"
             />
       </LinearLayout>
 
       <!-- Bookmark Section -->
       <LinearLayout
+          android:id="@+id/ll_bookmark"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="30dp"
           android:gravity="center"
+          android:layout_weight="1"
           android:orientation="horizontal"
           >
 
@@ -251,7 +244,7 @@
             android:id="@+id/tv_bookmark_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="98"
+            android:text="-"
             />
       </LinearLayout>
     </LinearLayout>
