@@ -122,7 +122,7 @@
         android:background="@color/white"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
-        tools:listitem="@layout/fragment_my_recipe"
+        tools:listitem="@layout/hashtag_trending_list"
         />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

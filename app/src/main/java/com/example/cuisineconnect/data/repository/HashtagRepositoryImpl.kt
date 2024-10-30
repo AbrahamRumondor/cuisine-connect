@@ -177,4 +177,65 @@ class HashtagRepositoryImpl @Inject constructor(
       }
   }
 
+  fun updateTrendingScores(callback: (Boolean, Exception?) -> Unit) {
+    hashtagRef.get()
+      .addOnSuccessListener { snapshot ->
+        val currentTime = System.currentTimeMillis()
+        snapshot.documents.forEach { document ->
+          val hashtag = document.toObject(HashtagResponse::class.java)
+          val currentTimestamps = hashtag?.timeStamps?.toMutableMap() ?: mutableMapOf()
+
+          // Remove timestamps older than 24 hours
+          currentTimestamps.entries.removeIf { entry ->
+            (currentTime - entry.key.toLong()) > (24 * 60 * 60 * 1000)
+          }
+
+          // Recalculate total score
+          val newTotalScore = currentTimestamps.values.sum()
+
+          // Update Firestore with new timestamps and total score if changed
+          if (newTotalScore != hashtag?.totalScore) {
+            hashtagRef.document(document.id).update(
+              mapOf(
+                "hashtag_timestamps" to currentTimestamps,
+                "hashtag_total_score" to newTotalScore
+              )
+            ).addOnFailureListener { e ->
+              println("Error updating hashtag scores: ${e.message}")
+              callback(false, e)
+            }
+          }
+        }
+        callback(true, null) // All hashtags updated successfully
+      }
+      .addOnFailureListener { e ->
+        println("Error fetching hashtags for updating scores: ${e.message}")
+        callback(false, e)
+      }
+  }
+
+  override fun getSortedTrendingHashtags(limit: Int, callback: (List<Hashtag>, Exception?) -> Unit) {
+    updateTrendingScores { success, error ->
+      if (success) {
+        // Proceed to fetch trending hashtags if scores were successfully updated
+        hashtagRef
+          .orderBy("hashtag_total_score", Query.Direction.DESCENDING)
+          .limit(limit.toLong())
+          .get()
+          .addOnSuccessListener { snapshot ->
+            val trendingHashtags = snapshot.documents.mapNotNull { document ->
+              document.toObject(HashtagResponse::class.java)?.let { HashtagResponse.transform(it) }
+            }
+            callback(trendingHashtags, null)
+          }
+          .addOnFailureListener { e ->
+            callback(emptyList(), e)
+          }
+      } else {
+        // Pass the error if updating scores failed
+        callback(emptyList(), error)
+      }
+    }
+  }
+
 }

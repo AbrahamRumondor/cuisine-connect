@@ -20,7 +20,6 @@ import com.example.cuisineconnect.databinding.RecipeDetailTagsBinding
 import com.example.cuisineconnect.databinding.SubTitleBinding
 import com.example.cuisineconnect.databinding.UserHorizontalBinding
 import com.example.cuisineconnect.databinding.ViewBottomSpaceBinding
-import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.Ingredient
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Step

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.OnClickItemListener
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
@@ -32,11 +33,17 @@ class SearchPromptFragment : Fragment() {
   private val searchPromptViewModel: SearchPromptViewModel by viewModels()
   private val searchPromptAdapter by lazy { SearchPromptAdapter() }
 
+  private val args: SearchPromptFragmentArgs by navArgs()
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentSearchPromptBinding.inflate(inflater, container, false)
+
+    val query = args.query
+
+    if (!query.isNullOrEmpty()) binding.etSearch.setText(query)
 
     setupToolbar()
     focusSearchBar()

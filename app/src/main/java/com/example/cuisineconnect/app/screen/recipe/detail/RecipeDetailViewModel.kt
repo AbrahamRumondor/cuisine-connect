@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Step
 import com.example.cuisineconnect.domain.model.User
+import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
 import com.example.cuisineconnect.domain.usecase.step.StepUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
@@ -14,13 +15,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
   private val userUseCase: UserUseCase,
   private val recipeUseCase: RecipeUseCase,
-  private val stepUseCase: StepUseCase
+  private val stepUseCase: StepUseCase,
+  private val hashtagUseCase: HashtagUseCase
 ) : ViewModel() {
 
   private val _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
@@ -150,6 +153,22 @@ class RecipeDetailViewModel @Inject constructor(
     viewModelScope.launch {
       recipeUseCase.removeFromBookmark(recipeId, userId) {
         fetchRecipe(recipeId)
+      }
+    }
+  }
+
+  fun updateTrendingCounter(hashtagsBody: List<String>, itemId: String) {
+    if (hashtagsBody.isEmpty()) return
+
+    viewModelScope.launch {
+      val newTimestamp = Date().time
+      val increment = 1
+      hashtagsBody.forEach { hashtagBody ->
+        try {
+          hashtagUseCase.updateHashtagWithScore(hashtagBody, itemId, newTimestamp, increment)
+        } catch (e: Exception) {
+          Timber.tag("HASHTAG_UPDATE_ERROR").e("Failed to update hashtag $hashtagBody: ${e.message}")
+        }
       }
     }
   }

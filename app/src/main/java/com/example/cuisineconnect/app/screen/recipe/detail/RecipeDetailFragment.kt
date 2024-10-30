@@ -92,6 +92,11 @@ class RecipeDetailFragment : Fragment() {
               )
             findNavController().navigate(action)
           }
+
+          recipeDetailViewModel.updateTrendingCounter(
+            recipe.hashtags,
+            recipe.id
+          )
         }
       }
     }

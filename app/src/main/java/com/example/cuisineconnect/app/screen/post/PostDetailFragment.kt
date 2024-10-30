@@ -63,6 +63,11 @@ class PostDetailFragment : Fragment() {
     postDetailViewModel.getPostById(postId) { result ->
       result?.let { (user, post) ->
         binding.run {
+//          TODO postDetailViewModel.updateTrendingCounter(
+//            post.hashtags,
+//            post.id
+//          )
+
           tvUpvoteCount.text = post.upvotes.size.toString()
           tvReplyCount.text = post.replyCount.toString()
           // Render the post content

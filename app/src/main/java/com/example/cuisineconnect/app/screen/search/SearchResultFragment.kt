@@ -15,6 +15,7 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.home.HomeAdapter
+import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentSearchResultBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -35,13 +36,30 @@ class SearchResultFragment : Fragment() {
   ): View {
     binding = FragmentSearchResultBinding.inflate(inflater, container, false)
 
+    binding.btnBack.setOnClickListener {
+      activity?.supportFragmentManager?.popBackStack()
+    }
+
     val query = args.query
 
     setupRecyclerView()
     observeData(query)
 
     binding.clSearchBar.setOnClickListener {
-      findNavController().popBackStack()
+      val navController = findNavController()
+
+      // Check if SearchPromptFragment is in the back stack
+      val hasSearchPromptFragment = navController.previousBackStackEntry?.destination?.id == R.id.searchPromptFragment
+
+      if (!hasSearchPromptFragment) {
+        val action =
+          SearchResultFragmentDirections.actionSearchResultFragmentToSearchPromptFragment(
+            query
+          )
+        navController.navigate(action)
+      } else {
+        navController.popBackStack()
+      }
     }
 
     binding.tvSearch.text = query

@@ -9,6 +9,7 @@ import com.example.cuisineconnect.data.response.PostResponse
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
+import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
 import com.example.cuisineconnect.domain.usecase.post.PostUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
@@ -30,7 +32,8 @@ import kotlin.coroutines.resume
 class PostDetailViewModel @Inject constructor(
   private val userUseCase: UserUseCase,
   private val recipeUseCase: RecipeUseCase,
-  private val postUseCase: PostUseCase
+  private val postUseCase: PostUseCase,
+  private val hashtagUseCase: HashtagUseCase
 ) : ViewModel() {
   private val storageReference = FirebaseStorage.getInstance().reference
 
@@ -119,6 +122,21 @@ class PostDetailViewModel @Inject constructor(
   ) {
     viewModelScope.launch {
       postUseCase.removeFromBookmark(postId, userId, result)
+    }
+  }
+
+  fun updateTrendingCounter(hashtagsBody: List<String>, itemId: String) {
+    viewModelScope.launch {
+      val newTimestamp = Date().time
+      val increment = 1
+      hashtagsBody.forEach { hashtagBody ->
+        try {
+          hashtagUseCase.updateHashtagWithScore(hashtagBody, itemId, newTimestamp, increment)
+        } catch (e: Exception) {
+          Timber.tag("HASHTAG_UPDATE_ERROR")
+            .e("Failed to update hashtag $hashtagBody: ${e.message}")
+        }
+      }
     }
   }
 }

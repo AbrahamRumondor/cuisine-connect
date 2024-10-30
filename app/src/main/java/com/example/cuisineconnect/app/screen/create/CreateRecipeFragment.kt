@@ -42,8 +42,8 @@ class CreateRecipeFragment : Fragment() {
 
   private val SELECT_PICTURE = 200
 
-  // HashtagAdapter
-  private lateinit var hashtagAdapter: HashtagAdapter
+  // TrendingHashtagAdapter
+  private lateinit var trendingHashtagAdapter: HashtagAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -196,7 +196,7 @@ class CreateRecipeFragment : Fragment() {
 
   // RecyclerView setup for hashtags
   private fun setupRecyclerView() {
-    hashtagAdapter = HashtagAdapter(mutableListOf()) { hashtag ->
+    trendingHashtagAdapter = HashtagAdapter(mutableListOf()) { hashtag ->
       if (hashtag.id == "create_new") {
         hashtag.apply {
           body = currentHashtag
@@ -209,16 +209,16 @@ class CreateRecipeFragment : Fragment() {
 
     binding.rvTagList.apply {
       layoutManager = LinearLayoutManager(requireContext()) // Use requireContext() in fragment
-      adapter = hashtagAdapter
+      adapter = trendingHashtagAdapter
     }
   }
 
   private fun updateHashtags(hashtags: List<Hashtag>) {
-    hashtagAdapter.updateHashtags(hashtags)
+    trendingHashtagAdapter.updateHashtags(hashtags)
   }
 
   private fun clearHashtagList() {
-    hashtagAdapter.updateHashtags(emptyList()) // Clear the adapter list
+    trendingHashtagAdapter.updateHashtags(emptyList()) // Clear the adapter list
   }
 
   private fun setupTagsBar() {

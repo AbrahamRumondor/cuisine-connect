@@ -41,4 +41,11 @@ class HashtagUseCaseImpl @Inject constructor(
   ) {
     hashtagRepository.findSearchPromptHashtags(query, callback)
   }
+
+  override fun getSortedTrendingHashtags(
+    limit: Int,
+    callback: (List<Hashtag>, Exception?) -> Unit
+  ) {
+    hashtagRepository.getSortedTrendingHashtags(limit, callback)
+  }
 }
