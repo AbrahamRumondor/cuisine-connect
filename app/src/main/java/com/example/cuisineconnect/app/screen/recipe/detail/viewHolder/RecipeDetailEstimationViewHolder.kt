@@ -22,7 +22,7 @@ class RecipeDetailEstimationViewHolder(
 
                 Glide.with(root)
                     .load(recipe.image)
-                    .placeholder(android.R.drawable.ic_menu_report_image)
+                    .placeholder(R.drawable.ic_no_image)
                     .into(ivRecipeImg)
 
                 ivRecipeImg.setOnClickListener {

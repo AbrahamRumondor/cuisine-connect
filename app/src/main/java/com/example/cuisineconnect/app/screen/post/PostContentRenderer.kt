@@ -9,12 +9,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class PostContentRenderer(
   private val container: LinearLayout,
@@ -96,8 +92,10 @@ class PostContentRenderer(
 
       // Set dialog layout parameters to fill 90-95% of the screen
       val params = dialog.window?.attributes
-      params?.width = (container.context.resources.displayMetrics.widthPixels * 0.80).toInt() // 95% of screen width
-      params?.height = (container.context.resources.displayMetrics.heightPixels * 0.80).toInt() // 95% of screen height
+      params?.width =
+        (container.context.resources.displayMetrics.widthPixels * 0.80).toInt() // 95% of screen width
+      params?.height =
+        (container.context.resources.displayMetrics.heightPixels * 0.80).toInt() // 95% of screen height
       dialog.window?.attributes = params
 
       dialog.show()
@@ -156,7 +154,8 @@ class PostContentRenderer(
           val formattedDate = dateFormat.format(recipe.date)
           tvDate.text = formattedDate
 
-          Glide.with(container).load(recipe.image).into(ivImageTitle)
+          Glide.with(container).load(recipe.image).placeholder(R.drawable.ic_no_image)
+            .into(ivImageTitle)
 
           user.let {
             tvUsername.text = it.name

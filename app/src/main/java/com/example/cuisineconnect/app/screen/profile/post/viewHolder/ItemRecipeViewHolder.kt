@@ -7,9 +7,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
+import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
@@ -19,7 +21,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class ItemRecipeViewHolder(
-  private val view: ItemRecipeHorizontalBinding,
+  private val view: ItemRecipeBigImageBinding,
 //    private val itemListener: OrderSummaryItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
@@ -42,12 +44,12 @@ class ItemRecipeViewHolder(
           .into(ivUserProfile)
 
         tvTitle.text = recipe.title
-        tvDesc.text = recipe.description
+//        tvDesc.text = recipe.description
 
         val formattedDate = getRelativeTime(recipe.date) // recipe.date is of type Date
         tvDate.text = formattedDate
 
-        clRecipeItem.setOnClickListener {
+        cvRecipe.setOnClickListener {
           listener?.onRecipeClicked(recipe.id)
           Toast.makeText(
             view.root.context,
@@ -56,7 +58,7 @@ class ItemRecipeViewHolder(
           ).show()
         }
 
-        clRecipeItem.setOnLongClickListener {
+        cvRecipe.setOnLongClickListener {
           listener?.onRecipeLongClicked(recipe.id)
           Toast.makeText(
             view.root.context,
@@ -67,10 +69,10 @@ class ItemRecipeViewHolder(
         }
 
         val isAuthor = createPostViewModel?.user?.value?.id == user.id
-        btnEdit.visibility = View.INVISIBLE
+        btnDelete.visibility = View.INVISIBLE
         if (isAuthor) {
-          btnEdit.visibility = View.VISIBLE
-          btnEdit.setOnClickListener {
+          btnDelete.visibility = View.VISIBLE
+          btnDelete.setOnClickListener {
             val builder = AlertDialog.Builder(view.root.context)
             builder.setTitle("Delete Recipe")
             builder.setMessage("Are you sure you want to delete the recipe?")
@@ -96,8 +98,8 @@ class ItemRecipeViewHolder(
         val uri = Uri.parse(recipe.image)
         Glide.with(view.root)
           .load(uri)   // Load the image URL into the ImageView
-          .placeholder(android.R.drawable.ic_menu_report_image)
-          .into(ivImageTitle)
+          .placeholder(R.drawable.ic_no_image)
+          .into(ivImage)
 
 //        if (isMyRecipes) holder.editRecipe.visibility = View.VISIBLE
 //        else holder.editRecipe.visibility = View.GONE

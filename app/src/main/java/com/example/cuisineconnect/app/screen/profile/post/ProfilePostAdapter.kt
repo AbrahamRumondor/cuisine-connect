@@ -10,6 +10,7 @@ import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemPostViewHolder
 import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemRecipeViewHolder
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
+import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.Recipe
@@ -44,7 +45,7 @@ class ProfilePostAdapter :
       }
 
       SHOW_RECIPE -> {
-        val bindingRecipe = ItemRecipeHorizontalBinding.inflate(inflater, parent, false)
+        val bindingRecipe = ItemRecipeBigImageBinding.inflate(inflater, parent, false)
         ItemRecipeViewHolder(bindingRecipe)
       }
 

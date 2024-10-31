@@ -15,6 +15,7 @@ import com.example.cuisineconnect.data.pagingSource.FeedItem
 import com.example.cuisineconnect.data.pagingSource.FeedItem.PostItem
 import com.example.cuisineconnect.data.pagingSource.FeedItem.RecipeItem
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
+import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 
 class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedItemComparator) {
@@ -39,7 +40,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
                 ItemPostViewHolder(bindingPost)
             }
             VIEW_TYPE_RECIPE -> {
-                val bindingRecipe = ItemRecipeHorizontalBinding.inflate(inflater, parent, false)
+                val bindingRecipe = ItemRecipeBigImageBinding.inflate(inflater, parent, false)
                 ItemRecipeViewHolder(bindingRecipe)
             }
             else -> throw IllegalArgumentException("Unknown view type: $viewType")

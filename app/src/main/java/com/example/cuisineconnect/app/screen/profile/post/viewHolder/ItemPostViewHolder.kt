@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
@@ -141,10 +140,12 @@ class ItemPostViewHolder(
       .inflate(R.layout.item_post_text_view, view.llPostContents, false)
 
     // Set margins using the new function
-    setViewMargins(customCardView, 0, 4)
+    setViewMargins(customCardView, 0, 0, 4)
 
     val tvUserInput: TextView = customCardView.findViewById(R.id.tvUserInput)
     tvUserInput.text = text
+
+    tvUserInput.textSize = 16f
 
     if (order != null && order <= view.llPostContents.childCount) {
       view.llPostContents.removeViewAt(order)
@@ -159,10 +160,10 @@ class ItemPostViewHolder(
       .inflate(R.layout.item_post_image_view, view.llPostContents, false)
 
     // Set margins using the new function
-    setViewMargins(customImageView, 4, 4)
+    setViewMargins(customImageView, 4, 0, 8)
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
-    Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(imageView)
+    Glide.with(view.root).load(imageUri).placeholder(R.drawable.ic_no_image).into(imageView)
 
     // Set click listener to open the image in full screen
     imageView.setOnClickListener {
@@ -171,12 +172,14 @@ class ItemPostViewHolder(
       dialog.setContentView(R.layout.dialog_full_image)
 
       val fullImageView = dialog.findViewById<ImageView>(R.id.iv_full_image)
-      Glide.with(view.root).load(imageUri).placeholder(R.drawable.loading_image).into(fullImageView)
+      Glide.with(view.root).load(imageUri).placeholder(R.drawable.ic_no_image).into(fullImageView)
 
       // Set dialog layout parameters to fill 90-95% of the screen
       val params = dialog.window?.attributes
-      params?.width = (view.root.context.resources.displayMetrics.widthPixels * 0.90).toInt() // 95% of screen width
-      params?.height = (view.root.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
+      params?.width =
+        (view.root.context.resources.displayMetrics.widthPixels * 0.90).toInt() // 95% of screen width
+      params?.height =
+        (view.root.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
       dialog.window?.attributes = params
 
       dialog.show()
@@ -222,7 +225,7 @@ class ItemPostViewHolder(
         )
 
         // Set margins using the new function
-        setViewMargins(viewRecipe.root, 4, 4)
+        setViewMargins(viewRecipe.root, 4, 4, 4)
 
         viewRecipe.run {
           tvTitle.text = recipe.title
@@ -235,7 +238,8 @@ class ItemPostViewHolder(
           val formattedDate = dateFormat.format(recipe.date)
           tvDate.text = formattedDate
 
-          Glide.with(view.root).load(recipe.image).into(ivImageTitle)
+          Glide.with(view.root).load(recipe.image).placeholder(R.drawable.ic_no_image)
+            .into(ivImageTitle)
 
           user.let {
             tvUsername.text = it.name
@@ -256,18 +260,20 @@ class ItemPostViewHolder(
   private fun setViewMargins(
     view: android.view.View,
     horizontalMarginDp: Int,
-    verticalMarginDp: Int
+    topMarginDP: Int,
+    bottomMarginDP: Int
   ) {
     val density = view.context.resources.displayMetrics.density
     val horizontalMarginInPx = (horizontalMarginDp * density).toInt()
-    val verticalMarginInPx = (verticalMarginDp * density).toInt()
+    val topMarginPx = (topMarginDP * density).toInt()
+    val bottomMarginPx = (bottomMarginDP * density).toInt()
 
     val layoutParams = view.layoutParams as LinearLayout.LayoutParams
     layoutParams.setMargins(
       horizontalMarginInPx,
-      verticalMarginInPx,
+      topMarginPx,
       horizontalMarginInPx,
-      verticalMarginInPx
+      bottomMarginPx
     )
     view.layoutParams = layoutParams
   }
