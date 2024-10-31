@@ -7,6 +7,7 @@ import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment
 import com.example.cuisineconnect.app.screen.collection.myRecipe.MyRecipeFragment
 import com.example.cuisineconnect.app.screen.profile.post.OtherProfilePostFragment
 import com.example.cuisineconnect.app.screen.profile.post.ProfilePostFragment
+import com.example.cuisineconnect.app.screen.profile.recipe.OtherProfileRecipeFragment
 
 class OtherProfileViewPagerAdapter(
   activity: OtherProfileFragment,
@@ -25,7 +26,7 @@ class OtherProfileViewPagerAdapter(
         fragment
       }
       1 -> {
-        val fragment = SavedRecipeFragment()
+        val fragment = OtherProfileRecipeFragment()
         fragment.arguments = Bundle().apply {
           putString("userId", userId)
         }

@@ -1,4 +1,4 @@
-package com.example.cuisineconnect.app.screen.profile.post.viewHolder
+package com.example.cuisineconnect.app.screen.recipe.viewHolder
 
 import android.app.AlertDialog
 import android.net.Uri
@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
-import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import java.text.SimpleDateFormat

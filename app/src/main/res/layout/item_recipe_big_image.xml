@@ -244,7 +244,7 @@
             android:layout_height="wrap_content"
             android:text="Healthy Vegetarian and Rice"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="20sp"
             />
 
       </LinearLayout>

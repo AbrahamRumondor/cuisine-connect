@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
           R.id.searchPromptFragment -> hideBottomNav()
           R.id.postDetailFragment2 -> hideBottomNav()
           R.id.searchResultFragment -> hideBottomNav()
+          R.id.otherProfileFragment -> hideBottomNav()
           else -> showBottomNav()
         }
       }

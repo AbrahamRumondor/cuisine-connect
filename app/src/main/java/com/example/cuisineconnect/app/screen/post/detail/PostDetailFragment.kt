@@ -1,4 +1,4 @@
-package com.example.cuisineconnect.app.screen.post
+package com.example.cuisineconnect.app.screen.post.detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
+import com.example.cuisineconnect.app.screen.post.PostContentRenderer
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentPostDetailBinding
 import com.example.cuisineconnect.domain.model.Post

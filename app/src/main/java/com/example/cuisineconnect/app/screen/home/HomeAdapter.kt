@@ -7,16 +7,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
-import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemPostViewHolder
-import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemRecipeViewHolder
+import com.example.cuisineconnect.app.screen.post.viewHolder.ItemPostViewHolder
+import com.example.cuisineconnect.app.screen.recipe.viewHolder.ItemRecipeViewHolder
 import com.example.cuisineconnect.data.pagingSource.FeedItem
 import com.example.cuisineconnect.data.pagingSource.FeedItem.PostItem
 import com.example.cuisineconnect.data.pagingSource.FeedItem.RecipeItem
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
-import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 
 class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedItemComparator) {
 

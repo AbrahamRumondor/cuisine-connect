@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.screen.post.detail.PostDetailViewModel
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import java.text.SimpleDateFormat
 

@@ -1,25 +1,15 @@
 package com.example.cuisineconnect.app.screen.search
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.app.listener.OnClickItemListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
-import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
-import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemPostViewHolder
-import com.example.cuisineconnect.app.screen.profile.post.viewHolder.ItemRecipeViewHolder
 import com.example.cuisineconnect.app.screen.search.viewHolder.DividerViewHolder
 import com.example.cuisineconnect.app.screen.search.viewHolder.TextViewViewHolder
 import com.example.cuisineconnect.app.screen.search.viewHolder.UserViewHolder
 import com.example.cuisineconnect.databinding.ItemDividerHorizontalBinding
-import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
-import com.example.cuisineconnect.databinding.ItemPostTextViewBinding
-import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemSearchTextViewBinding
 import com.example.cuisineconnect.databinding.ItemUserHorizontalBinding
-import com.example.cuisineconnect.domain.model.Post
-import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 
 class SearchPromptAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

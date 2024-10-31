@@ -1,11 +1,9 @@
-package com.example.cuisineconnect.app.screen.post
+package com.example.cuisineconnect.app.screen.post.detail
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
-import com.example.cuisineconnect.data.response.PostResponse
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
@@ -20,13 +18,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Date
-import java.util.UUID
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(

@@ -1,4 +1,4 @@
-package com.example.cuisineconnect.app.screen.profile.post
+package com.example.cuisineconnect.app.screen.profile.recipe
 
 import android.os.Bundle
 import android.util.Log
@@ -14,31 +14,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
-import com.example.cuisineconnect.databinding.FragmentProfilePostBinding
+import com.example.cuisineconnect.databinding.FragmentProfileRecipeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfilePostFragment : Fragment() {
+class ProfileRecipeFragment : Fragment() {
 
   private var columnCount = 1
 
-  private lateinit var binding: FragmentProfilePostBinding
-  private val profilePostViewModel: ProfilePostViewModel by viewModels()
+  private lateinit var binding: FragmentProfileRecipeBinding
+  private val profileRecipeViewModel: ProfileRecipeViewModel by viewModels()
   private val createPostViewModel: CreatePostViewModel by viewModels()
 
-
-  private val profilePostAdapter by lazy { ProfilePostAdapter() }
+  private val profileRecipeAdapter by lazy { ProfileRecipeAdapter() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    profilePostViewModel.getPostsOfUser()
+    profileRecipeViewModel.getRecipeOfUser()
 
     arguments?.let {
       columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -49,7 +47,7 @@ class ProfilePostFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    binding = FragmentProfilePostBinding.inflate(inflater, container, false)
+    binding = FragmentProfileRecipeBinding.inflate(inflater, container, false)
 
     if (binding.list is RecyclerView) {
       with(binding.list) {
@@ -73,10 +71,10 @@ class ProfilePostFragment : Fragment() {
 
   private fun refreshContent() {
     lifecycleScope.launch {
-      profilePostViewModel.getPostsOfUser()
-      profilePostViewModel.list.collectLatest {
+      profileRecipeViewModel.getRecipeOfUser()
+      profileRecipeViewModel.list.collectLatest {
         if (it != null) {
-          profilePostAdapter.submitPosts(it.toMutableList())
+          profileRecipeAdapter.submitRecipeList(it.toMutableList())
           binding.root.isRefreshing = false
         }
       }
@@ -84,30 +82,34 @@ class ProfilePostFragment : Fragment() {
   }
 
   private fun setupAdapter() {
-    binding.list.adapter = profilePostAdapter
+    binding.list.adapter = profileRecipeAdapter
 
     lifecycleScope.launch {
-      profilePostViewModel.list.collectLatest { list ->
+      profileRecipeViewModel.list.collectLatest { list ->
         if (list != null) {
-          profilePostAdapter.submitPosts(list.toMutableList())
-          profilePostAdapter.addViewModel(createPostViewModel)
+          profileRecipeAdapter.submitRecipeList(list.toMutableList())
+          profileRecipeAdapter.addViewModel(createPostViewModel)
         }
       }
     }
 
-    profilePostAdapter.setItemListener(object : ItemListListener {
-      override fun onPostClicked(postId: String) {
+    profileRecipeAdapter.setItemListener(object : ItemListListener {
+      override fun onRecipeClicked(recipeId: String) {
         Log.d("aahdfkfj", "masuk")
         val action =
-          ProfileFragmentDirections.actionProfileFragmentToPostDetailFragment(postId)
+          ProfileFragmentDirections.actionProfileFragmentToRecipeDetailFragment(recipeId)
         findNavController().navigate(action)
+      }
+
+      override fun onRecipeLongClicked(recipeId: String) {
+        onRecipeLongClickSelected(recipeId)
       }
 
       override fun onItemDeleteClicked(itemId: String, type: String) {
         when (type) {
-          "post" -> profilePostViewModel.deletePost(itemId)
+          "recipe" -> profileRecipeViewModel.deleteRecipe(itemId)
         }
-        profilePostAdapter.removeData(itemId)
+        profileRecipeAdapter.removeRecipe(itemId)
       }
     })
   }
@@ -136,6 +138,6 @@ class ProfilePostFragment : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    profilePostViewModel.getUser()
+    profileRecipeViewModel.getUser()
   }
 }

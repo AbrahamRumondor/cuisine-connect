@@ -77,10 +77,10 @@ class OtherProfilePostFragment : Fragment() {
 
   private fun refreshContent() {
     lifecycleScope.launch {
-      otherProfilePostViewModel.getPostNRecipeOfUser()
+      otherProfilePostViewModel.getPostsOfUser()
       otherProfilePostViewModel.list.collectLatest {
         if (it != null) {
-          profilePostAdapter.submitPostNRecipeParts(it.toMutableList())
+          profilePostAdapter.submitPosts(it.toMutableList())
           binding.root.isRefreshing = false
         }
       }
@@ -93,22 +93,18 @@ class OtherProfilePostFragment : Fragment() {
     lifecycleScope.launch {
       otherProfilePostViewModel.list.collectLatest { list ->
         if (list != null) {
-          profilePostAdapter.submitPostNRecipeParts(list.toMutableList())
+          profilePostAdapter.submitPosts(list.toMutableList())
           profilePostAdapter.addViewModel(createPostViewModel)
         }
       }
     }
 
     profilePostAdapter.setItemListener(object : ItemListListener {
-      override fun onRecipeClicked(recipeId: String) {
+      override fun onPostClicked(postId: String) {
         Log.d("aahdfkfj", "masuk")
         val action =
-          OtherProfileFragmentDirections.actionOtherProfileFragmentToRecipeDetailFragment(recipeId)
+          OtherProfileFragmentDirections.actionOtherProfileFragmentToPostDetailFragment2(postId)
         findNavController().navigate(action)
-      }
-
-      override fun onRecipeLongClicked(recipeId: String) {
-        onRecipeLongClickSelected(recipeId)
       }
     })
   }

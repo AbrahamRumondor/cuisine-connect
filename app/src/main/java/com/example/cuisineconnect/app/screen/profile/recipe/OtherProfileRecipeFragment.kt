@@ -1,4 +1,4 @@
-package com.example.cuisineconnect.app.screen.profile.post
+package com.example.cuisineconnect.app.screen.profile.recipe
 
 import android.os.Bundle
 import android.util.Log
@@ -14,31 +14,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
-import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
+import com.example.cuisineconnect.app.screen.profile.OtherProfileFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentProfilePostBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfilePostFragment : Fragment() {
+class OtherProfileRecipeFragment : Fragment() {
 
   private var columnCount = 1
+  private var userId: String? = null
 
   private lateinit var binding: FragmentProfilePostBinding
-  private val profilePostViewModel: ProfilePostViewModel by viewModels()
+  private val otherProfileRecipeViewModel: OtherProfileRecipeViewModel by viewModels()
   private val createPostViewModel: CreatePostViewModel by viewModels()
 
-
-  private val profilePostAdapter by lazy { ProfilePostAdapter() }
+  private val profileRecipeAdapter by lazy { ProfileRecipeAdapter() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    userId = arguments?.getString("userId")
 
-    profilePostViewModel.getPostsOfUser()
+    userId?.let {
+      otherProfileRecipeViewModel.getUser(it)
+    }
 
     arguments?.let {
       columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -73,10 +75,10 @@ class ProfilePostFragment : Fragment() {
 
   private fun refreshContent() {
     lifecycleScope.launch {
-      profilePostViewModel.getPostsOfUser()
-      profilePostViewModel.list.collectLatest {
+      otherProfileRecipeViewModel.getRecipesOfUser()
+      otherProfileRecipeViewModel.list.collectLatest {
         if (it != null) {
-          profilePostAdapter.submitPosts(it.toMutableList())
+          profileRecipeAdapter.submitRecipeList(it.toMutableList())
           binding.root.isRefreshing = false
         }
       }
@@ -84,30 +86,27 @@ class ProfilePostFragment : Fragment() {
   }
 
   private fun setupAdapter() {
-    binding.list.adapter = profilePostAdapter
+    binding.list.adapter = profileRecipeAdapter
 
     lifecycleScope.launch {
-      profilePostViewModel.list.collectLatest { list ->
+      otherProfileRecipeViewModel.list.collectLatest { list ->
         if (list != null) {
-          profilePostAdapter.submitPosts(list.toMutableList())
-          profilePostAdapter.addViewModel(createPostViewModel)
+          profileRecipeAdapter.submitRecipeList(list.toMutableList())
+          profileRecipeAdapter.addViewModel(createPostViewModel)
         }
       }
     }
 
-    profilePostAdapter.setItemListener(object : ItemListListener {
-      override fun onPostClicked(postId: String) {
+    profileRecipeAdapter.setItemListener(object : ItemListListener {
+      override fun onRecipeClicked(recipeId: String) {
         Log.d("aahdfkfj", "masuk")
         val action =
-          ProfileFragmentDirections.actionProfileFragmentToPostDetailFragment(postId)
+          OtherProfileFragmentDirections.actionOtherProfileFragmentToRecipeDetailFragment(recipeId)
         findNavController().navigate(action)
       }
 
-      override fun onItemDeleteClicked(itemId: String, type: String) {
-        when (type) {
-          "post" -> profilePostViewModel.deletePost(itemId)
-        }
-        profilePostAdapter.removeData(itemId)
+      override fun onRecipeLongClicked(recipeId: String) {
+        onRecipeLongClickSelected(recipeId)
       }
     })
   }
@@ -136,6 +135,8 @@ class ProfilePostFragment : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    profilePostViewModel.getUser()
+    userId?.let {
+      otherProfileRecipeViewModel.getUser(it)
+    }
   }
 }

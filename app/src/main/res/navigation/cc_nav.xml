@@ -69,6 +69,9 @@
     <action
         android:id="@+id/action_profileFragment_to_recipeDetailFragment"
         app:destination="@id/recipeDetailFragment" />
+    <action
+        android:id="@+id/action_profileFragment_to_postDetailFragment"
+        app:destination="@id/postDetailFragment2" />
   </fragment>
   <fragment
       android:id="@+id/savedRecipeFragment"
@@ -121,11 +124,7 @@
       android:id="@+id/profilePostFragment"
       android:name="com.example.cuisineconnect.app.screen.profile.post.ProfilePostFragment"
       android:label="fragment_profile_post"
-      tools:layout="@layout/fragment_profile_post" >
-    <action
-        android:id="@+id/action_profilePostFragment_to_recipeDetailFragment"
-        app:destination="@id/recipeDetailFragment" />
-  </fragment>
+      tools:layout="@layout/fragment_profile_post" />
   <fragment
       android:id="@+id/searchPromptFragment"
       android:name="com.example.cuisineconnect.app.screen.search.SearchPromptFragment"
@@ -153,6 +152,9 @@
     <action
         android:id="@+id/action_otherProfileFragment_to_recipeDetailFragment"
         app:destination="@id/recipeDetailFragment" />
+    <action
+        android:id="@+id/action_otherProfileFragment_to_postDetailFragment2"
+        app:destination="@id/postDetailFragment2" />
   </fragment>
   <fragment
       android:id="@+id/otherProfilePostFragment"
@@ -175,7 +177,7 @@
   </fragment>
   <fragment
       android:id="@+id/postDetailFragment2"
-      android:name="com.example.cuisineconnect.app.screen.post.PostDetailFragment"
+      android:name="com.example.cuisineconnect.app.screen.post.detail.PostDetailFragment"
       android:label="fragment_post_detail"
       tools:layout="@layout/fragment_post_detail" >
     <argument
@@ -184,5 +186,13 @@
     <action
         android:id="@+id/action_postDetailFragment2_to_replyRecipeFragment"
         app:destination="@id/replyRecipeFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/profileRecipeFragment"
+      android:name="com.example.cuisineconnect.app.screen.profile.recipe.ProfileRecipeFragment"
+      android:label="ProfileRecipeFragment" >
+    <action
+        android:id="@+id/action_profileRecipeFragment_self"
+        app:destination="@id/profileRecipeFragment" />
   </fragment>
 </navigation>

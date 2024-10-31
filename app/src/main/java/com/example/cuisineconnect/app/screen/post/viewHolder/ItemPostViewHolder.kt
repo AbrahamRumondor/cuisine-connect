@@ -1,4 +1,4 @@
-package com.example.cuisineconnect.app.screen.profile.post.viewHolder
+package com.example.cuisineconnect.app.screen.post.viewHolder
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -133,6 +133,8 @@ class ItemPostViewHolder(
         )
       }
     }
+
+    setViewPadding(view.llPostContents, 0, 0, 0, 56)
   }
 
   private fun addText(text: String, order: Int?) {
@@ -276,6 +278,16 @@ class ItemPostViewHolder(
       bottomMarginPx
     )
     view.layoutParams = layoutParams
+  }
+
+  private fun setViewPadding(view: android.view.View, leftDp: Int, topDp: Int, rightDp: Int, bottomDp: Int) {
+    val density = view.context.resources.displayMetrics.density
+    val leftPx = (leftDp * density).toInt()
+    val topPx = (topDp * density).toInt()
+    val rightPx = (rightDp * density).toInt()
+    val bottomPx = (bottomDp * density).toInt()
+
+    view.setPadding(leftPx, topPx, rightPx, bottomPx)
   }
 
   private fun getRelativeTime(date: Date): String {
