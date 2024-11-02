@@ -17,7 +17,8 @@ class HomePagingSource(
   private val user: User,
   private val postsRef: CollectionReference,
   private val recipesRef: CollectionReference,
-  private val usersRef: CollectionReference
+  private val usersRef: CollectionReference,
+  private var isRefreshing: Boolean = false
 ) : PagingSource<QuerySnapshot, FeedItem>() {
 
   // Store snapshots separately for each user
@@ -26,6 +27,8 @@ class HomePagingSource(
 
   override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, FeedItem> {
     return try {
+      if (isRefreshing) invalidate()
+
       val followingUsers = listOf(user.id).plus(user.following)
       val pageSize = params.loadSize / followingUsers.size // Divide page size across users
       val feedItems = mutableListOf<FeedItem>()

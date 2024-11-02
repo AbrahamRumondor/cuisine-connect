@@ -20,6 +20,7 @@ import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -82,10 +83,17 @@ class HomeFragment : Fragment() {
   }
 
   private fun refreshContent() {
+    binding.srlHome.isRefreshing = true // Start the refreshing indicator
     lifecycleScope.launch {
       mainActivityViewModel.getUser()
-      mainActivityViewModel.postsNRecipesList.collectLatest {
-        adapter.submitData(it)
+      mainActivityViewModel.refreshItems()
+
+      // Collect the posts and recipes list
+      mainActivityViewModel.postsNRecipesList.collectLatest { pagingData ->
+        adapter.submitData(pagingData)
+        mainActivityViewModel.refreshToFalse()
+
+        delay(1000)
         binding.srlHome.isRefreshing = false
       }
     }

@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -38,6 +39,8 @@ class MainActivityViewModel @Inject constructor(
   @Named("usersRef") private val usersRef: CollectionReference
 ) : ViewModel() {
 
+  private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
 
@@ -47,10 +50,19 @@ class MainActivityViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   val postsNRecipesList: Flow<PagingData<FeedItem>> = user.flatMapLatest { currentUser ->
+    Log.d("mainActivityViewModel", "masuk")
     // Create a new Pager every time the user changes
     Pager(PagingConfig(pageSize = 10)) {
-      HomePagingSource(currentUser, postsRef, recipesRef, usersRef)
+      HomePagingSource(currentUser, postsRef, recipesRef, usersRef, _isRefreshing.value)
     }.flow.cachedIn(viewModelScope)
+  }
+
+  fun refreshItems() {
+    _isRefreshing.value = true
+  }
+
+  fun refreshToFalse() {
+    _isRefreshing.value = false
   }
 
   fun getUser() {
