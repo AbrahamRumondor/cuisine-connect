@@ -15,4 +15,5 @@ interface UserRepository {
   suspend fun getUsersStartingWith(prefix: String): List<User>
   fun followUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
   fun unfollowUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
+  suspend fun getUserBookmarks(userId: String): StateFlow<List<String>>
 }

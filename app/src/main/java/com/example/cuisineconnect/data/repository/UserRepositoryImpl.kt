@@ -23,6 +23,9 @@ class UserRepositoryImpl @Inject constructor(
   private val _currentUser = MutableStateFlow(User())
   private val currentUser: StateFlow<User> = _currentUser
 
+  private val _userBookmarks = MutableStateFlow<List<String>>(emptyList())
+  private val userBookmarks: StateFlow<List<String>> = _userBookmarks
+
   override suspend fun getCurrentUser(uid: String): StateFlow<User> {
     try {
       val snapshot = usersRef.get().await()
@@ -149,6 +152,20 @@ class UserRepositoryImpl @Inject constructor(
       Timber.tag("UserRepositoryImpl").e(e, "Error fetching users with prefix: $prefix")
       emptyList()
     }
+  }
+
+  override suspend fun getUserBookmarks(userId: String): StateFlow<List<String>> {
+    try {
+      val snapshot = usersRef.document(userId).get().await()
+      val userResponse = snapshot.toObject(UserResponse::class.java)
+
+      // Update the state with the bookmarks list or empty list if null
+      _userBookmarks.value = userResponse?.bookmarks ?: emptyList()
+    } catch (e: Exception) {
+      Timber.tag("UserRepositoryImpl").e(e, "Error fetching bookmarks for user: $userId")
+      _userBookmarks.value = emptyList()
+    }
+    return userBookmarks
   }
 
 }

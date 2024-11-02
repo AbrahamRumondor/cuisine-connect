@@ -116,6 +116,26 @@ class OtherProfileFragment : Fragment() {
           tvFollowers.text = followers
           val following = Html.fromHtml("<b>${user.following.size}</b> following")
           tvFollowing.text = following
+
+          tvFollowers.setOnClickListener {
+            val action =
+              OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowListFragment(
+                userId = user.id,
+                listType = "follower",
+                username = user.name
+              )
+            findNavController().navigate(action)
+          }
+
+          tvFollowing.setOnClickListener {
+            val action =
+              OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowListFragment(
+                userId = user.id,
+                listType = "following",
+                username = user.name
+              )
+            findNavController().navigate(action)
+          }
         }
       }
     }

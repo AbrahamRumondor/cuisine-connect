@@ -6,6 +6,7 @@ import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.RecipeRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Named
 
 class RecipeRepositoryImpl @Inject constructor(
   @Named("recipesRef") private val recipesRef: CollectionReference,
+  @Named("usersRef") private val usersRef: CollectionReference,
   private val userRepository: UserRepository
 ) : RecipeRepository {
 
@@ -170,16 +172,22 @@ class RecipeRepositoryImpl @Inject constructor(
     result: (Recipe) -> Unit
   ) {
     try {
+      // Update recipe to include user in bookmarks
       val recipeDoc = recipesRef.document(recipeId)
       val snapshot = recipeDoc.get().await()
       val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
 
       recipeResponse?.let { response ->
         val bookmarks = response.bookmarks.toMutableMap()
-        bookmarks[userId] = true // Add the user to bookmarks
+        bookmarks[userId] = true // Add user to recipe bookmarks
 
         response.bookmarks = bookmarks
         recipeDoc.set(response).await()
+
+        // Update user to include recipe in their bookmarks
+        val userDoc = usersRef.document(userId)
+        userDoc.update("user_bookmarks", FieldValue.arrayUnion(recipeId)).await()
+
         Timber.tag("Bookmark").d("User $userId bookmarked recipe $recipeId successfully")
         result(RecipeResponse.transform(response))
       }
@@ -194,16 +202,22 @@ class RecipeRepositoryImpl @Inject constructor(
     result: (Recipe) -> Unit
   ) {
     try {
+      // Update recipe to remove user from bookmarks
       val recipeDoc = recipesRef.document(recipeId)
       val snapshot = recipeDoc.get().await()
       val recipeResponse = snapshot.toObject(RecipeResponse::class.java)
 
       recipeResponse?.let { response ->
         val bookmarks = response.bookmarks.toMutableMap()
-        bookmarks.remove(userId) // Remove the user from bookmarks
+        bookmarks.remove(userId) // Remove user from recipe bookmarks
 
         response.bookmarks = bookmarks
         recipeDoc.set(response).await()
+
+        // Update user to remove recipe from their bookmarks
+        val userDoc = usersRef.document(userId)
+        userDoc.update("user_bookmarks", FieldValue.arrayRemove(recipeId)).await()
+
         Timber.tag("RemoveBookmark").d("User $userId removed bookmark from recipe $recipeId successfully")
         result(RecipeResponse.transform(response))
       }

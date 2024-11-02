@@ -72,6 +72,9 @@
     <action
         android:id="@+id/action_profileFragment_to_postDetailFragment"
         app:destination="@id/postDetailFragment2" />
+    <action
+        android:id="@+id/action_profileFragment_to_followListFragment"
+        app:destination="@id/followListFragment" />
   </fragment>
   <fragment
       android:id="@+id/savedRecipeFragment"
@@ -155,6 +158,9 @@
     <action
         android:id="@+id/action_otherProfileFragment_to_postDetailFragment2"
         app:destination="@id/postDetailFragment2" />
+    <action
+        android:id="@+id/action_otherProfileFragment_to_followListFragment"
+        app:destination="@id/followListFragment" />
   </fragment>
   <fragment
       android:id="@+id/otherProfilePostFragment"
@@ -190,9 +196,24 @@
   <fragment
       android:id="@+id/profileRecipeFragment"
       android:name="com.example.cuisineconnect.app.screen.profile.recipe.ProfileRecipeFragment"
-      android:label="ProfileRecipeFragment" >
+      android:label="ProfileRecipeFragment" />
+  <fragment
+      android:id="@+id/followListFragment"
+      android:name="com.example.cuisineconnect.app.screen.follow.FollowListFragment"
+      android:label="fragment_follow_list"
+      tools:layout="@layout/fragment_follow_list" >
+    <argument
+        android:name="userId"
+        app:argType="string" />
+    <argument
+        android:name="listType"
+        app:argType="string"
+        android:defaultValue="follower" />
     <action
-        android:id="@+id/action_profileRecipeFragment_self"
-        app:destination="@id/profileRecipeFragment" />
+        android:id="@+id/action_followListFragment_to_otherProfileFragment"
+        app:destination="@id/otherProfileFragment" />
+    <argument
+        android:name="username"
+        app:argType="string" />
   </fragment>
 </navigation>

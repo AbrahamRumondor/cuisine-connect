@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
+import com.example.cuisineconnect.app.screen.follow.FollowListFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -79,6 +80,26 @@ class ProfileFragment : Fragment() {
 
           btnSettings.setOnClickListener {
             showPopupMenu(it, user.id)
+          }
+
+          tvFollowers.setOnClickListener {
+            val action =
+              ProfileFragmentDirections.actionProfileFragmentToFollowListFragment(
+                userId = user.id,
+                listType = "follower",
+                username = user.name
+              )
+            findNavController().navigate(action)
+          }
+
+          tvFollowing.setOnClickListener {
+            val action =
+              ProfileFragmentDirections.actionProfileFragmentToFollowListFragment(
+                userId = user.id,
+                listType = "following",
+                username = user.name
+              )
+            findNavController().navigate(action)
           }
         }
       }

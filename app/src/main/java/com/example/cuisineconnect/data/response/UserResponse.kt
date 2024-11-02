@@ -22,11 +22,15 @@ data class UserResponse(
 
     @get:PropertyName("user_recipes")
     @set:PropertyName("user_recipes")
-    var recipes: List<String> = listOf(),
+    var recipes: List<String> = emptyList(),
 
     @get:PropertyName("user_posts")
     @set:PropertyName("user_posts")
     var posts: List<String> = listOf(),
+
+    @get:PropertyName("user_bookmarks")
+    @set:PropertyName("user_bookmarks")
+    var bookmarks: List<String> = emptyList(),
 
     @get:PropertyName("user_image")
     @set:PropertyName("user_image")
@@ -34,11 +38,11 @@ data class UserResponse(
 
     @get:PropertyName("user_follower")
     @set:PropertyName("user_follower")
-    var follower: List<String> = listOf(),
+    var follower: List<String> = emptyList(),
 
     @get:PropertyName("user_following")
     @set:PropertyName("user_following")
-    var following: List<String> = listOf()
+    var following: List<String> = emptyList()
 ) {
 
     constructor() : this("", "", "", "")
@@ -54,7 +58,8 @@ data class UserResponse(
                 follower = userResponse.follower,
                 following = userResponse.following,
                 image = userResponse.image,
-                posts = userResponse.posts
+                posts = userResponse.posts,
+                bookmarks = userResponse.bookmarks
             )
         }
 
@@ -68,7 +73,9 @@ data class UserResponse(
                 follower = user.follower,
                 following = user.following,
                 image = user.image,
-                posts = user.posts
+                posts = user.posts,
+                bookmarks = user.bookmarks
+
             )
         }
     }

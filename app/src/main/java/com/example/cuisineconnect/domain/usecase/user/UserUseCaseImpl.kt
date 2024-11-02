@@ -48,4 +48,8 @@ class UserUseCaseImpl @Inject constructor(
     ) {
         userRepository.unfollowUser(currentUserId, targetUserId, callback)
     }
+
+    override suspend fun getUserBookmarks(userId: String): StateFlow<List<String>> {
+        return userRepository.getUserBookmarks(userId)
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.collection.bookmark
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,19 +25,19 @@ import kotlinx.coroutines.launch
  * A fragment representing a list of Items.
  */
 @AndroidEntryPoint
-class MyRecipeFragment : Fragment() {
+class BookmarkRecipeFragment : Fragment() {
 
   private var columnCount = 1
 
   private lateinit var binding: FragmentMyRecipeListBinding
   private val collectionViewModel: CollectionViewModel by viewModels()
 
-  private val recipeAdapter by lazy { MyRecipeRecyclerViewAdapter(binding) }
+  private val recipeAdapter by lazy { BookmarkRecipeRecyclerViewAdapter(binding) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    collectionViewModel.getMyRecipes()
+    collectionViewModel.getBookmarkedRecipes()
 
     arguments?.let {
       columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -71,21 +72,19 @@ class MyRecipeFragment : Fragment() {
 
   private fun refreshContent() {
     lifecycleScope.launch {
-      collectionViewModel.getMyRecipes()
-      collectionViewModel.myRecipes.value?.let { recipeAdapter.updateData(it) }
+      collectionViewModel.getBookmarkedRecipes()
+      binding.root.isRefreshing = false
     }
-    binding.root.isRefreshing = false
   }
 
   private fun setupAdapter() {
     binding.list.adapter = recipeAdapter
-    recipeAdapter.isMyRecipes()
 
+    // Observe bookmarkedRecipes once in setupAdapter
     lifecycleScope.launch {
-      collectionViewModel.myRecipes.collectLatest {
-        if (it != null) {
-          recipeAdapter.updateData(it)
-        }
+      collectionViewModel.bookmarkedRecipes.collectLatest { recipes ->
+        Log.d("collectionViewModel", "INI ADAPTER: $recipes")
+        recipeAdapter.updateData(recipes)
       }
     }
 
@@ -131,7 +130,7 @@ class MyRecipeFragment : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    collectionViewModel.getRecipes()
+    collectionViewModel.getBookmarkedRecipes()
   }
 
   companion object {
@@ -142,7 +141,7 @@ class MyRecipeFragment : Fragment() {
     // TODO: Customize parameter initialization
     @JvmStatic
     fun newInstance(columnCount: Int) =
-      MyRecipeFragment().apply {
+      BookmarkRecipeFragment().apply {
         arguments = Bundle().apply {
           putInt(ARG_COLUMN_COUNT, columnCount)
         }

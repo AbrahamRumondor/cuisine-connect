@@ -16,7 +16,7 @@ import com.example.cuisineconnect.app.screen.collection.myRecipe.MyRecipeRecycle
 
 import com.example.cuisineconnect.app.screen.collection.placeholder.PlaceholderContent.PlaceholderItem
 import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
-import com.example.cuisineconnect.databinding.ItemRecipeHorizontalBinding
+import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import java.text.SimpleDateFormat
@@ -37,7 +37,7 @@ class MyRecipeRecyclerViewAdapter(
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
     return ViewHolder(
-      ItemRecipeHorizontalBinding.inflate(
+      ItemRecipeBigImageBinding.inflate(
         LayoutInflater.from(parent.context),
         parent,
         false
@@ -50,7 +50,7 @@ class MyRecipeRecyclerViewAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = recipes[position]
     holder.title.text = item.second.title
-    holder.description.text = item.second.description
+//    holder.description.text = item.second.description
 
     val dateFormat = SimpleDateFormat("MMM dd")
     val formattedDate = dateFormat.format(item.second.date)
@@ -73,7 +73,7 @@ class MyRecipeRecyclerViewAdapter(
       ).show()
       true
     }
-    holder.editRecipe.setOnClickListener {
+    holder.deleteRecipe.setOnClickListener {
       val builder = AlertDialog.Builder(myRecipeFragment.root.context)
       builder.setTitle("Delete Recipe")
       builder.setMessage("Are you sure you want to delete the recipe?")
@@ -101,8 +101,8 @@ class MyRecipeRecyclerViewAdapter(
       .placeholder(android.R.drawable.ic_menu_report_image)
       .into(holder.image)
 
-    if (isMyRecipes) holder.editRecipe.visibility = View.VISIBLE
-    else holder.editRecipe.visibility = View.GONE
+    if (isMyRecipes) holder.deleteRecipe.visibility = View.VISIBLE
+    else holder.deleteRecipe.visibility = View.GONE
 
     holder.upvoteCount.text = item.second.upvotes.size.toString()
     Log.d("oofoof", "masuk ${item.second.title} ${item.second.replyCount}")
@@ -124,14 +124,13 @@ class MyRecipeRecyclerViewAdapter(
 
   override fun getItemCount(): Int = recipes.size
 
-  inner class ViewHolder(binding: ItemRecipeHorizontalBinding) :
+  inner class ViewHolder(binding: ItemRecipeBigImageBinding) :
     RecyclerView.ViewHolder(binding.root) {
     val title = binding.tvTitle
-    val description = binding.tvDesc
     val date = binding.tvDate
-    val image = binding.ivImageTitle
-    val recipeItem = binding.clRecipeItem
-    val editRecipe = binding.btnEdit
+    val image = binding.ivImage
+    val recipeItem = binding.cvRecipe
+    val deleteRecipe = binding.btnDelete
     val userProfile = binding.ivUserProfile
     val userTitle = binding.tvUsername
     val upvoteCount = binding.tvUpvoteCount
@@ -140,8 +139,14 @@ class MyRecipeRecyclerViewAdapter(
   }
 
   fun updateData(newItems: List<Pair<User?, Recipe>>) {
-    recipes = newItems
-    notifyItemRangeChanged(0, newItems.size)
+    recipes = newItems // Make sure to update the recipes property
+    if (newItems.isEmpty()) {
+      notifyDataSetChanged()
+    } else if (newItems.size != recipes.size) {
+      notifyDataSetChanged()
+    } else {
+      notifyItemRangeChanged(0, newItems.size)
+    }
   }
 
   fun removeData(recipeId: String) {
@@ -162,10 +167,6 @@ class MyRecipeRecyclerViewAdapter(
 
   fun isMyRecipes() {
     isMyRecipes = true
-  }
-
-  fun isNotMyRecipes() {
-    isMyRecipes = false
   }
 
   fun setItemListener(recipeListListener: RecipeListListener) {

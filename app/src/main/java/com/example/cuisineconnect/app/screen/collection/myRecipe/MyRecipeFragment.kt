@@ -72,7 +72,6 @@ class MyRecipeFragment : Fragment() {
   private fun refreshContent() {
     lifecycleScope.launch {
       collectionViewModel.getMyRecipes()
-      collectionViewModel.myRecipes.value?.let { recipeAdapter.updateData(it) }
     }
     binding.root.isRefreshing = false
   }
@@ -83,9 +82,7 @@ class MyRecipeFragment : Fragment() {
 
     lifecycleScope.launch {
       collectionViewModel.myRecipes.collectLatest {
-        if (it != null) {
           recipeAdapter.updateData(it)
-        }
       }
     }
 

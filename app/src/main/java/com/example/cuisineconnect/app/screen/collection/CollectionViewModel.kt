@@ -23,11 +23,15 @@ class CollectionViewModel @Inject constructor(
   private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-  private val _recipes: MutableStateFlow<List<Pair<User?,Recipe>>?> = MutableStateFlow(null)
-  val recipes: StateFlow<List<Pair<User?,Recipe>>?> = _recipes
+  private val _recipes: MutableStateFlow<List<Pair<User?, Recipe>>?> = MutableStateFlow(null)
+  val recipes: StateFlow<List<Pair<User?, Recipe>>?> = _recipes
 
-  private val _myRecipes: MutableStateFlow<List<Pair<User?,Recipe>>?> = MutableStateFlow(null)
-  val myRecipes: StateFlow<List<Pair<User?,Recipe>>?> = _myRecipes
+  private val _myRecipes: MutableStateFlow<List<Pair<User?, Recipe>>> = MutableStateFlow(emptyList())
+  val myRecipes: StateFlow<List<Pair<User?, Recipe>>> = _myRecipes
+
+  private val _bookmarkedRecipes: MutableStateFlow<List<Pair<User?, Recipe>>> =
+    MutableStateFlow(emptyList())
+  val bookmarkedRecipes: StateFlow<List<Pair<User?, Recipe>>> = _bookmarkedRecipes
 
   private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
   val user: StateFlow<User?> = _user
@@ -68,6 +72,7 @@ class CollectionViewModel @Inject constructor(
       }
     }
   }
+
   fun getMyRecipes() {
     getRecipes()
     viewModelScope.launch {
@@ -76,7 +81,21 @@ class CollectionViewModel @Inject constructor(
           allRecipes?.let { recipes ->
             _myRecipes.value = recipes.filter { it.first?.id == currentUser.id }
           }
+          Log.d("brobruh", "tes: ${_myRecipes.value.toString()}")
         }
+      }
+    }
+  }
+
+  fun getBookmarkedRecipes() {
+    viewModelScope.launch {
+      userUseCase.getCurrentUser().collectLatest { currentUser ->
+        Log.d("collectionViewModel", "njir: ${currentUser.bookmarks}")
+        val bookmarkedRecipes = currentUser.bookmarks.map { recipeId ->
+          async { Pair(currentUser, recipeUseCase.getRecipeByID(recipeId) ?: Recipe()) }
+        }.awaitAll()
+
+        _bookmarkedRecipes.value = bookmarkedRecipes
       }
     }
   }
