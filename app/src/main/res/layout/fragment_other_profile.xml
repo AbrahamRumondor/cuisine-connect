@@ -18,7 +18,7 @@
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentScrim="@color/cc_yellow"
+        app:contentScrim="@color/cc_green"
         app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
         >
 
@@ -156,7 +156,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="@color/cc_yellow"
+        app:tabIndicatorColor="@color/cc_green"
         app:tabTextColor="@color/cc_gray"
         />
 

@@ -1,4 +1,6 @@
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.RecipeDetailTagsBinding
 import com.example.cuisineconnect.domain.model.Hashtag
 import com.google.android.material.chip.Chip
@@ -15,8 +17,12 @@ class RecipeDetailTagsViewHolder(
         text = hashtag
         isClickable = false // Disable click if not needed
         isCheckable = false
+        chipStrokeColor = ContextCompat.getColorStateList(context, R.color.cc_text_dark_green)
+        chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.cc_green) // Set background color
+        setTextColor(ContextCompat.getColor(context, R.color.cc_text_dark_green)) // Set text color
       }
       view.cgChips.addView(chip)
     }
   }
+
 }

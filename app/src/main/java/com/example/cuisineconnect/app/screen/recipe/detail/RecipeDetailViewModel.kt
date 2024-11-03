@@ -94,6 +94,7 @@ class RecipeDetailViewModel @Inject constructor(
     if (user == null || recipe == null) return null
 
     val detailRecipe = mutableListOf<Any>(
+      "Main_Image" to recipe,
       "Header" to recipe,
       user,
       "Estimation" to recipe,

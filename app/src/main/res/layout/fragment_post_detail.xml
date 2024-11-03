@@ -220,33 +220,6 @@
             />
       </LinearLayout>
 
-      <!-- Bookmark Section -->
-      <LinearLayout
-          android:id="@+id/ll_bookmark"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="30dp"
-          android:gravity="center"
-          android:layout_weight="1"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_bookmark"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:contentDescription="@string/image"
-            android:padding="5dp"
-            android:src="@drawable/ic_bookmark_regular"
-            />
-
-        <TextView
-            android:id="@+id/tv_bookmark_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            />
-      </LinearLayout>
     </LinearLayout>
   </androidx.cardview.widget.CardView>
 

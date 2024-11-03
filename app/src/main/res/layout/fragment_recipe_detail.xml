@@ -26,7 +26,7 @@
           android:id="@+id/ll_toolbar"
           android:layout_width="match_parent"
           android:layout_height="56dp"
-          android:background="@drawable/gradient_cc_yellow"
+          android:background="@color/cc_green"
           android:gravity="center_vertical"
           android:orientation="horizontal"
           app:layout_collapseMode="parallax"
@@ -60,7 +60,7 @@
         android:id="@+id/rv_recipe_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,9 +94,9 @@
           android:id="@+id/ll_upvote"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginHorizontal="30dp"
           android:layout_weight="1"
           android:gravity="center"
-          android:layout_marginHorizontal="30dp"
           android:orientation="horizontal"
           >
 
@@ -104,9 +104,10 @@
             android:id="@+id/iv_ic_thumbs"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
             android:contentDescription="@string/image"
+            android:padding="5dp"
             android:src="@drawable/ic_thumbs_up_regular"
+            app:tint="@color/cc_text_dark_green"
             />
 
         <TextView
@@ -115,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:text="98"
+            android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>
 
@@ -122,9 +124,9 @@
           android:id="@+id/ll_reply"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginHorizontal="30dp"
           android:layout_weight="1"
           android:gravity="center"
-          android:layout_marginHorizontal="30dp"
           android:orientation="horizontal"
           >
 
@@ -132,9 +134,10 @@
             android:id="@+id/iv_ic_reply"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
             android:contentDescription="@string/image"
+            android:padding="5dp"
             android:src="@drawable/ic_msg_bubble"
+            app:tint="@color/cc_text_dark_green"
             />
 
         <TextView
@@ -143,6 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:text="98"
+            android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>
 
@@ -150,19 +154,20 @@
           android:id="@+id/ll_bookmark"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginHorizontal="30dp"
           android:layout_weight="1"
           android:gravity="center"
           android:orientation="horizontal"
-          android:layout_marginHorizontal="30dp"
           >
 
         <ImageView
             android:id="@+id/iv_ic_bookmark"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
             android:contentDescription="@string/image"
+            android:padding="5dp"
             android:src="@drawable/ic_bookmark_regular"
+            app:tint="@color/cc_text_dark_green"
             />
 
         <TextView
@@ -170,6 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="98"
+            android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>
 
@@ -181,6 +187,7 @@
   <include
       android:id="@+id/incl_internet"
       layout="@layout/no_internet_connection"
-      android:visibility="gone" />
+      android:visibility="gone"
+      />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

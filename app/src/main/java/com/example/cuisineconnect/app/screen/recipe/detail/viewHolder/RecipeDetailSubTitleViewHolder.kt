@@ -12,6 +12,7 @@ class RecipeDetailSubTitleViewHolder(
   fun bind(string: String) {
     view.run {
       if (string.isNotEmpty()) {
+        root.textSize = 20f
         root.text = string
       }
     }

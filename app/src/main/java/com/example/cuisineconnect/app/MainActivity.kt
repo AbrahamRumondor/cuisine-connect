@@ -3,7 +3,6 @@ package com.example.cuisineconnect.app
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -14,7 +13,6 @@ import com.example.alfaresto_customersapp.data.network.networkStatusObserver.Con
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     checkConnectivityStatus()
 
-    this.window.statusBarColor = this.getColor(R.color.cc_yellow);
+    this.window.statusBarColor = this.getColor(R.color.cc_green);
 
     val navHostFragment =
       supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment

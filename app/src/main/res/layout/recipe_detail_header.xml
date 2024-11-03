@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/text_margin"
+    android:layout_marginHorizontal="@dimen/text_margin"
+    android:layout_marginTop="@dimen/text_margin"
     >
 
   <TextView
@@ -12,7 +13,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="Here's Why Some Developers Make $400,000 While Most Don't"
-      android:textSize="34sp"
+      android:textSize="24sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +26,7 @@
       android:layout_height="wrap_content"
       android:text="The Training and Growth Strategies of World-Class Developers"
       android:textColor="@android:color/darker_gray"
-      android:textSize="24sp"
+      android:textSize="18sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/tv_title"

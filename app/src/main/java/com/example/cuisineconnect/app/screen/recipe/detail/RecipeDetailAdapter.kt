@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cuisineconnect.app.listener.DetailRecipeItemListener
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailEstimationViewHolder
+import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailMainImageViewHolder
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailHeaderViewHolder
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailIngredientViewHolder
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailStepViewHolder
@@ -15,6 +16,7 @@ import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.ViewBottom
 import com.example.cuisineconnect.databinding.RecipeDetailEstimationBinding
 import com.example.cuisineconnect.databinding.RecipeDetailHeaderBinding
 import com.example.cuisineconnect.databinding.RecipeDetailIngredientBinding
+import com.example.cuisineconnect.databinding.RecipeDetailMainImageBinding
 import com.example.cuisineconnect.databinding.RecipeDetailStepBinding
 import com.example.cuisineconnect.databinding.RecipeDetailTagsBinding
 import com.example.cuisineconnect.databinding.SubTitleBinding
@@ -34,6 +36,7 @@ class RecipeDetailAdapter :
   private val SHOW_HEADER = 0
   private val SHOW_USER = 1
   private val SHOW_ESTIMATION = 2
+  private val SHOW_MAIN_IMAGE = 8
   private val SHOW_SUB_TITLE = 3
   private val SHOW_INGREDIENT = 4
   private val SHOW_STEP = 5
@@ -57,6 +60,7 @@ class RecipeDetailAdapter :
         when (pair.first) {
           "Header" -> SHOW_HEADER
           "Estimation" -> SHOW_ESTIMATION
+          "Main_Image" -> SHOW_MAIN_IMAGE
           else -> throw IllegalArgumentException("Invalid string type")
         }
       }
@@ -113,6 +117,11 @@ class RecipeDetailAdapter :
         ViewBottomSpacingViewHolder(bindingSpacing)
       }
 
+      SHOW_MAIN_IMAGE -> {
+        val bindingEstimation = RecipeDetailMainImageBinding.inflate(inflater, parent, false)
+        RecipeDetailMainImageViewHolder(bindingEstimation)
+      }
+
       else -> throw IllegalArgumentException("Invalid view type")
     }
   }
@@ -133,6 +142,7 @@ class RecipeDetailAdapter :
         when (pair.first) {
           "Header" -> (holder as RecipeDetailHeaderViewHolder).bind(pair.second)
           "Estimation" -> (holder as RecipeDetailEstimationViewHolder).bind(pair.second)
+          "Main_Image" -> (holder as RecipeDetailMainImageViewHolder).bind(pair.second)
           else -> throw IllegalArgumentException("Invalid string type")
         }
       }

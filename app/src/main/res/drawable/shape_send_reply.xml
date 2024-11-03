@@ -3,8 +3,8 @@
   <!-- Define the gradient -->
   <gradient
       android:startColor="@color/cc_light_gray"
-      android:centerColor="@color/cc_yellow"
-      android:endColor="@color/cc_yellow"
+      android:centerColor="@color/cc_green"
+      android:endColor="@color/cc_green"
       android:angle="90" />
 
   <!-- Define the rounded corners (make horizontal corners circular) -->

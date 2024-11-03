@@ -91,15 +91,15 @@ class PostDetailFragment : Fragment() {
 
           currentUser?.let {
             setupUpvoteButton(post, it)
-
-            if (post.id.contains(it.id)) {
-              ivIcBookmark.visibility = View.GONE
-              tvBookmarkCount.visibility = View.GONE
-            } else {
-              ivIcBookmark.visibility = View.VISIBLE
-              tvBookmarkCount.visibility = View.VISIBLE
-              tvBookmarkCount.text = post.bookmarks.size.toString()
-            }
+//
+//            if (post.id.contains(it.id)) {
+//              ivIcBookmark.visibility = View.GONE
+//              tvBookmarkCount.visibility = View.GONE
+//            } else {
+//              ivIcBookmark.visibility = View.VISIBLE
+//              tvBookmarkCount.visibility = View.VISIBLE
+//              tvBookmarkCount.text = post.bookmarks.size.toString()
+//            }
 
           }
 
@@ -157,7 +157,7 @@ class PostDetailFragment : Fragment() {
     val isBookmarked = post.bookmarks[user.id] == true
 
     updateUpvoteIcon(isUpvoted)
-    updateBookmarkIcon(isBookmarked)
+//    updateBookmarkIcon(isBookmarked)
 
     binding.llUpvote.setOnClickListener {
       if (isUpvoted) {
@@ -167,13 +167,13 @@ class PostDetailFragment : Fragment() {
       }
     }
 
-    binding.llBookmark.setOnClickListener {
-      if (isBookmarked) {
-        handleRemoveBookmark(post.id, user.id)
-      } else {
-        handleAddBookmark(post.id, user.id)
-      }
-    }
+//    binding.llBookmark.setOnClickListener {
+//      if (isBookmarked) {
+//        handleRemoveBookmark(post.id, user.id)
+//      } else {
+//        handleAddBookmark(post.id, user.id)
+//      }
+//    }
   }
 
   private fun updateUpvoteIcon(isUpvoted: Boolean) {
@@ -200,11 +200,11 @@ class PostDetailFragment : Fragment() {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
   }
 
-  private fun updateBookmarkIcon(isBookmarked: Boolean) {
-    binding.ivIcBookmark.setImageResource(
-      if (isBookmarked) R.drawable.ic_bookmark_solid else R.drawable.ic_bookmark_regular
-    )
-  }
+//  private fun updateBookmarkIcon(isBookmarked: Boolean) {
+//    binding.ivIcBookmark.setImageResource(
+//      if (isBookmarked) R.drawable.ic_bookmark_solid else R.drawable.ic_bookmark_regular
+//    )
+//  }
 
   private fun handleAddBookmark(postId: String, userId: String) {
     postDetailViewModel.addToBookmark(postId, userId) {

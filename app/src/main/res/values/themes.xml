@@ -2,7 +2,7 @@
   <!-- Base application theme. -->
   <style name="Base.Theme.Cuisineconnect" parent="Theme.Material3.Light.NoActionBar">
     <item name="android:windowBackground">@color/white</item>
-    <item name="colorPrimaryDark">@color/cc_yellow</item>
+    <item name="colorPrimaryDark">@color/cc_green</item>
     <!-- Customize your light theme here. -->
     <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
   </style>
@@ -14,7 +14,7 @@
   </style>
 
   <style name="CustomFABStyle" parent="Widget.MaterialComponents.FloatingActionButton">
-    <item name="backgroundTint">@color/cc_yellow</item>
+    <item name="backgroundTint">@color/cc_green</item>
     <item name="tint">@color/cc_gray</item>
     <item name="fabSize">normal</item>
     <item name="android:scaleType">centerInside</item>
