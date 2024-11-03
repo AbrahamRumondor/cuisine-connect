@@ -8,16 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
 import com.example.cuisineconnect.databinding.FragmentReplyRecipeBinding
 import com.example.cuisineconnect.domain.model.Reply
 import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,6 +43,14 @@ class ReplyRecipeFragment : Fragment() {
   ): View {
     // Inflate the layout for this fragment
     binding = FragmentReplyRecipeBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
 
     setupToolbar()
 
@@ -172,5 +184,23 @@ class ReplyRecipeFragment : Fragment() {
     })
   }
 
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.cvToolbar.visibility = View.GONE
+      binding.rvReplies.visibility = View.GONE
+      binding.clReplyOther.visibility = View.GONE
+      binding.vDivider.visibility = View.GONE
+      binding.clInputReply.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.cvToolbar.visibility = View.VISIBLE
+      binding.rvReplies.visibility = View.VISIBLE
+      binding.clReplyOther.visibility = View.VISIBLE
+      binding.vDivider.visibility = View.VISIBLE
+      binding.clInputReply.visibility = View.VISIBLE
+    }
+  }
 
 }

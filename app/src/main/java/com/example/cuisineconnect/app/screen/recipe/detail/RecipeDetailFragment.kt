@@ -11,12 +11,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentRecipeDetailBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -36,6 +38,14 @@ class RecipeDetailFragment : Fragment() {
   ): View {
     // Inflate the layout for this fragment
     binding = FragmentRecipeDetailBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
 
     binding.btnBack.setOnClickListener {
       activity?.supportFragmentManager?.popBackStack()
@@ -199,4 +209,20 @@ class RecipeDetailFragment : Fragment() {
     recipeDetailViewModel.removeFromBookmark(postId, userId)
     showToast("Removed from bookmarks")
   }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.ablToolbar.visibility = View.GONE
+      binding.clRvRecipeDetail.visibility = View.GONE
+      binding.cvBottomDetail.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.ablToolbar.visibility = View.VISIBLE
+      binding.clRvRecipeDetail.visibility = View.VISIBLE
+      binding.cvBottomDetail.visibility = View.VISIBLE
+    }
+  }
+
 }

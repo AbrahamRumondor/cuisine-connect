@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.post.PostContentRenderer
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
@@ -17,6 +19,8 @@ import com.example.cuisineconnect.databinding.FragmentPostDetailBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -38,6 +42,14 @@ class PostDetailFragment : Fragment() {
 
     binding.btnBack.setOnClickListener {
       activity?.supportFragmentManager?.popBackStack()
+    }
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
     }
 
     // Initialize the PostContentRenderer
@@ -205,6 +217,19 @@ class PostDetailFragment : Fragment() {
     postDetailViewModel.removeFromBookmark(postId, userId) {
       loadPostDetails(postId) // Refresh post details to update the bookmark state
       showToast("Removed from bookmarks")
+    }
+  }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.cvBottomDetail.visibility = View.GONE
+      binding.scrollableContent.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.cvBottomDetail.visibility = View.VISIBLE
+      binding.scrollableContent.visibility = View.VISIBLE
     }
   }
 }

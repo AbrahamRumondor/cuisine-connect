@@ -14,9 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.profile.ProfileViewModel
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentArgs
 import com.example.cuisineconnect.databinding.FragmentProfileEditBinding
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,6 +39,14 @@ class ProfileEditFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentProfileEditBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
 
     val userId = args.userId
 
@@ -131,5 +142,14 @@ class ProfileEditFragment : Fragment() {
     }
   }
 
-
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.svEditProfile.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.svEditProfile.visibility = View.VISIBLE
+    }
+  }
 }

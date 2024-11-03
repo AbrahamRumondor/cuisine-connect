@@ -10,11 +10,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
@@ -23,6 +25,7 @@ import com.example.cuisineconnect.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -38,6 +41,14 @@ class ProfileFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
 
     profileViewModel.getUser()
 
@@ -137,5 +148,20 @@ class ProfileFragment : Fragment() {
     val intent = Intent(context, LoginActivity::class.java)
     startActivity(intent)
     activity?.finish()
+  }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+//      binding.inclInternet.root.visibility = View.VISIBLE
+//      binding.appbarLayout.visibility = View.GONE
+//      binding.srlHome.visibility = View.GONE
+//      binding.inclFab.root.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+//      binding.inclInternet.root.visibility = View.GONE
+//      binding.appbarLayout.visibility = View.VISIBLE
+//      binding.srlHome.visibility = View.VISIBLE
+//      binding.inclFab.root.visibility = View.VISIBLE
+    }
   }
 }

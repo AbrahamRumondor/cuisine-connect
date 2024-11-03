@@ -82,4 +82,10 @@
       android:layout_margin="16dp"
       app:layout_anchor="@id/list"
       app:layout_anchorGravity="bottom|end" />
+
+  <include
+      android:id="@+id/incl_internet"
+      layout="@layout/no_internet_connection"
+      android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

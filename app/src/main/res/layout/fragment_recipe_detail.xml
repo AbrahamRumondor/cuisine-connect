@@ -50,6 +50,7 @@
 
   <!-- ConstraintLayout positioned below AppBarLayout -->
   <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/cl_rv_recipe_detail"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -176,5 +177,10 @@
     </LinearLayout>
 
   </androidx.cardview.widget.CardView>
+
+  <include
+      android:id="@+id/incl_internet"
+      layout="@layout/no_internet_connection"
+      android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -11,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentFollowListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -61,6 +64,15 @@ class FollowListFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentFollowListBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
+
     setupToolbar()
     setupRecyclerView()
     setupSwipeRefresh() // Set up swipe to refresh
@@ -141,5 +153,18 @@ class FollowListFragment : Fragment() {
   override fun onResume() {
     super.onResume()
 //    refreshFollowList() // Refresh on resume
+  }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.cvToolbar.visibility = View.GONE
+      binding.srlHome.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.cvToolbar.visibility = View.VISIBLE
+      binding.srlHome.visibility = View.VISIBLE
+    }
   }
 }

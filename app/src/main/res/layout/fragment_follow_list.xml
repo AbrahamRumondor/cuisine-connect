@@ -47,4 +47,9 @@
         tools:listitem="@layout/fragment_my_recipe" />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+  <include
+      android:id="@+id/incl_internet"
+      layout="@layout/no_internet_connection"
+      android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

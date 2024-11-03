@@ -39,4 +39,7 @@
   <string name="exception.message">%s</string>
   <string name="image_upload_failed">Failed to upload image</string>
   <string name="what_s_your_opinion">What\'s your opinion…</string>
+  <string name="no_internet_connection">No internet Connection</string>
+  <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
+  <string name="available">Available</string>
 </resources>

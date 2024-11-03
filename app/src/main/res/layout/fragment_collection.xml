@@ -9,6 +9,7 @@
 
   <!-- AppBarLayout for managing scroll behavior -->
   <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/appbar_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -80,6 +81,13 @@
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       />
 
-  <include layout="@layout/item_fab_create_recipe" />
+  <include
+      android:id="@+id/incl_fab"
+      layout="@layout/item_fab_create_recipe" />
+
+  <include
+      android:id="@+id/incl_internet"
+      layout="@layout/no_internet_connection"
+      android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

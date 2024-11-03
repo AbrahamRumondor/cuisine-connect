@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.listener.ItemListListener
@@ -69,6 +71,14 @@ class HomeFragment : Fragment() {
       binding.srlHome.setOnRefreshListener {
         refreshContent()
       }
+
+      lifecycleScope.launch {
+        delay(2000)
+        setConnectionBehaviour()
+      }
+      binding.inclInternet.btnInetTryAgain.setOnClickListener {
+        setConnectionBehaviour()
+      }
     }
 
     lifecycleScope.launch {
@@ -80,6 +90,21 @@ class HomeFragment : Fragment() {
     }
 
     return binding.root
+  }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+      binding.inclInternet.root.visibility = View.VISIBLE
+      binding.appbarLayout.visibility = View.GONE
+      binding.srlHome.visibility = View.GONE
+      binding.inclFab.root.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+      binding.inclInternet.root.visibility = View.GONE
+      binding.appbarLayout.visibility = View.VISIBLE
+      binding.srlHome.visibility = View.VISIBLE
+      binding.inclFab.root.visibility = View.VISIBLE
+    }
   }
 
   private fun refreshContent() {

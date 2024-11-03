@@ -7,14 +7,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alfaresto_customersapp.data.network.NetworkUtils
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.OnClickItemListener
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.app.screen.search.trending.TrendingHashtagAdapter
 import com.example.cuisineconnect.app.screen.search.trending.TrendingViewModel
 import com.example.cuisineconnect.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -28,6 +33,14 @@ class SearchFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentSearchBinding.inflate(inflater, container, false)
+
+    lifecycleScope.launch {
+      delay(2000)
+      setConnectionBehaviour()
+    }
+    binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      setConnectionBehaviour()
+    }
 
     // Initialize and set up the HashtagAdapter
     binding.list.apply {
@@ -93,4 +106,20 @@ class SearchFragment : Fragment() {
       }
     })
   }
+
+  private fun setConnectionBehaviour() {
+    if (NetworkUtils.isConnectedToNetwork.value == false) {
+//      binding.inclInternet.root.visibility = View.VISIBLE
+//      binding.appbarLayout.visibility = View.GONE
+//      binding.srlHome.visibility = View.GONE
+//      binding.inclFab.root.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+    } else {
+//      binding.inclInternet.root.visibility = View.GONE
+//      binding.appbarLayout.visibility = View.VISIBLE
+//      binding.srlHome.visibility = View.VISIBLE
+//      binding.inclFab.root.visibility = View.VISIBLE
+    }
+  }
+
 }

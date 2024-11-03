@@ -159,4 +159,9 @@
 
 <!--  <include layout="@layout/item_fab_create_recipe" />-->
 
+  <include
+      android:id="@+id/incl_internet"
+      layout="@layout/no_internet_connection"
+      android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
