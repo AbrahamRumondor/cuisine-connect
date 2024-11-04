@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="LetsGoCook123"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="16sp"
         />
 
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="\@LetsGoCook123"
         android:textColor="@android:color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
         />
   </LinearLayout>
 
@@ -65,7 +65,7 @@
       android:layout_marginHorizontal="24dp"
       android:gravity="end"
       android:text="Jan xx"
-      android:textSize="16sp"
+      android:textSize="12sp"
       android:textColor="@android:color/black"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@id/cv_profile"
@@ -76,9 +76,9 @@
       android:id="@+id/cv_recipe"
       android:layout_width="0dp"
       android:layout_height="420dp"
-      android:layout_marginVertical="24dp"
+      android:layout_marginVertical="16dp"
       android:layout_marginEnd="24dp"
-      app:cardCornerRadius="24dp"
+      app:cardCornerRadius="16dp"
       app:layout_constraintStart_toStartOf="@id/ll_username"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -118,8 +118,8 @@
       <FrameLayout
           android:layout_width="0dp"
           android:layout_height="0dp"
-          android:alpha="0.6"
-          android:background="@color/black"
+          android:alpha="1"
+          android:background="@color/white"
           app:layout_constraintBottom_toBottomOf="@id/ll_text"
           app:layout_constraintEnd_toEndOf="@id/ll_text"
           app:layout_constraintStart_toStartOf="@id/ll_text"
@@ -132,8 +132,8 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:paddingHorizontal="20dp"
-          android:paddingTop="10dp"
-          android:paddingBottom="16dp"
+          android:paddingTop="15dp"
+          android:paddingBottom="21dp"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
@@ -160,21 +160,20 @@
 
             <ImageView
                 android:id="@+id/iv_ic_thumbs"
-                android:layout_width="26dp"
-                android:layout_height="20dp"
+                android:layout_width="21dp"
+                android:layout_height="15dp"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_thumbs_up_regular"
-                app:tint="@color/white"
+                app:tint="@color/cc_gray"
                 />
 
             <TextView
                 android:id="@+id/tv_upvote_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
                 android:text="-"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
                 />
           </LinearLayout>
 
@@ -188,21 +187,21 @@
 
             <ImageView
                 android:id="@+id/iv_ic_reply"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_msg_bubble"
-                app:tint="@color/white"
+                app:tint="@color/cc_gray"
                 />
 
             <TextView
                 android:id="@+id/tv_reply_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="3dp"
                 android:text="-"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
                 />
           </LinearLayout>
 
@@ -217,11 +216,11 @@
 
             <ImageView
                 android:id="@+id/iv_ic_bookmark"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_bookmark_regular"
-                app:tint="@color/white"
+                app:tint="@color/cc_gray"
                 />
 
             <TextView
@@ -229,8 +228,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
                 />
           </LinearLayout>
 
@@ -243,8 +242,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Healthy Vegetarian and Rice"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textColor="@color/cc_gray"
+            android:textSize="16sp"
             />
 
       </LinearLayout>

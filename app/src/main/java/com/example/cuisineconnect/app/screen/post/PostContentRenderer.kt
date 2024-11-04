@@ -4,6 +4,7 @@ package com.example.cuisineconnect.app.screen.post
 import android.app.Dialog
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -89,6 +90,7 @@ class PostContentRenderer(
       dialog.setContentView(R.layout.dialog_full_image)
 
       val fullImageView = dialog.findViewById<ImageView>(R.id.iv_full_image)
+
       Glide.with(container).load(imageUri).placeholder(R.drawable.loading_image).into(fullImageView)
 
       // Set dialog layout parameters to fill 90-95% of the screen
@@ -98,6 +100,11 @@ class PostContentRenderer(
       params?.height =
         (container.context.resources.displayMetrics.heightPixels * 0.80).toInt() // 95% of screen height
       dialog.window?.attributes = params
+
+      val closeView = dialog.findViewById<ImageButton>(R.id.btn_close)
+      closeView.setOnClickListener {
+        dialog.dismiss()
+      }
 
       dialog.show()
     }

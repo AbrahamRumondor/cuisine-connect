@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.recipe.detail.viewHolder
 
 import android.app.Dialog
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +43,11 @@ class RecipeDetailMainImageViewHolder(
                         params?.height =
                             (view.root.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
                         dialog.window?.attributes = params
+
+                        val closeView = dialog.findViewById<ImageButton>(R.id.btn_close)
+                        closeView.setOnClickListener {
+                            dialog.dismiss()
+                        }
 
                         dialog.show()
                     }

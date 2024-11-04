@@ -131,7 +131,7 @@ class ProfileViewModel @Inject constructor(
             Log.e("ProfileViewModel", "Image upload failed, link is null")
           }
         }
-      }
+      } ?: result()
     }
   }
 

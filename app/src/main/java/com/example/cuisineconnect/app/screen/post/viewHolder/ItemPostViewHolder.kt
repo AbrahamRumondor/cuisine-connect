@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -87,7 +88,7 @@ class ItemPostViewHolder(
 
         tvUpvoteCount.text = post.upvotes.size.toString()
         tvReplyCount.text = post.replyCount.toString()
-        tvBookmarkCount.text = post.bookmarks.size.toString()
+//        tvBookmarkCount.text = post.bookmarks.size.toString()
 
 //                ivOrderAdd.setOnClickListener {
 //                    itemListener?.onAddItemClicked(position, menu.id)
@@ -183,6 +184,11 @@ class ItemPostViewHolder(
       params?.height =
         (view.root.context.resources.displayMetrics.heightPixels * 0.90).toInt() // 95% of screen height
       dialog.window?.attributes = params
+
+      val closeView = dialog.findViewById<ImageButton>(R.id.btn_close)
+      closeView.setOnClickListener {
+        dialog.dismiss()
+      }
 
       dialog.show()
     }
