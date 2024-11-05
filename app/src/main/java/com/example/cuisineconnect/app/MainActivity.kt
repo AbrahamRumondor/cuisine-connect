@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     checkConnectivityStatus()
 
-    this.window.statusBarColor = this.getColor(R.color.cc_green);
+    this.window.statusBarColor = this.getColor(R.color.cc_text_dark_green);
 
     val navHostFragment =
       supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment

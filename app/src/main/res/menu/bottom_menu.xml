@@ -3,18 +3,18 @@
 
   <item
       android:id="@+id/homeFragment"
-      android:icon="@drawable/ic_bnv_home"
-      android:title="@string/home" />
+      android:icon="@drawable/selector_home"
+      android:title="" />
   <item
       android:id="@+id/searchFragment"
-      android:icon="@drawable/ic_bnv_search"
-      android:title="@string/search" />
+      android:icon="@drawable/selector_search"
+      android:title="" />
   <item
       android:id="@+id/collectionFragment"
-      android:icon="@drawable/ic_bnv_collection"
-      android:title="@string/collection" />
+      android:icon="@drawable/selector_collection"
+      android:title="" />
   <item
       android:id="@+id/profileFragment"
-      android:icon="@drawable/ic_bnv_profile"
-      android:title="@string/profile" />
+      android:icon="@drawable/selector_profile"
+      android:title="" />
 </menu>
