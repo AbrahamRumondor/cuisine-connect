@@ -135,7 +135,12 @@ class ItemPostViewHolder(
       }
     }
 
-    setViewPadding(view.llPostContents, 0, 0, 0, 56)
+    view.llPostContents.viewTreeObserver.addOnGlobalLayoutListener {
+      val heightInDp = view.llPostContents.height / view.root.resources.displayMetrics.density
+      val bottomPadding = if (heightInDp < 150) 5 else 12
+
+      setViewPadding(view.llPostContents, 0, 0, 0, (bottomPadding * view.root.resources.displayMetrics.density).toInt())
+    }
   }
 
   private fun addText(text: String, order: Int?) {

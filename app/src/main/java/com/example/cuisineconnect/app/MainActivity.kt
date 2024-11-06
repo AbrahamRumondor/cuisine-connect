@@ -1,8 +1,11 @@
 package com.example.cuisineconnect.app
 
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
   @Inject
   lateinit var connectivityObserver: ConnectivityObserver
 
+  @RequiresApi(VERSION_CODES.R)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -36,7 +40,6 @@ class MainActivity : AppCompatActivity() {
 
     checkConnectivityStatus()
 
-    this.window.statusBarColor = this.getColor(R.color.cc_text_dark_green);
 
     val navHostFragment =
       supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -56,7 +59,14 @@ class MainActivity : AppCompatActivity() {
           R.id.postDetailFragment2 -> hideBottomNav()
           R.id.searchResultFragment -> hideBottomNav()
           R.id.otherProfileFragment -> hideBottomNav()
-          else -> showBottomNav()
+          R.id.homeFragment -> {
+            showBottomNav()
+            this.window.statusBarColor = this.getColor(R.color.cc_light_gray)
+          }
+          else -> {
+            this.window.statusBarColor = this.getColor(R.color.white)
+            showBottomNav()
+          }
         }
       }
 

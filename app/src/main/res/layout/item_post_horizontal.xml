@@ -41,13 +41,36 @@
         />
   </androidx.cardview.widget.CardView>
 
+  <View
+      android:id="@+id/v_line"
+      android:layout_width="1dp"
+      android:layout_height="20dp"
+      android:background="@android:color/darker_gray"
+      android:layout_marginVertical="2dp"
+      app:layout_constraintStart_toStartOf="@id/cv_profile"
+      app:layout_constraintEnd_toEndOf="@id/cv_profile"
+      app:layout_constraintTop_toBottomOf="@id/cv_profile"
+      />
+
+  <TextView
+      android:id="@+id/tv_constant_post"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="post"
+      android:textSize="12dp"
+      android:textColor="@color/cc_gray"
+      app:layout_constraintStart_toStartOf="@id/cv_profile"
+      app:layout_constraintEnd_toEndOf="@id/cv_profile"
+      app:layout_constraintTop_toBottomOf="@id/v_line"
+      android:paddingBottom="8dp"
+      />
+
   <LinearLayout
       android:id="@+id/ll_username"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:orientation="vertical"
-      app:layout_constraintBottom_toBottomOf="@id/cv_profile"
       app:layout_constraintStart_toEndOf="@id/cv_profile"
       app:layout_constraintTop_toTopOf="@id/cv_profile"
       >
@@ -62,14 +85,14 @@
         android:textStyle="bold"
         />
 
-    <TextView
-        android:id="@+id/tv_unique_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\@LetsGoCook123"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_unique_username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="\@LetsGoCook123"-->
+<!--        android:textColor="@android:color/darker_gray"-->
+<!--        android:textSize="14sp"-->
+<!--        />-->
   </LinearLayout>
 
   <TextView
@@ -91,12 +114,14 @@
   <LinearLayout
       android:id="@+id/ll_post_contents"
       android:layout_width="0dp"
-      android:layout_marginTop="4dp"
       android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:background="@color/cc_text_dark_green"
       android:orientation="vertical"
       app:layout_constraintEnd_toEndOf="@id/btn_edit"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="@id/ll_username"
-      app:layout_constraintTop_toBottomOf="@id/cv_profile"
+      app:layout_constraintTop_toBottomOf="@id/ll_username"
       >
 
   </LinearLayout>
@@ -108,12 +133,12 @@
       android:layout_marginHorizontal="16dp"
       android:background="@drawable/ic_trash_can"
       android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="@id/cv_profile"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/cv_profile"
+      app:layout_constraintTop_toBottomOf="@+id/tv_date"
       />
 
   <FrameLayout
+      android:id="@+id/fl_shadow"
       android:layout_width="match_parent"
       android:layout_height="15dp"
       app:layout_constraintStart_toStartOf="parent"

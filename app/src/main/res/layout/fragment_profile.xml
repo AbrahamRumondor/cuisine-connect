@@ -36,7 +36,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:background="@color/cc_text_dark_green"
+            android:background="@color/cc_light_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -141,7 +141,6 @@
             android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@id/ll_profile"
             app:layout_constraintEnd_toEndOf="parent"
-            android:backgroundTint="@color/white"
             />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
@@ -154,7 +153,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="@color/cc_green"
+        app:tabIndicatorColor="@color/cc_gray"
         app:tabTextColor="@color/cc_gray"
         />
 
