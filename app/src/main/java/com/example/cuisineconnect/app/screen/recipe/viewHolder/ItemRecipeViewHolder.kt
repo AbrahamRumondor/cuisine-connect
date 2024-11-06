@@ -57,12 +57,21 @@ class ItemRecipeViewHolder(
         }
 
         cvRecipe.setOnLongClickListener {
-          listener?.onRecipeLongClicked(recipe.id)
-          Toast.makeText(
-            view.root.context,
-            "you long clicked ${recipe.title}",
-            Toast.LENGTH_SHORT
-          ).show()
+          val builder = AlertDialog.Builder(view.root.context)
+          builder.setTitle("Choose this recipe?")
+          builder.setPositiveButton("Yes") { dialog, _ ->
+            Toast.makeText(
+              view.root.context,
+              "this recipe is chosen",
+              Toast.LENGTH_SHORT
+            ).show()
+            listener?.onRecipeLongClicked(recipe.id)
+            dialog.dismiss()
+          }
+          builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+          }
+          builder.create().show()
           true
         }
 

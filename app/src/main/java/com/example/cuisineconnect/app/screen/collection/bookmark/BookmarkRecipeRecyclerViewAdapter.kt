@@ -55,12 +55,21 @@ class BookmarkRecipeRecyclerViewAdapter(
     }
 
     holder.recipeItem.setOnLongClickListener {
-      recipeListListener?.onRecipeLongClicked(item.second.id)
-      Toast.makeText(
-        bookmarkRecipeFragmentBinding.root.context,
-        "you long clicked ${item.second.title}",
-        Toast.LENGTH_SHORT
-      ).show()
+      val builder = AlertDialog.Builder(bookmarkRecipeFragmentBinding.root.context)
+      builder.setTitle("Choose this recipe?")
+      builder.setPositiveButton("Yes") { dialog, _ ->
+        Toast.makeText(
+          bookmarkRecipeFragmentBinding.root.context,
+          "${item.second.title} is chosen",
+          Toast.LENGTH_SHORT
+        ).show()
+        recipeListListener?.onRecipeLongClicked(item.second.id)
+        dialog.dismiss()
+      }
+      builder.setNegativeButton("No") { dialog, _ ->
+        dialog.dismiss()
+      }
+      builder.create().show()
       true
     }
 

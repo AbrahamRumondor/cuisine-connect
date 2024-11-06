@@ -66,11 +66,23 @@ class MyRecipeRecyclerViewAdapter(
     }
     holder.recipeItem.setOnLongClickListener {
       recipeListListener?.onRecipeLongClicked(item.second.id)
-      Toast.makeText(
+      val builder = AlertDialog.Builder(
         myRecipeFragment.root.context,
-        "you long clicked ${item.second.title}",
-        Toast.LENGTH_SHORT
-      ).show()
+      )
+      builder.setTitle("Choose this recipe?")
+      builder.setPositiveButton("Yes") { dialog, _ ->
+        Toast.makeText(
+          myRecipeFragment.root.context,
+          "${item.second.title} is chosen",
+          Toast.LENGTH_SHORT
+        ).show()
+        recipeListListener?.onRecipeLongClicked(item.second.id)
+        dialog.dismiss()
+      }
+      builder.setNegativeButton("No") { dialog, _ ->
+        dialog.dismiss()
+      }
+      builder.create().show()
       true
     }
     holder.deleteRecipe.setOnClickListener {

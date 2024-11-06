@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.profile.edit
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -71,13 +72,26 @@ class ProfileEditFragment : Fragment() {
           return@setOnClickListener
         }
 
-        llLoading.root.visibility = View.VISIBLE
-        profileViewModel.updateUser(username, "", "", imageUri) {
-          llLoading.root.visibility = View.GONE
-          Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
-          findNavController().navigateUp() // Navigate back to the previous fragment
+        val builder = AlertDialog.Builder(binding.root.context)
+        builder.setTitle("Are you sure with the changes?")
+        builder.setPositiveButton("Yes") { dialog, _ ->
+          applySaveEdit(username)
+          dialog.dismiss()
         }
+        builder.setNegativeButton("No") { dialog, _ ->
+          dialog.dismiss()
+        }
+        builder.create().show()
       }
+    }
+  }
+
+  private fun FragmentProfileEditBinding.applySaveEdit(username: String) {
+    llLoading.root.visibility = View.VISIBLE
+    profileViewModel.updateUser(username, "", "", imageUri) {
+      llLoading.root.visibility = View.GONE
+      Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
+      findNavController().navigateUp() // Navigate back to the previous fragment
     }
   }
 

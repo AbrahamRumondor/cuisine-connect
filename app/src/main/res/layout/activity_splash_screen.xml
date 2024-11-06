@@ -20,4 +20,30 @@
       android:layout_marginBottom="30dp"
       />
 
+  <TextView
+      android:id="@+id/tv_by"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_marginBottom="100dp"
+      android:text="By"
+      android:textSize="16sp"
+      />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tv_by"
+      android:layout_marginBottom="50dp"
+      android:textColor="@color/cc_text_dark_green"
+      android:layout_marginVertical="2dp"
+      android:textStyle="bold"
+      android:text="Abraham &amp; Justin"
+      android:textSize="22sp"
+      />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
