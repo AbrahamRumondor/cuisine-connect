@@ -10,7 +10,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -68,10 +70,7 @@ class CreateRecipeFragment : Fragment() {
         addNewStep()
       }
 
-      btnSubmitIngre.setOnClickListener {
-      }
-
-      btnSubmitStep.setOnClickListener {
+      btnPublish.setOnClickListener {
         val steps = createRecipeViewModel.toSteps(getSteps())
         val hashtags = getAllHashtags()
 
@@ -95,7 +94,7 @@ class CreateRecipeFragment : Fragment() {
         }
       }
 
-      btnAddImage.setOnClickListener {
+      ivImage.setOnClickListener {
         val i = Intent()
         i.type = "image/*"
         i.action = Intent.ACTION_GET_CONTENT
@@ -143,6 +142,7 @@ class CreateRecipeFragment : Fragment() {
     val customCardView = LayoutInflater.from(context)
       .inflate(R.layout.item_edit_text_input, binding.llIngreContainer, false)
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+    val btnDelete: ImageButton = customCardView.findViewById(R.id.btn_delete)
     etUserInput.hint = "2 Carrots"
 
     // Add the new EditText to the container
@@ -150,12 +150,19 @@ class CreateRecipeFragment : Fragment() {
 
     // Add the new EditText to the list
     editTextIngreList.add(etUserInput)
+
+    btnDelete.setOnClickListener {
+      binding.llIngreContainer.removeView(customCardView)
+      editTextIngreList.remove(etUserInput)
+    }
   }
 
   private fun addNewStep() {
     val customCardView = LayoutInflater.from(context)
       .inflate(R.layout.item_edit_text_input, binding.llStepContainer, false)
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+    val btnDelete: ImageButton = customCardView.findViewById(R.id.btn_delete)
+
     etUserInput.hint = "Start by putting all the ingredients together..."
     etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
@@ -164,6 +171,11 @@ class CreateRecipeFragment : Fragment() {
 
     // Add the new EditText to the list
     editTextStepList.add(etUserInput)
+
+    btnDelete.setOnClickListener {
+      binding.llStepContainer.removeView(customCardView)
+      editTextStepList.remove(etUserInput)
+    }
   }
 
   private fun getSteps(): List<String> {
@@ -230,9 +242,9 @@ class CreateRecipeFragment : Fragment() {
 
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val query = s.toString().trim()
-        binding.root.post {
-          binding.root.smoothScrollTo(0, binding.root.bottom)
-        }
+//        binding.root.post {
+//          binding.root.smoothScrollTo(0, binding.root.bottom)
+//        }
 
         // Cancel any existing search to debounce
         searchRunnable?.let {
@@ -290,7 +302,15 @@ class CreateRecipeFragment : Fragment() {
 
       // Clear the EditText after adding the chip
       binding.etTags.setText("") // Clear the input after adding the chip
-      binding.etTags.requestFocus() // Set focus back to the EditText
+//      binding.etTags.requestFocus()
+//      binding.root.viewTreeObserver.addOnGlobalLayoutListener(object :
+//        ViewTreeObserver.OnGlobalLayoutListener {
+//        override fun onGlobalLayout() {
+//          // Scroll to the EditText to keep it in view
+//          binding.root.smoothScrollTo(0, binding.root.bottom)
+//          binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//        }
+//      })
     } else {
       Toast.makeText(context, "Hashtag already added", Toast.LENGTH_SHORT).show()
     }
