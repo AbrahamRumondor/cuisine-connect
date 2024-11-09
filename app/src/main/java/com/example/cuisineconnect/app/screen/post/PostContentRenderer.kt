@@ -8,10 +8,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.screen.post.detail.PostDetailViewModel
+import com.example.cuisineconnect.app.util.ClickableTextView
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import java.text.SimpleDateFormat
 
@@ -70,8 +72,11 @@ class PostContentRenderer(
     // Set margins using the new function
     setViewMargins(customCardView, 0, 8)
 
-    val tvUserInput: TextView = customCardView.findViewById(R.id.tvUserInput)
-    tvUserInput.text = text
+    val tvUserInput: ClickableTextView = customCardView.findViewById(R.id.tvUserInput)
+    tvUserInput.setHashtagText(text) { hashtag ->
+      // Handle hashtag click, e.g., navigate to a new screen or perform a search
+      navigateToHashtag(hashtag)
+    }
 
     if (order != null && order <= container.childCount) {
       container.removeViewAt(order)
@@ -79,6 +84,12 @@ class PostContentRenderer(
     } else {
       container.addView(customCardView, container.childCount)
     }
+  }
+
+  // Example function for handling hashtag click
+  private fun navigateToHashtag(hashtag: String) {
+    // Navigate to the hashtag page or perform any other action with the hashtag
+    Toast.makeText(container.context, "Clicked hashtag: $hashtag", Toast.LENGTH_SHORT).show()
   }
 
   private fun addImage(imageUri: String, order: Int?) {

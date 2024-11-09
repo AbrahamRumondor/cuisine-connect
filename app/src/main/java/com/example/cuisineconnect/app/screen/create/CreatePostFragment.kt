@@ -5,8 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
 import android.text.InputType
+import android.text.SpannableString
+import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,19 +20,21 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
+import com.example.cuisineconnect.domain.model.Hashtag
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -38,11 +44,14 @@ class CreatePostFragment : Fragment() {
 
   private lateinit var binding: FragmentCreatePostBinding
   private val createPostViewModel: CreatePostViewModel by viewModels()
+  private val createRecipeViewModel: CreateRecipeViewModel by viewModels()
 
   private var imageUri: Uri? = null
   private var imageToReplaceIndex: Int? = null
 
   var SELECT_PICTURE: Int = 200
+
+  private lateinit var trendingHashtagAdapter: HashtagAdapter
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -107,11 +116,51 @@ class CreatePostFragment : Fragment() {
     }
   }
 
+//  private fun addText(text: String, isFromListener: Boolean, order: Int?) {
+//    // Add text to the container (UI logic)
+//    val customCardView = LayoutInflater.from(context)
+//      .inflate(R.layout.item_post_edit_text_input, binding.llPostContents, false)
+//    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+//    etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+//
+//    if (order != null && order <= binding.llPostContents.childCount) {
+//      binding.llPostContents.removeViewAt(order)
+//      binding.llPostContents.addView(customCardView, order)
+//    } else {
+//      binding.llPostContents.addView(customCardView, binding.llPostContents.childCount)
+//    }
+//
+//    etUserInput.setText(text)
+//
+//    // If the function is called by a listener, add text content to ViewModel
+//    if (isFromListener) {
+//      Log.d("lololol", "add text")
+//      createPostViewModel.postContent.add(
+//        mutableMapOf(
+//          "type" to "${createPostViewModel.postContent.size}_text",
+//          "value" to etUserInput.text.toString()
+//        )
+//      )
+//    }
+//
+//    // Scroll to the bottom of the ScrollView first, then focus on the EditText
+//    binding.svPost.post {
+//      binding.svPost.fullScroll(View.FOCUS_DOWN)
+//
+//      // Request focus on the new EditText and show the keyboard after scrolling
+//      etUserInput.requestFocus()
+//      etUserInput.post {
+//        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+//        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
+//      }
+//    }
+//  }
+
   private fun addText(text: String, isFromListener: Boolean, order: Int?) {
-    // Add text to the container (UI logic)
     val customCardView = LayoutInflater.from(context)
       .inflate(R.layout.item_post_edit_text_input, binding.llPostContents, false)
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+    val rvHashtag: RecyclerView = customCardView.findViewById(R.id.rv_hashtag)
     etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
     if (order != null && order <= binding.llPostContents.childCount) {
@@ -123,9 +172,51 @@ class CreatePostFragment : Fragment() {
 
     etUserInput.setText(text)
 
-    // If the function is called by a listener, add text content to ViewModel
+    // Add TextWatcher to detect "#" and show hashtag suggestions
+    etUserInput.addTextChangedListener(object : TextWatcher {
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        val query = s.toString()
+
+        // Find the last "#" character in the query
+        val lastHashPosition = query.lastIndexOf("#")
+        val lastSpacePosition = query.lastIndexOf(" ")
+
+        // Check if "#" exists and is not followed by a space
+        val isShowRV = lastHashPosition > lastSpacePosition
+
+        // If valid hashtag is found and no space after "#"
+        if (isShowRV && lastHashPosition != -1) {
+          val hashtagQuery = query.substring(lastHashPosition + 1) // Get the hashtag query after the last "#"
+
+          if (hashtagQuery.isNotEmpty()) {
+            searchHashtags("#$hashtagQuery")
+            rvHashtag.visibility = View.VISIBLE // Show RecyclerView for hashtag suggestions
+          }
+        } else {
+          rvHashtag.visibility = View.GONE // Hide RecyclerView if "#" is followed by a space or no hashtag after "#"
+        }
+      }
+
+      override fun afterTextChanged(s: Editable?) {}
+    })
+
+    // RecyclerView setup
+    setupRecyclerView(rvHashtag, etUserInput)
+
+    // Scroll to the bottom of the ScrollView, focus on EditText, and show keyboard
+    binding.svPost.post {
+      binding.svPost.fullScroll(View.FOCUS_DOWN)
+      etUserInput.requestFocus()
+      etUserInput.post {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
+      }
+    }
+
+    // Handle ViewModel update if needed
     if (isFromListener) {
-      Log.d("lololol", "add text")
       createPostViewModel.postContent.add(
         mutableMapOf(
           "type" to "${createPostViewModel.postContent.size}_text",
@@ -133,18 +224,88 @@ class CreatePostFragment : Fragment() {
         )
       )
     }
+  }
 
-    // Scroll to the bottom of the ScrollView first, then focus on the EditText
-    binding.svPost.post {
-      binding.svPost.fullScroll(View.FOCUS_DOWN)
+  // RecyclerView setup
+  private fun setupRecyclerView(rvHashtag: RecyclerView, etUserInput: EditText) {
+    trendingHashtagAdapter = HashtagAdapter(mutableListOf()) { hashtag ->
+      addHashtagToEditText(hashtag.body, etUserInput)
+      rvHashtag.visibility = View.GONE
+    }
 
-      // Request focus on the new EditText and show the keyboard after scrolling
-      etUserInput.requestFocus()
-      etUserInput.post {
-        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
+    rvHashtag.layoutManager = LinearLayoutManager(requireContext())
+    rvHashtag.adapter = trendingHashtagAdapter
+  }
+
+  private fun addHashtagToEditText(hashtag: String, etUserInput: EditText) {
+    val currentText = etUserInput.text.toString()
+    val cursorPosition = etUserInput.selectionStart
+    val greenColor = ContextCompat.getColor(requireContext(), R.color.cc_text_dark_green)
+
+    // Find the position of the last hashtag
+    val lastHashtagStart = currentText.lastIndexOf("#", cursorPosition - 1)
+    var lastHashtagEnd = currentText.indexOf(" ", lastHashtagStart)
+
+    // If no space after the last hashtag, take the rest of the text as the hashtag
+    if (lastHashtagEnd == -1) {
+      lastHashtagEnd = currentText.length
+      currentText.substring(lastHashtagStart)
+    } else {
+      currentText.substring(lastHashtagStart, lastHashtagEnd)
+    }
+
+    // Replace the last hashtag with the new hashtag
+    val newText = currentText.replaceRange(
+      lastHashtagStart,
+      lastHashtagEnd,
+      hashtag
+    )
+
+    // Create a SpannableString to apply the color to the hashtag
+    val spannableText = SpannableString(newText)
+
+    // Iterate over the text to find all hashtags and apply the green color span
+    var start = newText.indexOf("#")
+    while (start != -1) {
+      val end = newText.indexOf(" ", start)
+      val hashtagEnd = if (end == -1) newText.length else end
+
+      // Apply the green color span to the hashtag
+      spannableText.setSpan(ForegroundColorSpan(greenColor), start, hashtagEnd, 0)
+
+      // Move to the next hashtag
+      start = if (end == -1) -1 else newText.indexOf("#", hashtagEnd)
+    }
+
+    // Set the new text with colored hashtags and position the cursor after the hashtag
+    etUserInput.setText(spannableText)
+    etUserInput.setSelection(lastHashtagStart + hashtag.length) // Position cursor after the new hashtag
+
+
+  }
+
+  // Search hashtags and update RecyclerView
+  private fun searchHashtags(query: String) {
+    createRecipeViewModel.searchTags(query) { hashtags, exception ->
+      if (exception == null) {
+        updateHashtags(hashtags)
+      } else {
+        Toast.makeText(
+          context,
+          "Failed to fetch hashtags: ${exception.message}",
+          Toast.LENGTH_SHORT
+        ).show()
       }
     }
+  }
+
+  // Update RecyclerView adapter with new hashtags
+  private fun updateHashtags(hashtags: List<Hashtag>) {
+    trendingHashtagAdapter.updateHashtags(hashtags)
+  }
+
+  private fun clearHashtagList() {
+    trendingHashtagAdapter.updateHashtags(emptyList()) // Clear the adapter list
   }
 
   private fun addImage(imageUri: String, isFromListener: Boolean, order: Int?) {
@@ -269,6 +430,7 @@ class CreatePostFragment : Fragment() {
         .inflate(R.layout.item_post_edit_text_input, binding.llPostContents, false)
       binding.llPostContents.addView(customCardView)
     }
+
 
     // Sequentially process each item
     for (item in currentPostContent) {

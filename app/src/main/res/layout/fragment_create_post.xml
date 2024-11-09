@@ -66,15 +66,50 @@
         </androidx.appcompat.widget.Toolbar>
       </androidx.cardview.widget.CardView>
 
-      <LinearLayout
-          android:id="@+id/ll_post_contents"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginVertical="24dp"
-          android:orientation="vertical"
-          app:layout_constraintEnd_toEndOf="parent"
+      <androidx.cardview.widget.CardView
+          android:id="@+id/cv_profile"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_gravity="top"
+          android:layout_marginStart="24dp"
+          android:layout_marginTop="24dp"
+          app:cardCornerRadius="250dp"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@id/cv_toolbar"
+          >
+
+        <ImageView
+            android:id="@+id/iv_user_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars"
+            />
+      </androidx.cardview.widget.CardView>
+
+      <TextView
+          android:id="@+id/tv_username"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:text="LetsGoCook123"
+
+          android:textColor="@android:color/black"
+          android:textSize="16sp"
+          app:layout_constraintStart_toEndOf="@id/cv_profile"
+          app:layout_constraintTop_toTopOf="@id/cv_profile"
+          />
+
+      <LinearLayout
+          android:id="@+id/ll_post_contents"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginVertical="8dp"
+          android:orientation="vertical"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="@id/tv_username"
+          app:layout_constraintTop_toBottomOf="@id/tv_username"
           >
 
       </LinearLayout>
@@ -96,9 +131,9 @@
       android:id="@+id/ll_buttons"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@color/white"
       android:orientation="horizontal"
       android:weightSum="3"
-      android:background="@color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

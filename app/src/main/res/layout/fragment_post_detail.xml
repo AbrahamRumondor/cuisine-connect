@@ -57,29 +57,50 @@
       <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:padding="16dp"
           android:orientation="vertical"
+          android:padding="24dp"
           >
 
-          <androidx.cardview.widget.CardView
-              android:id="@+id/cv_profile"
-              android:layout_width="40dp"
-              android:layout_height="40dp"
-              android:layout_gravity="top"
-              app:cardCornerRadius="250dp"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_profile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top"
+            app:cardCornerRadius="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-            <ImageView
-                android:id="@+id/iv_user_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/image"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/avatars"
-                />
-          </androidx.cardview.widget.CardView>
+          <ImageView
+              android:id="@+id/iv_user_profile"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:contentDescription="@string/image"
+              android:scaleType="centerCrop"
+              tools:srcCompat="@tools:sample/avatars"
+              />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Username and Details Layout -->
+        <LinearLayout
+            android:id="@+id/ll_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/cv_profile"
+            app:layout_constraintTop_toTopOf="@id/cv_profile"
+            >
+
+          <TextView
+              android:id="@+id/tv_username"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="LetsGoCook123"
+              android:textColor="@android:color/black"
+              android:textSize="16sp"
+              />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_date"
@@ -88,32 +109,11 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="Jan xx"
-            android:textSize="14sp"
             android:textColor="@android:color/black"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/cv_profile"
             />
-
-          <!-- Username and Details Layout -->
-          <LinearLayout
-              android:id="@+id/ll_username"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="8dp"
-              android:orientation="vertical"
-              app:layout_constraintStart_toEndOf="@id/cv_profile"
-              app:layout_constraintTop_toTopOf="@id/cv_profile"
-              >
-
-            <TextView
-                android:id="@+id/tv_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LetsGoCook123"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                />
-          </LinearLayout>
 
         <!-- Post Contents -->
         <LinearLayout
@@ -122,8 +122,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="@id/ll_username"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/ll_username"
             app:layout_constraintTop_toBottomOf="@id/ll_username"
             />
 
@@ -186,8 +186,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="30dp"
-          android:gravity="center"
           android:layout_weight="1"
+          android:gravity="center"
           android:orientation="horizontal"
           >
 
@@ -215,6 +215,7 @@
   <include
       android:id="@+id/incl_internet"
       layout="@layout/no_internet_connection"
-      android:visibility="gone" />
+      android:visibility="gone"
+      />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
