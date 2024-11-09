@@ -207,6 +207,9 @@
     <action
         android:id="@+id/action_postDetailFragment2_to_profileFragment"
         app:destination="@id/profileFragment" />
+    <action
+        android:id="@+id/action_postDetailFragment2_to_searchResultFragment"
+        app:destination="@id/searchResultFragment" />
   </fragment>
   <fragment
       android:id="@+id/profileRecipeFragment"

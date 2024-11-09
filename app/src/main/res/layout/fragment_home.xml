@@ -77,6 +77,16 @@
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+  <com.airbnb.lottie.LottieAnimationView
+      android:id="@+id/progressBar"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:layout_gravity="center"
+      android:visibility="visible"
+      android:scaleType="fitCenter"
+      app:lottie_autoPlay="true"
+      app:lottie_loop="true" />
+
   <!-- Floating Action Button -->
   <include
       android:id="@+id/incl_fab"

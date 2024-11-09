@@ -5,19 +5,9 @@
     android:id="@+id/cl_recipe_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="8dp"
     app:layout_constraintVertical_chainStyle="packed"
     >
-
-  <View
-      android:id="@+id/v_divider"
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_marginVertical="8dp"
-      android:background="@color/cc_light_gray"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      />
 
   <androidx.cardview.widget.CardView
       android:id="@+id/cv_profile"
@@ -45,10 +35,10 @@
       android:id="@+id/v_line"
       android:layout_width="1dp"
       android:layout_height="20dp"
-      android:background="@android:color/darker_gray"
       android:layout_marginVertical="2dp"
-      app:layout_constraintStart_toStartOf="@id/cv_profile"
+      android:background="@android:color/darker_gray"
       app:layout_constraintEnd_toEndOf="@id/cv_profile"
+      app:layout_constraintStart_toStartOf="@id/cv_profile"
       app:layout_constraintTop_toBottomOf="@id/cv_profile"
       />
 
@@ -56,13 +46,13 @@
       android:id="@+id/tv_constant_post"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:paddingBottom="16dp"
       android:text="post"
-      android:textSize="12dp"
       android:textColor="@color/cc_gray"
-      app:layout_constraintStart_toStartOf="@id/cv_profile"
+      android:textSize="12dp"
       app:layout_constraintEnd_toEndOf="@id/cv_profile"
+      app:layout_constraintStart_toStartOf="@id/cv_profile"
       app:layout_constraintTop_toBottomOf="@id/v_line"
-      android:paddingBottom="8dp"
       />
 
   <LinearLayout
@@ -85,14 +75,14 @@
         android:textStyle="bold"
         />
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_unique_username"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="\@LetsGoCook123"-->
-<!--        android:textColor="@android:color/darker_gray"-->
-<!--        android:textSize="14sp"-->
-<!--        />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_unique_username"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="\@LetsGoCook123"-->
+    <!--        android:textColor="@android:color/darker_gray"-->
+    <!--        android:textSize="14sp"-->
+    <!--        />-->
   </LinearLayout>
 
   <TextView
@@ -103,11 +93,11 @@
       android:layout_weight="1"
       android:gravity="end"
       android:text="Jan xx"
-      android:textSize="12sp"
       android:textColor="@android:color/black"
+      android:textSize="12sp"
+      app:layout_constraintBottom_toBottomOf="@id/ll_username"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@id/ll_username"
-      app:layout_constraintBottom_toBottomOf="@id/ll_username"
       />
 
 
@@ -140,75 +130,76 @@
       android:id="@+id/fl_shadow"
       android:layout_width="match_parent"
       android:layout_height="15dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toTopOf="@id/ll_buttons"
       android:background="@drawable/gradient_cc_white"
+      app:layout_constraintBottom_toTopOf="@id/ll_buttons"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       />
 
+  <LinearLayout
+      android:id="@+id/ll_buttons"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:background="@color/white"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingTop="4dp"
+      android:paddingBottom="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/cv_profile"
+      >
+
     <LinearLayout
-        android:id="@+id/ll_buttons"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:layout_marginHorizontal="8dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cv_profile"
         >
 
-      <LinearLayout
+      <ImageView
+          android:id="@+id/iv_ic_thumbs"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:contentDescription="@string/image"
+          android:src="@drawable/ic_thumbs_up_regular"
+          />
+
+      <TextView
+          android:id="@+id/tv_upvote_count"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginHorizontal="8dp"
-          android:gravity="center"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_thumbs"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_thumbs_up_regular"
-            />
-
-        <TextView
-            android:id="@+id/tv_upvote_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:text="98"
-            />
-      </LinearLayout>
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="8dp"
-          android:gravity="center"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_reply"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_msg_bubble"
-            />
-
-        <TextView
-            android:id="@+id/tv_reply_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:text="98"
-            />
-      </LinearLayout>
-
+          android:layout_marginHorizontal="5dp"
+          android:text="98"
+          />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+      <ImageView
+          android:id="@+id/iv_ic_reply"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:contentDescription="@string/image"
+          android:src="@drawable/ic_msg_bubble"
+          />
+
+      <TextView
+          android:id="@+id/tv_reply_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="5dp"
+          android:text="98"
+          />
+    </LinearLayout>
+
+  </LinearLayout>
 
 </com.example.cuisineconnect.app.util.MaxHeightConstraintLayout>

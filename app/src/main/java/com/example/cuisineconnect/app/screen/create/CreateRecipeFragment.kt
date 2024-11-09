@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
@@ -71,20 +72,22 @@ class CreateRecipeFragment : Fragment() {
       }
 
       btnPublish.setOnClickListener {
+        showLoadingAnimation()
         val steps = createRecipeViewModel.toSteps(getSteps())
         val hashtags = getAllHashtags()
 
         createRecipeViewModel.saveRecipeInDatabase(
           title = etTitle.text.toString(),
           description = etDescription.text.toString(),
-          portion = etPortion.text.toString().toInt(),
-          duration = etDuration.text.toString().toInt(),
+          portion = etPortion.text.toString(),
+          duration = etDuration.text.toString(),
           image = imageUri.toString(),
           ingredients = getIngredients(),
           steps = steps,
           imageUri = imageUri,
           hashtags = hashtags
         ) { text ->
+          hideLoadingAnimation()
           if (text == null) {
             Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
@@ -339,5 +342,19 @@ class CreateRecipeFragment : Fragment() {
       hashtags.add(chip.text.toString()) // Collect the hashtag text from each chip
     }
     return hashtags
+  }
+
+  private fun showLoadingAnimation() {
+    binding.flShadow.visibility = View.VISIBLE
+    binding.progressBar.setAnimation(R.raw.cc_loading) // Set the animation from res/raw
+    binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
+    binding.progressBar.playAnimation() // Start the animation
+    binding.progressBar.visibility = View.VISIBLE
+  }
+
+  private fun hideLoadingAnimation() {
+    binding.progressBar.cancelAnimation() // Stop the Lottie animation
+    binding.progressBar.visibility = View.GONE
+    binding.flShadow.visibility = View.GONE
   }
 }

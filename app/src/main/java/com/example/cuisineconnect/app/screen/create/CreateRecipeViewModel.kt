@@ -56,8 +56,8 @@ class CreateRecipeViewModel @Inject constructor(
   fun saveRecipeInDatabase(
     title: String,
     description: String,
-    portion: Int,
-    duration: Int,
+    portion: String,
+    duration: String,
     image: String,
     steps: List<Step>,
     ingredients: List<String>,

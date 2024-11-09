@@ -6,8 +6,8 @@ data class Recipe(
   var id: String = "", // userId_recipeId
   var title: String = "",
   var description: String = "",
-  var portion: Int = 0,
-  var duration: Int = 0,
+  var portion: String = "",
+  var duration: String = "",
   var ingredients: List<String> = listOf(),
   var hashtags: List<String> = emptyList(),
   var date: Date = Date(),

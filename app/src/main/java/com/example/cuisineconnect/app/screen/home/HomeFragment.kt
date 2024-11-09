@@ -12,14 +12,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieDrawable
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
-import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -43,32 +42,16 @@ class HomeFragment : Fragment() {
     setupView()
     loadData()
     adapter.addViewModel(createPostViewModel)
+    loadingAnimation()
+
 
     binding.run {
-      inclFab.fabOpenOptions.setOnClickListener {
-        if (inclFab.fabCreatePost.visibility == View.GONE && inclFab.fabCreateRecipe.visibility == View.GONE) {
-          inclFab.fabCreatePost.visibility = View.VISIBLE
-          inclFab.fabCreateRecipe.visibility = View.VISIBLE
-          inclFab.fabOpenOptions.setImageResource(
-            R.drawable.ic_close
-          )
 
-          inclFab.fabCreateRecipe.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
-          }
-          inclFab.fabCreatePost.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
-          }
-        } else {
-          inclFab.fabCreatePost.visibility = View.GONE
-          inclFab.fabCreateRecipe.visibility = View.GONE
-          inclFab.fabOpenOptions.setImageResource(
-            R.drawable.ic_create_recipe
-          )
-        }
+      inclFab.fabOpenOptions.setOnClickListener {
+        toggleFabOptions()
       }
 
-      binding.srlHome.setOnRefreshListener {
+      srlHome.setOnRefreshListener {
         refreshContent()
       }
 
@@ -76,7 +59,7 @@ class HomeFragment : Fragment() {
         delay(2000)
         setConnectionBehaviour()
       }
-      binding.inclInternet.btnInetTryAgain.setOnClickListener {
+      inclInternet.btnInetTryAgain.setOnClickListener {
         setConnectionBehaviour()
       }
     }
@@ -92,34 +75,47 @@ class HomeFragment : Fragment() {
     return binding.root
   }
 
+  private fun loadingAnimation() {
+    lifecycleScope.launch {
+      adapter.isPopulated.collectLatest {
+        if (it) {
+          hideLoadingAnimation()
+        } else {
+          showLoadingAnimation()
+        }
+      }
+    }
+  }
+
+
   private fun setConnectionBehaviour() {
     if (NetworkUtils.isConnectedToNetwork.value == false) {
-      binding.inclInternet.root.visibility = View.VISIBLE
-      binding.appbarLayout.visibility = View.GONE
-      binding.srlHome.visibility = View.GONE
-      binding.inclFab.root.visibility = View.GONE
+      showNoInternetLayout()
       Toast.makeText(requireContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
     } else {
-      binding.inclInternet.root.visibility = View.GONE
-      binding.appbarLayout.visibility = View.VISIBLE
-      binding.srlHome.visibility = View.VISIBLE
-      binding.inclFab.root.visibility = View.VISIBLE
+      hideNoInternetLayout()
     }
   }
 
   private fun refreshContent() {
-    binding.srlHome.isRefreshing = true // Start the refreshing indicator
+    binding.srlHome.isRefreshing = true
+
     lifecycleScope.launch {
       mainActivityViewModel.getUser()
       mainActivityViewModel.refreshItems()
 
-      // Collect the posts and recipes list
+      mainActivityViewModel.postsNRecipesList.collectLatest { pagingData ->
+        binding.srlHome.isRefreshing = false
+        mainActivityViewModel.refreshToFalse()
+        adapter.submitData(pagingData)
+      }
+    }
+  }
+
+  private fun loadData() {
+    lifecycleScope.launch {
       mainActivityViewModel.postsNRecipesList.collectLatest { pagingData ->
         adapter.submitData(pagingData)
-        mainActivityViewModel.refreshToFalse()
-
-        delay(1000)
-        binding.srlHome.isRefreshing = false
       }
     }
   }
@@ -156,14 +152,6 @@ class HomeFragment : Fragment() {
 
   }
 
-  private fun loadData() {
-    lifecycleScope.launch {
-      mainActivityViewModel.postsNRecipesList.collectLatest {
-        adapter.submitData(it)
-      }
-    }
-  }
-
   fun onRecipeLongClickSelected(recipeId: String) {
     // Pass the selected recipeId back to CreatePostFragment
     val bundle = Bundle().apply {
@@ -173,6 +161,60 @@ class HomeFragment : Fragment() {
 
     // Navigate back to CreatePostFragment
     navigateBackToCreatePostFragment()
+  }
+
+  private fun showLoadingAnimation() {
+    binding.progressBar.setAnimation(R.raw.cc_loading) // Set the animation from res/raw
+    binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
+    binding.progressBar.playAnimation() // Start the animation
+    binding.progressBar.visibility = View.VISIBLE
+    lifecycleScope.launch {
+      delay(5000)
+      if (binding.progressBar.visibility == View.VISIBLE) {
+        hideLoadingAnimation()
+        Toast.makeText(requireContext(), "No item", Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  private fun hideLoadingAnimation() {
+    binding.progressBar.cancelAnimation() // Stop the Lottie animation
+    binding.progressBar.visibility = View.GONE
+  }
+
+  private fun showNoInternetLayout() {
+    binding.inclInternet.root.visibility = View.VISIBLE
+    binding.appbarLayout.visibility = View.GONE
+    binding.srlHome.visibility = View.GONE
+    binding.inclFab.root.visibility = View.GONE
+  }
+
+  private fun hideNoInternetLayout() {
+    binding.inclInternet.root.visibility = View.GONE
+    binding.appbarLayout.visibility = View.VISIBLE
+    binding.srlHome.visibility = View.VISIBLE
+    binding.inclFab.root.visibility = View.VISIBLE
+  }
+
+  private fun toggleFabOptions() {
+    with(binding.inclFab) {
+      if (fabCreatePost.visibility == View.GONE && fabCreateRecipe.visibility == View.GONE) {
+        fabCreatePost.visibility = View.VISIBLE
+        fabCreateRecipe.visibility = View.VISIBLE
+        fabOpenOptions.setImageResource(R.drawable.ic_close)
+
+        fabCreateRecipe.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+        }
+        fabCreatePost.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+        }
+      } else {
+        fabCreatePost.visibility = View.GONE
+        fabCreateRecipe.visibility = View.GONE
+        fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
+      }
+    }
   }
 
   private fun navigateBackToCreatePostFragment() {

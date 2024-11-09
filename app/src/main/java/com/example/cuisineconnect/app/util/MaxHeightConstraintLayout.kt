@@ -15,7 +15,7 @@ class MaxHeightConstraintLayout @JvmOverloads constructor(
   private val maxHeightDp = 600 // Maximum height in dp
   private val maxHeightPx = (maxHeightDp * resources.displayMetrics.density).toInt()
 
-  private val shortHeightDp = 150 // height for short in dp
+  private val shortHeightDp = 200 // height for short in dp
   private val shortHeightPx = (shortHeightDp * resources.displayMetrics.density).toInt()
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.UserClickListener
+import com.example.cuisineconnect.app.screen.post.detail.PostDetailFragmentDirections
 import com.example.cuisineconnect.app.screen.post.detail.PostDetailViewModel
 import com.example.cuisineconnect.app.util.ClickableTextView
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
@@ -20,7 +20,8 @@ import java.text.SimpleDateFormat
 class PostContentRenderer(
   private val container: LinearLayout,
   private val inflater: LayoutInflater,
-  private val viewModel: PostDetailViewModel?
+  private val viewModel: PostDetailViewModel?,
+  private val findNavController: NavController
 ) {
 
   private var userClickListener: UserClickListener? = null
@@ -88,8 +89,9 @@ class PostContentRenderer(
 
   // Example function for handling hashtag click
   private fun navigateToHashtag(hashtag: String) {
-    // Navigate to the hashtag page or perform any other action with the hashtag
-    Toast.makeText(container.context, "Clicked hashtag: $hashtag", Toast.LENGTH_SHORT).show()
+    // Use navController to navigate
+    val action = PostDetailFragmentDirections.actionPostDetailFragment2ToSearchResultFragment(hashtag)
+    findNavController.navigate(action)
   }
 
   private fun addImage(imageUri: String, order: Int?) {

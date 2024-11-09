@@ -39,11 +39,11 @@ data class RecipeResponse(
 
   @get:PropertyName("recipe_portion")
   @set:PropertyName("recipe_portion")
-  var portion: Int = 0,
+  var portion: String = "",
 
   @get:PropertyName("recipe_duration")
   @set:PropertyName("recipe_duration")
-  var duration: Int = 0,
+  var duration: String = "",
 
   @get:PropertyName("recipe_reply_count")
   @set:PropertyName("recipe_reply_count")

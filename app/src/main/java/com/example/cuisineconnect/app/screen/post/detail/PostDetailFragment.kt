@@ -13,9 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
-import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.screen.post.PostContentRenderer
-import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentPostDetailBinding
 import com.example.cuisineconnect.domain.model.Post
@@ -55,7 +53,8 @@ class PostDetailFragment : Fragment() {
     }
 
     // Initialize the PostContentRenderer
-    postContentRenderer = PostContentRenderer(binding.llPostContents, inflater, postDetailViewModel)
+    postContentRenderer = PostContentRenderer(binding.llPostContents, inflater, postDetailViewModel,
+      findNavController())
     setupContentRendererListener()
 
     // Retrieve and display post data

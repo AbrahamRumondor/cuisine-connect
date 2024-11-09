@@ -89,4 +89,6 @@ dependencies {
   implementation("com.jakewharton.timber:timber:5.0.1")
 
   implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+
+  implementation(libs.lottie)
 }
