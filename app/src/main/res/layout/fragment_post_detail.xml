@@ -88,11 +88,10 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="Jan xx"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/cv_profile"
-            app:layout_constraintBottom_toBottomOf="@id/cv_profile"
             />
 
           <!-- Username and Details Layout -->
@@ -104,7 +103,6 @@
               android:orientation="vertical"
               app:layout_constraintStart_toEndOf="@id/cv_profile"
               app:layout_constraintTop_toTopOf="@id/cv_profile"
-              app:layout_constraintBottom_toBottomOf="@id/cv_profile"
               >
 
             <TextView
@@ -112,15 +110,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LetsGoCook123"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                />
-
-            <TextView
-                android:id="@+id/tv_unique_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\@LetsGoCook123"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 />

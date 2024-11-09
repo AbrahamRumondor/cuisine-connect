@@ -13,7 +13,9 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.screen.post.PostContentRenderer
+import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentPostDetailBinding
 import com.example.cuisineconnect.domain.model.Post
@@ -54,6 +56,7 @@ class PostDetailFragment : Fragment() {
 
     // Initialize the PostContentRenderer
     postContentRenderer = PostContentRenderer(binding.llPostContents, inflater, postDetailViewModel)
+    setupContentRendererListener()
 
     // Retrieve and display post data
     val postId = args.postId
@@ -68,6 +71,25 @@ class PostDetailFragment : Fragment() {
     }
 
     return binding.root
+  }
+
+  private fun setupContentRendererListener() {
+//    postContentRenderer.setItemListener(object : UserClickListener {
+//      override fun onUserClicked(userId: String) {
+//        if (userId == currentUser?.id) {
+//          val action =
+//            PostDetailFragmentDirections.actionPostDetailFragment2ToProfileFragment()
+//          findNavController().navigate(action)
+//          return
+//        } else {
+//          val action =
+//            PostDetailFragmentDirections.actionPostDetailFragment2ToOtherProfileFragment(
+//              userId
+//            )
+//          findNavController().navigate(action)
+//        }
+//      }
+//    })
   }
 
   private fun loadPostDetails(postId: String) {
@@ -86,7 +108,6 @@ class PostDetailFragment : Fragment() {
           postContentRenderer.renderPostContent(post.postContent)
 
           tvUsername.text = user.name
-          tvUniqueUsername.text = "@${user.name}"
           tvDate.text = getRelativeTime(post.date)
 
           currentUser?.let {
@@ -107,10 +128,33 @@ class PostDetailFragment : Fragment() {
             .load(user.image)   // Load the image URL into the ImageView
             .placeholder(android.R.drawable.ic_menu_report_image)
             .into(ivUserProfile)
+
+          cvProfile.setOnClickListener {
+            goToProfile(user.id)
+          }
+
+          tvUsername.setOnClickListener {
+            goToProfile(user.id)
+          }
         }
       } ?: run {
         // Handle the case where either post or user is null
       }
+    }
+  }
+
+  private fun goToProfile(userId: String) {
+    if (userId == currentUser?.id) {
+      val action =
+        PostDetailFragmentDirections.actionPostDetailFragment2ToProfileFragment()
+      findNavController().navigate(action)
+      return
+    } else {
+      val action =
+        PostDetailFragmentDirections.actionPostDetailFragment2ToOtherProfileFragment(
+          userId
+        )
+      findNavController().navigate(action)
     }
   }
 

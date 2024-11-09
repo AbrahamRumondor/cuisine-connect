@@ -4,7 +4,7 @@ import RecipeDetailTagsViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cuisineconnect.app.listener.DetailRecipeItemListener
+import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailEstimationViewHolder
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailMainImageViewHolder
 import com.example.cuisineconnect.app.screen.recipe.detail.viewHolder.RecipeDetailHeaderViewHolder
@@ -31,7 +31,7 @@ class RecipeDetailAdapter :
   RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   private var items: MutableList<Any?> = mutableListOf()
-  private var detailRecipeItemListener: DetailRecipeItemListener? = null
+  private var userClickListener: UserClickListener? = null
 
   private val SHOW_HEADER = 0
   private val SHOW_USER = 1
@@ -104,7 +104,7 @@ class RecipeDetailAdapter :
 
       SHOW_USER -> {
         val bindingUser = UserHorizontalBinding.inflate(inflater, parent, false)
-        RecipeDetailUserViewHolder(bindingUser)
+        RecipeDetailUserViewHolder(bindingUser, userClickListener)
       }
 
       SHOW_TAGS -> {
@@ -161,7 +161,7 @@ class RecipeDetailAdapter :
     notifyDataSetChanged()  // Call notifyDataSetChanged to refresh the list
   }
 
-  fun setItemListener(detailRecipeItemListener: DetailRecipeItemListener) {
-    this.detailRecipeItemListener = detailRecipeItemListener
+  fun setItemListener(userClickListener: UserClickListener) {
+    this.userClickListener = userClickListener
   }
 }

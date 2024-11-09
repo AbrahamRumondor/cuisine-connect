@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentRecipeDetailBinding
 import com.example.cuisineconnect.domain.model.Recipe
@@ -62,7 +63,28 @@ class RecipeDetailFragment : Fragment() {
 
     setupBottomButtons(recipeId)
 
+    setupListListener()
+
     return binding.root
+  }
+
+  private fun setupListListener() {
+    recipeAdapter.setItemListener(object : UserClickListener {
+      override fun onUserClicked(userId: String) {
+        if (userId == currentUser?.id) {
+          val action =
+            RecipeDetailFragmentDirections.actionRecipeDetailFragmentToProfileFragment()
+          findNavController().navigate(action)
+          return
+        } else {
+          val action =
+            RecipeDetailFragmentDirections.actionRecipeDetailFragmentToOtherProfileFragment(
+              userId
+            )
+          findNavController().navigate(action)
+        }
+      }
+    })
   }
 
   private fun setupBottomButtons(recipeId: String?) {

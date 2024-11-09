@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.app.screen.post.detail.PostDetailViewModel
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import java.text.SimpleDateFormat
@@ -19,6 +20,12 @@ class PostContentRenderer(
   private val inflater: LayoutInflater,
   private val viewModel: PostDetailViewModel?
 ) {
+
+  private var userClickListener: UserClickListener? = null
+
+  fun setItemListener(userClickListener: UserClickListener) {
+    this.userClickListener = userClickListener
+  }
 
   fun renderPostContent(postContent: MutableList<MutableMap<String, String>>) {
     // Clear any existing views in the container to avoid duplicates

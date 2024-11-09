@@ -93,6 +93,12 @@
     <action
         android:id="@+id/action_recipeDetailFragment_to_replyRecipeFragment"
         app:destination="@id/replyRecipeFragment" />
+    <action
+        android:id="@+id/action_recipeDetailFragment_to_otherProfileFragment"
+        app:destination="@id/otherProfileFragment" />
+    <action
+        android:id="@+id/action_recipeDetailFragment_to_profileFragment"
+        app:destination="@id/profileFragment" />
   </fragment>
   <fragment
       android:id="@+id/replyRecipeFragment"
@@ -192,6 +198,15 @@
     <action
         android:id="@+id/action_postDetailFragment2_to_replyRecipeFragment"
         app:destination="@id/replyRecipeFragment" />
+    <action
+        android:id="@+id/action_postDetailFragment2_to_recipeDetailFragment"
+        app:destination="@id/recipeDetailFragment" />
+    <action
+        android:id="@+id/action_postDetailFragment2_to_otherProfileFragment"
+        app:destination="@id/otherProfileFragment" />
+    <action
+        android:id="@+id/action_postDetailFragment2_to_profileFragment"
+        app:destination="@id/profileFragment" />
   </fragment>
   <fragment
       android:id="@+id/profileRecipeFragment"

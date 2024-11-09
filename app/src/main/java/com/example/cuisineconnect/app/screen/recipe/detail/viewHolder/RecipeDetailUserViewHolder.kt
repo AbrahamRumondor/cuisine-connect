@@ -2,12 +2,13 @@ package com.example.cuisineconnect.app.screen.recipe.detail.viewHolder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.databinding.UserHorizontalBinding
 import com.example.cuisineconnect.domain.model.User
 
 class RecipeDetailUserViewHolder(
   private val view: UserHorizontalBinding,
-//    private val itemListener: OrderSummaryItemListener?,
+    private val itemListener: UserClickListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
   fun bind(user: User?) {
@@ -22,9 +23,10 @@ class RecipeDetailUserViewHolder(
           .placeholder(android.R.drawable.ic_menu_report_image)
           .into(ivUserProfile)
 
-//                ivOrderAdd.setOnClickListener {
-//                    itemListener?.onAddItemClicked(position, menu.id)
-//                }
+        root.setOnClickListener {
+          itemListener?.onUserClicked(user.id)
+        }
+
       }
     }
   }
