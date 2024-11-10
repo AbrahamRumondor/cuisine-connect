@@ -94,7 +94,7 @@ class MyRecipeFragment : Fragment() {
           return@collectLatest
         }
         binding.ivEmptyState.visibility = View.GONE
-        binding.tvEmptyState.visibility = View.VISIBLE
+        binding.tvEmptyState.visibility = View.GONE
         recipeAdapter.updateData(it)
       }
     }

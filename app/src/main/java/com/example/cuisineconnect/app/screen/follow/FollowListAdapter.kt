@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.ItemUserListBinding
 import com.example.cuisineconnect.domain.model.User
 
@@ -45,6 +46,7 @@ class FollowListAdapter : RecyclerView.Adapter<FollowListAdapter.ViewHolder>() {
 
       Glide.with(binding.ivUserProfile.context)
         .load(user.image)
+        .placeholder(R.drawable.ic_bnv_profile)
         .circleCrop()
         .into(binding.ivUserProfile)
 

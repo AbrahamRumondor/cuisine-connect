@@ -95,14 +95,17 @@ class OtherProfilePostFragment : Fragment() {
 
     lifecycleScope.launch {
       otherProfilePostViewModel.list.collectLatest { list ->
-        if (list.isNullOrEmpty()) {
+        if (list == null) {
+          return@collectLatest
+        }
+        if (list.isEmpty()) {
           hideLoadingAnimation()
           binding.ivEmptyState.visibility = View.VISIBLE
           binding.tvEmptyState.visibility = View.VISIBLE
           return@collectLatest
         }
         binding.ivEmptyState.visibility = View.GONE
-        binding.tvEmptyState.visibility = View.VISIBLE
+        binding.tvEmptyState.visibility = View.GONE
         profilePostAdapter.submitPosts(list.toMutableList())
         profilePostAdapter.addViewModel(createPostViewModel)
       }

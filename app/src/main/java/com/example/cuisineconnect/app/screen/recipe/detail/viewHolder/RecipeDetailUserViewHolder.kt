@@ -2,6 +2,7 @@ package com.example.cuisineconnect.app.screen.recipe.detail.viewHolder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.UserClickListener
 import com.example.cuisineconnect.databinding.UserHorizontalBinding
 import com.example.cuisineconnect.domain.model.User
@@ -20,7 +21,7 @@ class RecipeDetailUserViewHolder(
 
         Glide.with(root)
           .load(user.image)
-          .placeholder(android.R.drawable.ic_menu_report_image)
+          .placeholder(R.drawable.ic_bnv_profile)
           .into(ivUserProfile)
 
         root.setOnClickListener {

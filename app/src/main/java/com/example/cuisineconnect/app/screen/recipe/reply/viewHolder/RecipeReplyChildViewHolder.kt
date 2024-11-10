@@ -26,7 +26,7 @@ class RecipeReplyChildViewHolder(
 
                 Glide.with(root)
                     .load(user.image)
-                    .placeholder(android.R.drawable.ic_menu_report_image)
+                    .placeholder(R.drawable.ic_bnv_profile)
                     .into(ivUserProfile)
 
                 llUser.setOnClickListener {

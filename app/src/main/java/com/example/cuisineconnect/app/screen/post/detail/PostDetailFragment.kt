@@ -125,7 +125,7 @@ class PostDetailFragment : Fragment() {
 
           Glide.with(binding.root)
             .load(user.image)   // Load the image URL into the ImageView
-            .placeholder(android.R.drawable.ic_menu_report_image)
+            .placeholder(R.drawable.ic_bnv_profile)
             .into(ivUserProfile)
 
           cvProfile.setOnClickListener {

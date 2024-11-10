@@ -95,7 +95,7 @@ class BookmarkRecipeFragment : Fragment() {
           return@collectLatest
         }
         binding.ivEmptyState.visibility = View.GONE
-        binding.tvEmptyState.visibility = View.VISIBLE
+        binding.tvEmptyState.visibility = View.GONE
         Log.d("collectionViewModel", "INI ADAPTER: $recipes")
         recipeAdapter.updateData(recipes)
       }

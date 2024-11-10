@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentOtherProfileBinding
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
@@ -71,7 +72,7 @@ class OtherProfileFragment : Fragment() {
 
           Glide.with(root)
             .load(user.image)
-            .placeholder(android.R.drawable.ic_menu_report_image)
+            .placeholder(R.drawable.ic_bnv_profile)
             .into(ivUserProfile)
 
           if (user.follower.contains(currentUser?.id)) {

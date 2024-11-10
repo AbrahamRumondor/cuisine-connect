@@ -93,14 +93,17 @@ class OtherProfileRecipeFragment : Fragment() {
 
     lifecycleScope.launch {
       otherProfileRecipeViewModel.list.collectLatest { list ->
-        if (list.isNullOrEmpty()) {
+        if (list == null) {
+          return@collectLatest
+        }
+        if (list.isEmpty()) {
           hideLoadingAnimation()
           binding.ivEmptyState.visibility = View.VISIBLE
           binding.tvEmptyState.visibility = View.VISIBLE
           return@collectLatest
         }
         binding.ivEmptyState.visibility = View.GONE
-        binding.tvEmptyState.visibility = View.VISIBLE
+        binding.tvEmptyState.visibility = View.GONE
         profileRecipeAdapter.submitRecipeList(list.toMutableList())
         profileRecipeAdapter.addViewModel(createPostViewModel)
       }
