@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.airbnb.lottie.LottieDrawable
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
@@ -115,7 +116,23 @@ class HomeFragment : Fragment() {
   private fun loadData() {
     lifecycleScope.launch {
       mainActivityViewModel.postsNRecipesList.collectLatest { pagingData ->
+        binding.ivEmptyState.visibility = View.GONE // Hide empty state initially
         adapter.submitData(pagingData)
+      }
+    }
+
+    // Listen to the adapter's load states
+    adapter.addLoadStateListener { loadStates ->
+      // Show empty state if no items loaded after refresh is complete
+      if (loadStates.refresh is LoadState.NotLoading && adapter.itemCount == 0) {
+        hideLoadingAnimation()
+        binding.ivEmptyState.visibility = View.VISIBLE
+      } else if (loadStates.refresh is LoadState.Loading) {
+        // Optionally show loading animation while loading
+        showLoadingAnimation()
+      } else {
+        hideLoadingAnimation()
+        binding.ivEmptyState.visibility = View.GONE
       }
     }
   }
@@ -168,13 +185,6 @@ class HomeFragment : Fragment() {
     binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
     binding.progressBar.playAnimation() // Start the animation
     binding.progressBar.visibility = View.VISIBLE
-    lifecycleScope.launch {
-      delay(5000)
-      if (binding.progressBar.visibility == View.VISIBLE) {
-        hideLoadingAnimation()
-        Toast.makeText(requireContext(), "No item", Toast.LENGTH_SHORT).show()
-      }
-    }
   }
 
   private fun hideLoadingAnimation() {

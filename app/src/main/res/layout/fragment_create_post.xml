@@ -273,15 +273,32 @@
 
   </LinearLayout>
 
-  <include
-      android:id="@+id/ll_loading"
-      layout="@layout/item_loading"
+  <FrameLayout
+      android:id="@+id/fl_shadow"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
+      android:background="@color/cc_gray"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:visibility="gone"
+      android:alpha="0.4"
+      android:focusable="true"
+      app:layout_constraintBottom_toBottomOf="parent"
+      />
+
+  <com.airbnb.lottie.LottieAnimationView
+      android:id="@+id/progressBar"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:layout_gravity="center"
+      android:visibility="visible"
+      android:scaleType="fitCenter"
+      app:lottie_autoPlay="true"
+      app:lottie_loop="true"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       />
 

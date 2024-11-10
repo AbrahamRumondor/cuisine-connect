@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
@@ -106,10 +107,10 @@ class CreatePostFragment : Fragment() {
       btnPost.text = postText
       btnPost.setOnClickListener {
         updateTextPostContent()
-        llLoading.root.visibility = View.VISIBLE
+        showLoadingAnimation()
         createPostViewModel.savePostInDatabase {
           Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
-          llLoading.root.visibility = View.GONE
+          hideLoadingAnimation()
           findNavController().popBackStack()
         }
       }
@@ -545,6 +546,20 @@ class CreatePostFragment : Fragment() {
     }
     Log.d("brobruh", "Updated list: $list")
     return list
+  }
+
+  private fun showLoadingAnimation() {
+    binding.flShadow.visibility = View.VISIBLE
+    binding.progressBar.setAnimation(R.raw.cc_loading) // Set the animation from res/raw
+    binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
+    binding.progressBar.playAnimation() // Start the animation
+    binding.progressBar.visibility = View.VISIBLE
+  }
+
+  private fun hideLoadingAnimation() {
+    binding.progressBar.cancelAnimation() // Stop the Lottie animation
+    binding.progressBar.visibility = View.GONE
+    binding.flShadow.visibility = View.GONE
   }
 
 }

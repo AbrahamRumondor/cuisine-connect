@@ -1,27 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="com.example.cuisineconnect.app.screen.collection.MyRecipeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
-    tools:listitem="@layout/fragment_my_recipe"
-    >
+    tools:context=".app.screen.collection.myRecipe.MyRecipeFragment">
+
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/srl_my_recipe"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/list"
-      android:name="com.example.cuisineconnect.app.screen.collection.MyRecipeFragment"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
       android:background="@color/white"
       app:layoutManager="LinearLayoutManager"
-      tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
-      tools:listitem="@layout/fragment_my_recipe"/>
+      tools:listitem="@layout/fragment_my_recipe" />
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+  <ImageView
+      android:id="@+id/iv_empty_state"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:contentDescription="empty state"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:visibility="gone"
+      android:src="@drawable/ic_empty_recipes"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:scaleType="fitCenter"
+      />
+
+  <TextView
+      android:id="@+id/tv_empty_state"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:visibility="gone"
+      android:gravity="center"
+      app:layout_constraintTop_toBottomOf="@id/iv_empty_state"
+      android:text="Nothing to see here yet.\nStart exploring to fill up your feed!"
+      />
+
+  <com.airbnb.lottie.LottieAnimationView
+      android:id="@+id/progressBar"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:layout_gravity="center"
+      android:visibility="visible"
+      android:scaleType="fitCenter"
+      app:lottie_autoPlay="true"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:lottie_loop="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,19 +2,19 @@ package com.example.cuisineconnect.app.screen.profile.post
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieDrawable
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
-import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
@@ -51,6 +51,8 @@ class ProfilePostFragment : Fragment() {
   ): View {
     binding = FragmentProfilePostBinding.inflate(inflater, container, false)
 
+    loadingAnimation()
+
     if (binding.list is RecyclerView) {
       with(binding.list) {
         layoutManager = when {
@@ -64,7 +66,7 @@ class ProfilePostFragment : Fragment() {
 
     binding.root.isNestedScrollingEnabled = true
 
-    binding.root.setOnRefreshListener {
+    binding.srlMyRecipe.setOnRefreshListener {
       refreshContent()
     }
 
@@ -77,7 +79,7 @@ class ProfilePostFragment : Fragment() {
       profilePostViewModel.list.collectLatest {
         if (it != null) {
           profilePostAdapter.submitPosts(it.toMutableList())
-          binding.root.isRefreshing = false
+          binding.srlMyRecipe.isRefreshing = false
         }
       }
     }
@@ -88,10 +90,16 @@ class ProfilePostFragment : Fragment() {
 
     lifecycleScope.launch {
       profilePostViewModel.list.collectLatest { list ->
-        if (list != null) {
-          profilePostAdapter.submitPosts(list.toMutableList())
-          profilePostAdapter.addViewModel(createPostViewModel)
+        if (list.isNullOrEmpty()) {
+          hideLoadingAnimation()
+          binding.ivEmptyState.visibility = View.VISIBLE
+          binding.tvEmptyState.visibility = View.VISIBLE
+          return@collectLatest
         }
+        binding.ivEmptyState.visibility = View.GONE
+        binding.tvEmptyState.visibility = View.VISIBLE
+        profilePostAdapter.submitPosts(list.toMutableList())
+        profilePostAdapter.addViewModel(createPostViewModel)
       }
     }
 
@@ -132,6 +140,30 @@ class ProfilePostFragment : Fragment() {
       // If CreatePostFragment is not in the back stack, handle it appropriately
       // You may navigate back to a specific fragment or show an error message
     }
+  }
+
+  private fun loadingAnimation() {
+    lifecycleScope.launch {
+      profilePostAdapter.isPopulated.collectLatest {
+        if (it) {
+          hideLoadingAnimation()
+        } else {
+          showLoadingAnimation()
+        }
+      }
+    }
+  }
+
+  private fun showLoadingAnimation() {
+    binding.progressBar.setAnimation(R.raw.cc_loading) // Set the animation from res/raw
+    binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
+    binding.progressBar.playAnimation() // Start the animation
+    binding.progressBar.visibility = View.VISIBLE
+  }
+
+  private fun hideLoadingAnimation() {
+    binding.progressBar.cancelAnimation() // Stop the Lottie animation
+    binding.progressBar.visibility = View.GONE
   }
 
   override fun onResume() {

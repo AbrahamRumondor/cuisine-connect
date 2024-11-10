@@ -87,6 +87,17 @@
       app:lottie_autoPlay="true"
       app:lottie_loop="true" />
 
+  <ImageView
+      android:id="@+id/iv_empty_state"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:contentDescription="empty state"
+      android:visibility="gone"
+      android:src="@drawable/ic_empty_recipes"
+      android:layout_gravity="center"
+      android:scaleType="fitCenter"
+      />
+
   <!-- Floating Action Button -->
   <include
       android:id="@+id/incl_fab"

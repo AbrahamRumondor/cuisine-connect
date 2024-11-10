@@ -11,7 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import androidx.paging.map
+import com.airbnb.lottie.LottieDrawable
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
@@ -38,6 +40,8 @@ class SearchResultFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View {
     binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+
+    loadingAnimation()
 
     lifecycleScope.launch {
       delay(2000)
@@ -102,17 +106,30 @@ class SearchResultFragment : Fragment() {
     searchResultViewModel.updateSearchQuery(formatQuery)
 
     lifecycleScope.launch {
-      searchResultViewModel.postsNRecipesList.collectLatest {
-        it.map { item ->
+      searchResultViewModel.postsNRecipesList.collectLatest { pagingData ->
+        adapter.submitData(pagingData) // Submit data to the adapter
+      }
+    }
 
-        Log.d("searchResultFragment", item.toString())
-
+    adapter.addLoadStateListener { loadStates ->
+      when {
+        loadStates.refresh is LoadState.NotLoading && adapter.itemCount == 0 -> {
+          // Show empty state if no items loaded
+          hideLoadingAnimation()
+          binding.llEmptyState.visibility = View.VISIBLE
         }
-        adapter.submitData(it)
+        loadStates.refresh is LoadState.Loading -> {
+          // Show loading animation while loading
+          showLoadingAnimation()
+        }
+        else -> {
+          // Hide empty state and loading animation
+          hideLoadingAnimation()
+          binding.llEmptyState.visibility = View.GONE
+        }
       }
     }
   }
-
   private fun formatSearchQuery(searchQuery: String): Pair<List<String>, String> {
     val splitQueries = searchQuery.split(" ")
     val hashtags = mutableListOf<String>()
@@ -168,6 +185,30 @@ class SearchResultFragment : Fragment() {
 //      binding.srlHome.visibility = View.VISIBLE
 //      binding.inclFab.root.visibility = View.VISIBLE
     }
+  }
+
+  private fun loadingAnimation() {
+    lifecycleScope.launch {
+      adapter.isPopulated.collectLatest {
+        if (it) {
+          hideLoadingAnimation()
+        } else {
+          showLoadingAnimation()
+        }
+      }
+    }
+  }
+
+  private fun showLoadingAnimation() {
+    binding.progressBar.setAnimation(R.raw.cc_loading) // Set the animation from res/raw
+    binding.progressBar.repeatCount = LottieDrawable.INFINITE // Loop the animation infinitely
+    binding.progressBar.playAnimation() // Start the animation
+    binding.progressBar.visibility = View.VISIBLE
+  }
+
+  private fun hideLoadingAnimation() {
+    binding.progressBar.cancelAnimation() // Stop the Lottie animation
+    binding.progressBar.visibility = View.GONE
   }
 
 }

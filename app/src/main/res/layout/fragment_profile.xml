@@ -60,6 +60,7 @@
                   app:cardCornerRadius="250dp"
                   app:strokeColor="@color/white"
                   app:strokeWidth="3dp"
+                  android:backgroundTint="@color/white"
                   >
 
                 <ImageView

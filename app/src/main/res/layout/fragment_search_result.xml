@@ -125,6 +125,46 @@
         />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+  <LinearLayout
+      android:id="@+id/ll_empty_state"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="gone"
+      android:layout_gravity="center"
+      android:orientation="vertical"
+      >
+
+  <ImageView
+      android:id="@+id/iv_empty_state"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:layout_gravity="center"
+      android:contentDescription="empty state"
+      android:visibility="visible"
+      android:src="@drawable/ic_empty_recipes"
+      android:scaleType="fitCenter"
+      />
+
+  <TextView
+      android:id="@+id/tv_empty_state"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="Nothing to see here yet.\nStart exploring to fill up your feed!"
+      />
+
+  </LinearLayout>
+
+  <com.airbnb.lottie.LottieAnimationView
+      android:id="@+id/progressBar"
+      android:layout_width="144dp"
+      android:layout_height="144dp"
+      android:layout_gravity="center"
+      android:visibility="visible"
+      android:scaleType="fitCenter"
+      app:lottie_autoPlay="true"
+      app:lottie_loop="true" />
+
   <!-- Floating Action Button -->
   <include
       android:id="@+id/incl_fab"

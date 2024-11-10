@@ -10,6 +10,8 @@ import com.example.cuisineconnect.app.screen.post.viewHolder.ItemPostViewHolder
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ProfilePostAdapter :
   RecyclerView.Adapter<ItemPostViewHolder>() {
@@ -19,13 +21,18 @@ class ProfilePostAdapter :
   private var items: MutableList<Pair<User, Post?>> = mutableListOf()
   private var postItemListener: ItemListListener? = null
 
+  private val _isPopulated = MutableStateFlow(false)
+  val isPopulated: StateFlow<Boolean> get() = _isPopulated
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemPostViewHolder {
+    _isPopulated.value = false
     val inflater = LayoutInflater.from(parent.context)
     val bindingPost = ItemPostHorizontalBinding.inflate(inflater, parent, false)
     return ItemPostViewHolder(bindingPost)
   }
 
   override fun onBindViewHolder(holder: ItemPostViewHolder, position: Int) {
+    _isPopulated.value = true // Set the value to true once the item is bound
     val (user, post) = items[position]
     holder.bind(user, post?:Post(), postItemListener, createPostViewModel)
   }

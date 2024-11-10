@@ -79,7 +79,7 @@ class CollectionViewModel @Inject constructor(
       recipes.collectLatest { allRecipes ->
         userUseCase.getCurrentUser().collectLatest { currentUser ->
           allRecipes?.let { recipes ->
-            _myRecipes.value = recipes.filter { it.first?.id == currentUser.id }
+            _myRecipes.value = recipes.filter { it.first?.id == currentUser.id }.ifEmpty { emptyList() }
           }
           Log.d("brobruh", "tes: ${_myRecipes.value.toString()}")
         }
@@ -91,6 +91,10 @@ class CollectionViewModel @Inject constructor(
     viewModelScope.launch {
       userUseCase.getCurrentUser().collectLatest { currentUser ->
         Log.d("collectionViewModel", "njir: ${currentUser.bookmarks}")
+        if (currentUser.bookmarks.isEmpty()) {
+          _bookmarkedRecipes.value = emptyList()
+          return@collectLatest
+        }
         val bookmarkedRecipes = currentUser.bookmarks.map { recipeId ->
           async { Pair(currentUser, recipeUseCase.getRecipeByID(recipeId) ?: Recipe()) }
         }.awaitAll()

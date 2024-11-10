@@ -16,6 +16,8 @@ import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
 import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.text.SimpleDateFormat
 
 class BookmarkRecipeRecyclerViewAdapter(
@@ -26,7 +28,12 @@ class BookmarkRecipeRecyclerViewAdapter(
   private var recipeListListener: RecipeListListener? = null
   private var isMyRecipes = false
 
+  // Use MutableStateFlow to track population state
+  private val _isPopulated = MutableStateFlow(false)
+  val isPopulated: StateFlow<Boolean> get() = _isPopulated
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    _isPopulated.value = false
     return ViewHolder(
       ItemRecipeBigImageBinding.inflate(
         LayoutInflater.from(parent.context),
@@ -38,6 +45,7 @@ class BookmarkRecipeRecyclerViewAdapter(
 
   @SuppressLint("SimpleDateFormat")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    _isPopulated.value = true // Set the value to true once the item is bound
     val item = recipes[position]
     holder.title.text = item.second.title
 

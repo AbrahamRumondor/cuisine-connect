@@ -10,6 +10,8 @@ import com.example.cuisineconnect.app.screen.recipe.viewHolder.ItemRecipeViewHol
 import com.example.cuisineconnect.databinding.ItemRecipeBigImageBinding
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ProfileRecipeAdapter : RecyclerView.Adapter<ItemRecipeViewHolder>() {
 
@@ -18,13 +20,19 @@ class ProfileRecipeAdapter : RecyclerView.Adapter<ItemRecipeViewHolder>() {
   private var items: MutableList<Pair<User?, Recipe?>> = mutableListOf()
   private var recipeItemListener: ItemListListener? = null
 
+  // Use MutableStateFlow to track population state
+  private val _isPopulated = MutableStateFlow(false)
+  val isPopulated: StateFlow<Boolean> get() = _isPopulated
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemRecipeViewHolder {
+    _isPopulated.value = false
     val inflater = LayoutInflater.from(parent.context)
     val bindingRecipe = ItemRecipeBigImageBinding.inflate(inflater, parent, false)
     return ItemRecipeViewHolder(bindingRecipe)
   }
 
   override fun onBindViewHolder(holder: ItemRecipeViewHolder, position: Int) {
+    _isPopulated.value = true // Set the value to true once the item is bound
     val user = items[position].first
     val recipe = items[position].second
     holder.bind(user, recipe, recipeItemListener, createPostViewModel)
