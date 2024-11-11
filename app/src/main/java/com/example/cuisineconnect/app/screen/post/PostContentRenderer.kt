@@ -141,7 +141,6 @@ class PostContentRenderer(
     order: Int?,
     viewModel: PostDetailViewModel?,
   ) {
-
     Log.d("borborboror", "masukk: ${viewModel}")
 
     viewModel?.getRecipeById(recipeId) { pair ->
@@ -188,6 +187,11 @@ class PostContentRenderer(
           }
         }
 
+        // Set click listener to navigate to recipe details
+        viewRecipe.root.setOnClickListener {
+          navigateToDetailRecipe(recipeId)
+        }
+
         if (order != null && order <= container.childCount) {
           container.removeViewAt(order)
           container.addView(viewRecipe.root, order)
@@ -198,6 +202,10 @@ class PostContentRenderer(
     }
   }
 
+  private fun navigateToDetailRecipe(recipeId: String) {
+    val action = PostDetailFragmentDirections.actionPostDetailFragment2ToRecipeDetailFragment(recipeId)
+    findNavController.navigate(action)
+  }
   private fun setViewMargins(
     view: android.view.View,
     horizontalMarginDp: Int,
