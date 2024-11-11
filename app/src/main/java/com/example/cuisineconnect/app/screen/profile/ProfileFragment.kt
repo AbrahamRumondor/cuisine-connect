@@ -12,15 +12,12 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
-import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
-import com.example.cuisineconnect.app.screen.follow.FollowListFragmentDirections
 import com.example.cuisineconnect.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -73,10 +70,10 @@ class ProfileFragment : Fragment() {
     lifecycleScope.launch {
       profileViewModel.user.collectLatest { user ->
         binding.run {
-          tvUsername.text = user.name
-          val unique = "@${user.email}"
-          tvUniqueUsername.text = unique
-
+          tvUsername.text = user.displayName
+          val username = "@${user.username}"
+          tvUniqueUsername.text = username
+          
           Glide.with(root)
             .load(user.image)
             .placeholder(R.drawable.ic_bnv_profile)
@@ -98,7 +95,7 @@ class ProfileFragment : Fragment() {
               ProfileFragmentDirections.actionProfileFragmentToFollowListFragment(
                 userId = user.id,
                 listType = "follower",
-                username = user.name
+                username = user.displayName
               )
             findNavController().navigate(action)
           }
@@ -108,7 +105,7 @@ class ProfileFragment : Fragment() {
               ProfileFragmentDirections.actionProfileFragmentToFollowListFragment(
                 userId = user.id,
                 listType = "following",
-                username = user.name
+                username = user.displayName
               )
             findNavController().navigate(action)
           }

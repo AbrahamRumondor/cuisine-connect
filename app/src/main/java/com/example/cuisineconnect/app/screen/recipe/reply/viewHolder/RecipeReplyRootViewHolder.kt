@@ -19,7 +19,7 @@ class RecipeReplyRootViewHolder(
   fun bind(position: Int, user: User?, reply: Reply?, viewModel: ReplyRecipeViewModel) {
     view.run {
       if (reply != null && user != null) {
-        tvUsername.text = user.name
+        tvUsername.text = user.displayName
         Glide.with(root)
           .load(user.image)
           .placeholder(R.drawable.ic_bnv_profile)

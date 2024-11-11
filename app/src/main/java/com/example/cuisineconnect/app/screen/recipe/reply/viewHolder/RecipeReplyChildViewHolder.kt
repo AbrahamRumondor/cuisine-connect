@@ -1,16 +1,11 @@
 package com.example.cuisineconnect.app.screen.recipe.reply.viewHolder
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeReplyItemListener
-import com.example.cuisineconnect.databinding.RecipeDetailStepBinding
 import com.example.cuisineconnect.databinding.ReplyRecipeChildBinding
-import com.example.cuisineconnect.databinding.ReplyRecipeRootBinding
-import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Reply
-import com.example.cuisineconnect.domain.model.Step
 import com.example.cuisineconnect.domain.model.User
 
 class RecipeReplyChildViewHolder(
@@ -22,7 +17,7 @@ class RecipeReplyChildViewHolder(
         view.run {
             if (reply != null && user != null) {
 
-                tvUsername.text = user.name
+                tvUsername.text = user.displayName
 
                 Glide.with(root)
                     .load(user.image)
@@ -34,7 +29,7 @@ class RecipeReplyChildViewHolder(
                 }
 
                 // contents
-                val text = "@${userTarget?.name ?: "User"} " + reply.body
+                val text = "@${userTarget?.displayName ?: "User"} " + reply.body
                 tvBody.text = text
                 tvReplyUpvote.text = reply.upvotes.toString()
 

@@ -40,7 +40,7 @@ class ItemPostViewHolder(
 
         Log.d("lilil", "this is post ${user} and ${post}")
 
-        tvUsername.text = user.name
+        tvUsername.text = user.displayName
 
         root.setOnClickListener {
           listener?.onPostClicked(post.id)
@@ -242,21 +242,19 @@ class ItemPostViewHolder(
 
         viewRecipe.run {
           tvTitle.text = recipe.title
-          tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
           tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
-          val dateFormat = SimpleDateFormat("MMM dd")
-          val formattedDate = dateFormat.format(recipe.date)
-          tvDate.text = formattedDate
-
           Glide.with(view.root).load(recipe.image).placeholder(R.drawable.ic_no_image)
-            .into(ivImageTitle)
+            .into(ivImage)
 
           user.let {
-            tvUsername.text = it.name
-            Glide.with(view.root).load(it.image).into(ivUserProfile)
+            tvUsername.text = it.displayName
+            Glide.with(view.root)
+              .load(it.image)
+              .placeholder(R.drawable.ic_bnv_profile)
+              .into(ivUserProfile)
           }
         }
 

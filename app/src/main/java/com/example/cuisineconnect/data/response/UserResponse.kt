@@ -10,7 +10,11 @@ data class UserResponse(
 
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
-    var name: String = "",
+    var name: String = "", // display name
+
+    @get:PropertyName("user_unique_name")
+    @set:PropertyName("user_unique_name")
+    var uniqueUsername: String = "", // username
 
     @get:PropertyName("user_email")
     @set:PropertyName("user_email")
@@ -51,7 +55,7 @@ data class UserResponse(
         fun transform(userResponse: UserResponse): User {
             return User(
                 id = userResponse.id,
-                name = userResponse.name,
+                displayName = userResponse.name,
                 email = userResponse.email,
                 password = userResponse.password,
                 recipes = userResponse.recipes,
@@ -59,14 +63,15 @@ data class UserResponse(
                 following = userResponse.following,
                 image = userResponse.image,
                 posts = userResponse.posts,
-                bookmarks = userResponse.bookmarks
+                bookmarks = userResponse.bookmarks,
+                username = userResponse.uniqueUsername
             )
         }
 
         fun transform(user: User): UserResponse {
             return UserResponse(
                 id = user.id,
-                name = user.name,
+                name = user.displayName,
                 email = user.email,
                 password = user.password,
                 recipes = user.recipes,
@@ -74,8 +79,8 @@ data class UserResponse(
                 following = user.following,
                 image = user.image,
                 posts = user.posts,
-                bookmarks = user.bookmarks
-
+                bookmarks = user.bookmarks,
+                uniqueUsername = user.username
             )
         }
     }

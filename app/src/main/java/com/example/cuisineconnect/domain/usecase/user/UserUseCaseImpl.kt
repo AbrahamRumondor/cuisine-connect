@@ -21,8 +21,8 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getUserByUserId(userId)
     }
 
-    override suspend fun storeUser(uid: String, user: User) {
-        userRepository.storeUser(uid, user)
+    override suspend fun storeUser(uid: String, user: User, isUpdate: Boolean): Result<Unit> {
+        return userRepository.storeUser(uid, user, isUpdate)
     }
 
     override fun addRecipeToUser(newRecipe: String) {

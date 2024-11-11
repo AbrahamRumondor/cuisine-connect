@@ -373,26 +373,25 @@ class CreatePostFragment : Fragment() {
         // Update the UI with the recipe data
         bindingRecipe.run {
           tvTitle.text = recipe.title
-          tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
           tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
           val dateFormat = SimpleDateFormat("MMM dd")
           val formattedDate = dateFormat.format(recipe.date)
-          tvDate.text = formattedDate
 
           Glide
             .with(binding.root)
             .load(recipe.image)
             .placeholder(R.drawable.ic_no_image)
-            .into(ivImageTitle)
+            .into(ivImage)
 
           user.let {
-            tvUsername.text = it.name
+            tvUsername.text = it.displayName
             Glide
               .with(binding.root)
               .load(it.image)
+              .placeholder(R.drawable.ic_bnv_profile)
               .into(ivUserProfile)
           }
         }

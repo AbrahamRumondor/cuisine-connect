@@ -106,7 +106,7 @@ class PostDetailFragment : Fragment() {
           // Render the post content
           postContentRenderer.renderPostContent(post.postContent)
 
-          tvUsername.text = user.name
+          tvUsername.text = user.displayName
           tvDate.text = getRelativeTime(post.date)
 
           currentUser?.let {

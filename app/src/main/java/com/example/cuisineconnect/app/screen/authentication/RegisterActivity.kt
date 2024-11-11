@@ -1,21 +1,13 @@
 package com.example.cuisineconnect.app.screen.authentication
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivity
-import com.example.cuisineconnect.app.MainActivityViewModel
-import com.example.cuisineconnect.databinding.ActivityLoginBinding
-import com.example.cuisineconnect.databinding.ActivityMainBinding
 import com.example.cuisineconnect.databinding.ActivityRegisterBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -56,13 +48,29 @@ class RegisterActivity : AppCompatActivity() {
         pbCreate.visibility = View.VISIBLE
         btnCreate.visibility = View.GONE
 
-        val username = etName.text.toString()
+        val displayName = etDisplayName.text.toString()
+        val username = etUsername.text.toString()
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
-        if (username.isEmpty()) {
-          Toast.makeText(this@RegisterActivity, "Please enter your username", Toast.LENGTH_SHORT)
-            .show()
+        // Define regex pattern for allowed characters (alphanumeric and underscore)
+        val usernamePattern = "^[a-zA-Z0-9_]+$".toRegex()
+
+        if (displayName.isEmpty() || !displayName.matches(usernamePattern)) {
+          Toast.makeText(
+            this@RegisterActivity,
+            "Display name must contain only letters, numbers, or underscores",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+
+        if (username.isEmpty() || !username.matches(usernamePattern)) {
+          Toast.makeText(
+            this@RegisterActivity,
+            "Username must contain only letters, numbers, or underscores",
+            Toast.LENGTH_SHORT
+          ).show()
           return@setOnClickListener
         }
 
@@ -79,9 +87,10 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         registerViewModel.registerUser(
-          name = username,
+          displayName = displayName,
           email = email,
-          password = password
+          password = password,
+          username = username
         ) {
           if (it) {
             pbCreate.visibility = View.GONE

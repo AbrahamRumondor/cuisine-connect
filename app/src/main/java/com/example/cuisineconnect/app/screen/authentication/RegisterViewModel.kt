@@ -18,7 +18,8 @@ class RegisterViewModel @Inject constructor(
 
   fun registerUser(
     email: String,
-    name: String,
+    displayName: String,
+    username: String,
     password: String,
     onComplete: (Boolean) -> Unit
   ) {
@@ -28,11 +29,12 @@ class RegisterViewModel @Inject constructor(
         val uid = authUseCase.getCurrentUserID()
         val user = User(
           id = uid,
+          username = username,
           email = email,
-          name = name,
+          displayName = displayName,
           password = hashPassword(password)
         )
-        userUseCase.storeUser(uid, user)
+        userUseCase.storeUser(uid, user, isUpdate = false)
         onComplete(true)
       } catch (
         e: Exception

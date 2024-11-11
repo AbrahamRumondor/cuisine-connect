@@ -20,9 +20,9 @@ class UserViewHolder(
                     .placeholder(R.drawable.ic_bnv_profile)
                     .into(ivUserProfile)
 
-                tvUsername.text = user.name
-                val uniqueName = "@${user.name}"
-                tvUniqueUsername.text = uniqueName
+                tvUsername.text = user.displayName
+                val username = "@${user.username}"
+                tvUniqueUsername.text = username
 
                 root.setOnClickListener {
                     itemListener?.onUserClicked(user)

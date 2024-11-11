@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface UserRepository {
   suspend fun getCurrentUser(uid: String): StateFlow<User>
   suspend fun getUserByUserId(userId: String): User?
-  suspend fun storeUser(uid: String, user: User)
+  suspend fun storeUser(uid: String, user: User, isUpdate: Boolean = false): Result<Unit>
   fun addRecipeToUser(newRecipe: String)
   fun addPostToUser(newPost: String)
   suspend fun getUsersStartingWith(prefix: String): List<User>

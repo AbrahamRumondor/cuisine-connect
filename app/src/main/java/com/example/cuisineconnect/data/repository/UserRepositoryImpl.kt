@@ -5,10 +5,8 @@ import com.example.cuisineconnect.data.response.UserResponse
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.UserRepository
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
@@ -53,17 +51,28 @@ class UserRepositoryImpl @Inject constructor(
     }
   }
 
-  override suspend fun storeUser(uid: String, user: User) {
+  override suspend fun storeUser(uid: String, user: User, isUpdate: Boolean): Result<Unit> {
     val currentUser = usersRef.document(uid)
 
-    try {
+    return try {
+      // Only check for unique username if this is not an update
+      if (!isUpdate) {
+        val uniqueNameQuery = usersRef.whereEqualTo("user_unique_name", user.username).get()
+        val result = uniqueNameQuery.await()
+
+        if (!result.isEmpty && result.documents[0].id != uid) {
+          // If another document with the same unique name exists
+          Timber.tag("UserRepositoryImpl").e("Error saving user: user_unique_name '${user.username}' is already taken.")
+          return Result.failure(Exception("user_unique_name '${user.username}' is already taken."))
+        }
+      }
+
+      // If no document with the same unique name exists or it's an update
       currentUser.set(UserResponse.transform(user))
-    } catch (
-      e: Exception
-    ) {
-      Timber.tag("UserRepositoryImpl").e(
-        e, "Error saving user"
-      )
+      Result.success(Unit)  // Return success
+    } catch (e: Exception) {
+      Timber.tag("UserRepositoryImpl").e(e, "Error saving user")
+      Result.failure(e)  // Return failure with the caught exception
     }
   }
 
@@ -135,10 +144,18 @@ class UserRepositoryImpl @Inject constructor(
 
   override suspend fun getUsersStartingWith(prefix: String): List<User> {
     return try {
+      // Check if the prefix starts with '@' and determine the field and searchPrefix accordingly
+      val (field, searchPrefix) = if (prefix.startsWith("@")) {
+        "user_unique_name" to prefix.substring(1) // Remove the '@' from prefix
+      } else {
+        "user_name" to prefix
+      }
+
+      // Perform the query based on the selected field and search prefix
       val querySnapshot = usersRef
-        .orderBy("user_name")
-        .startAt(prefix)
-        .endAt(prefix + "\uf8ff") // This ensures we get all names starting with the prefix
+        .orderBy(field)
+        .startAt(searchPrefix)
+        .endAt(searchPrefix + "\uf8ff") // Ensures fetching all names starting with the prefix
         .get()
         .await()
 

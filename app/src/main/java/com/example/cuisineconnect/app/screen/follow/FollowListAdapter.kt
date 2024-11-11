@@ -41,8 +41,9 @@ class FollowListAdapter : RecyclerView.Adapter<FollowListAdapter.ViewHolder>() {
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(user: User) {
-      binding.tvUsername.text = user.name
-      binding.tvUniqueUsername.text = "@${user.name}"
+      binding.tvUsername.text = user.displayName
+      val username = "@${user.username}"
+      binding.tvUniqueUsername.text = username
 
       Glide.with(binding.ivUserProfile.context)
         .load(user.image)
@@ -52,7 +53,7 @@ class FollowListAdapter : RecyclerView.Adapter<FollowListAdapter.ViewHolder>() {
 
       binding.root.setOnClickListener {
         listener?.onUserClicked(user.id)
-        Toast.makeText(binding.root.context, "Clicked on ${user.name}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(binding.root.context, "Clicked on ${user.displayName}", Toast.LENGTH_SHORT).show()
       }
     }
   }

@@ -150,7 +150,7 @@ class ReplyRecipeFragment : Fragment() {
 
       override fun onReplyInputClicked(position: Int, targetReplyId: String, user: User) {
         binding.run {
-          val text = "Replying to ${user.name}"
+          val text = "Replying to ${user.displayName}"
           tvReplyOtherUser.text = text
           clReplyOther.visibility = View.VISIBLE
 

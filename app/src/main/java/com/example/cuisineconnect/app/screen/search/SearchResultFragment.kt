@@ -116,15 +116,18 @@ class SearchResultFragment : Fragment() {
         loadStates.refresh is LoadState.NotLoading && adapter.itemCount == 0 -> {
           // Show empty state if no items loaded
           hideLoadingAnimation()
+          binding.list.visibility = View.VISIBLE
           binding.llEmptyState.visibility = View.VISIBLE
         }
         loadStates.refresh is LoadState.Loading -> {
           // Show loading animation while loading
+          binding.list.visibility = View.GONE
           showLoadingAnimation()
         }
         else -> {
           // Hide empty state and loading animation
           hideLoadingAnimation()
+          binding.list.visibility = View.VISIBLE
           binding.llEmptyState.visibility = View.GONE
         }
       }

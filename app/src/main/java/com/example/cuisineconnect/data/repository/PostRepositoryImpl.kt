@@ -137,7 +137,7 @@ class PostRepositoryImpl @Inject constructor(
       user?.let {
         val updatedPosts =
           it.posts.filterNot { id -> id == postId } // Remove the postId from user's posts
-        userRepository.storeUser(userId, user.copy(posts = updatedPosts)) // Store the updated user
+        userRepository.storeUser(userId, user.copy(posts = updatedPosts), isUpdate = true) // Store the updated user
       }
 
       // Delete the post document

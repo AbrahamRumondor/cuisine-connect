@@ -16,7 +16,7 @@ class RecipeDetailUserViewHolder(
     view.run {
       if (user != null) {
 
-        tvUsername.text = user.name
+        tvUsername.text = user.displayName
         tvFollower.text = user.follower.size.toString()
 
         Glide.with(root)

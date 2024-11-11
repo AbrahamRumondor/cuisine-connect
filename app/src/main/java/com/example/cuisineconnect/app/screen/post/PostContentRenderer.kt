@@ -15,7 +15,6 @@ import com.example.cuisineconnect.app.screen.post.detail.PostDetailFragmentDirec
 import com.example.cuisineconnect.app.screen.post.detail.PostDetailViewModel
 import com.example.cuisineconnect.app.util.ClickableTextView
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
-import java.text.SimpleDateFormat
 
 class PostContentRenderer(
   private val container: LinearLayout,
@@ -173,21 +172,19 @@ class PostContentRenderer(
 
         viewRecipe.run {
           tvTitle.text = recipe.title
-          tvDesc.text = recipe.description
           tvUpvoteCount.text = recipe.upvotes.size.toString()
           tvReplyCount.text = recipe.replyCount.toString()
           tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
-          val dateFormat = SimpleDateFormat("MMM dd")
-          val formattedDate = dateFormat.format(recipe.date)
-          tvDate.text = formattedDate
-
           Glide.with(container).load(recipe.image).placeholder(R.drawable.ic_no_image)
-            .into(ivImageTitle)
+            .into(ivImage)
 
           user.let {
-            tvUsername.text = it.name
-            Glide.with(container).load(it.image).into(ivUserProfile)
+            tvUsername.text = it.displayName
+            Glide.with(container)
+              .load(it.image)
+              .placeholder(R.drawable.ic_bnv_profile)
+              .into(ivUserProfile)
           }
         }
 

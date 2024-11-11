@@ -34,7 +34,7 @@ class ItemRecipeViewHolder(
 
         Log.d("lilil", "this is recipe ${user} and ${recipe}")
 
-        tvUsername.text = user.name
+        tvUsername.text = user.displayName
 
         Glide.with(root)
           .load(user.image)

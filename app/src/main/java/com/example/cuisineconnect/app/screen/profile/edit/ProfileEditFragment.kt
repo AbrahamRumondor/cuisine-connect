@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.screen.profile.ProfileViewModel
-import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentArgs
 import com.example.cuisineconnect.databinding.FragmentProfileEditBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -64,7 +63,7 @@ class ProfileEditFragment : Fragment() {
   private fun onSaveClicked() {
     binding.run {
       btnSave.setOnClickListener {
-        val username = etName.text.toString()
+        val username = etDisplayName.text.toString()
 //        val email = etEmail.text.toString()
 //        val password = etPassword.text.toString()
 
@@ -120,7 +119,7 @@ class ProfileEditFragment : Fragment() {
             .placeholder(R.drawable.ic_bnv_profile)
             .into(ivProfilePicture)
 
-          etName.setText(user.name)
+          etDisplayName.setText(user.displayName)
 //          etEmail.setText(user.email)
 //          etPassword.setText(user.password)
 

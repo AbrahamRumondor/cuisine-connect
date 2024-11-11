@@ -6,18 +6,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cuisineconnect.MainApplication
-import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
-import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -78,7 +74,7 @@ class ProfileViewModel @Inject constructor(
       val updateUserSuccess = try {
         userUseCase.storeUser(
           user.value.id,
-          user.value.copy(name = username)
+          user.value.copy(displayName = username)
         )
         true // Update successful
       } catch (e: Exception) {

@@ -130,7 +130,7 @@ class MyRecipeRecyclerViewAdapter(
 
     // USER
     item.first?.let { user ->
-      holder.userTitle.text = user.name
+      holder.userTitle.text = user.displayName
 
       val userUri = Uri.parse(user.image)
       Glide.with(myRecipeFragment.root)

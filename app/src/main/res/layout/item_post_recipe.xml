@@ -1,222 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginHorizontal="24dp"
-    android:layout_marginVertical="12dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="4dp"
     >
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/cl_recipe_item"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="12dp"
+  <androidx.cardview.widget.CardView
+      android:id="@+id/cv_recipe"
+      android:layout_width="250dp"
+      android:layout_height="0dp"
+      android:layout_marginVertical="4dp"
+      app:cardCornerRadius="10dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintDimensionRatio="H, 1:1.1"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+
       >
 
-    <LinearLayout
-        android:id="@+id/ll_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
 
       <androidx.cardview.widget.CardView
-          android:layout_width="20dp"
-          android:layout_height="20dp"
-          android:layout_gravity="center"
-          app:cardCornerRadius="250dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:cardCornerRadius="8dp"
+          android:layout_margin="8dp"
           >
 
-        <ImageView
-            android:id="@+id/iv_user_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/image"
-            android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars"
-            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="2dp"
+            >
+
+          <androidx.cardview.widget.CardView
+              android:id="@+id/cv_profile"
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_gravity="top"
+              app:cardCornerRadius="250dp"
+              android:layout_margin="4dp"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintBottom_toBottomOf="parent"
+              >
+
+            <ImageView
+                android:id="@+id/iv_user_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/image"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars"
+                />
+          </androidx.cardview.widget.CardView>
+
+          <LinearLayout
+              android:id="@+id/ll_username"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="4dp"
+              android:orientation="vertical"
+              app:layout_constraintBottom_toBottomOf="@id/cv_profile"
+              app:layout_constraintStart_toEndOf="@id/cv_profile"
+              app:layout_constraintTop_toTopOf="@id/cv_profile"
+              >
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LetsGoCook123"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp"
+                />
+
+            <!--    <TextView-->
+            <!--        android:id="@+id/tv_unique_username"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:text="\@LetsGoCook123"-->
+            <!--        android:textColor="@android:color/black"-->
+            <!--        android:textSize="14sp"-->
+            <!--        />-->
+          </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
       </androidx.cardview.widget.CardView>
 
-      <TextView
-          android:id="@+id/tv_username"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="8dp"
-          android:layout_marginVertical="8dp"
-          android:text="LetsGoCook123"
-          android:textColor="@android:color/black"
-          android:textSize="12sp"
-
-          />
-
-    </LinearLayout>
-
-    <!-- Title TextView -->
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:paddingHorizontal="8dp"
-        android:text="A Sweet and Sour Dessert?! Under 10$ aokwoakoakwokoawokooakwokoaowkoakowkoao"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/cv_image_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_user"
-        />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_image_title"
-        android:layout_width="110dp"
-        android:layout_marginTop="10dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="150dp"
-        app:layout_constraintDimensionRatio="H, 1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ll_buttons"
-        >
-
       <ImageView
-          android:id="@+id/iv_image_title"
+          android:id="@+id/iv_image"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:contentDescription="@string/image"
           android:scaleType="centerCrop"
-          tools:srcCompat="@tools:sample/avatars"
-          />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tv_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="This is a very long description that might take more than two lines. If it does, it will be truncated with an aaewfjioawejfoawefjawdjfkladjf ellipsis."
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/cv_image_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        />
-
-    <LinearLayout
-        android:id="@+id/ll_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_image_title"
-        >
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="8dp"
-          android:gravity="center"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_thumbs"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_thumbs_up_regular"
-            />
-
-        <TextView
-            android:id="@+id/tv_upvote_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:text="98"
-            />
-      </LinearLayout>
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="8dp"
-          android:gravity="center"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_reply"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_msg_bubble"
-            />
-
-        <TextView
-            android:id="@+id/tv_reply_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:text="98"
-            />
-      </LinearLayout>
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="8dp"
-          android:layout_marginEnd="16dp"
-          android:gravity="center"
-          android:orientation="horizontal"
-          >
-
-        <ImageView
-            android:id="@+id/iv_ic_bookmark"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_bookmark_regular"
-            />
-
-        <TextView
-            android:id="@+id/tv_bookmark_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="98"
-            />
-      </LinearLayout>
-
-      <TextView
-          android:id="@+id/tv_date"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginHorizontal="16dp"
-          android:layout_weight="1"
-          android:gravity="end"
-          android:text="Jan xx"
-          android:textColor="@android:color/black"
+          android:src="@drawable/ic_no_image"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
           />
 
 
-    </LinearLayout>
+      <ImageView
+          android:id="@+id/btn_delete"
+          android:layout_width="25dp"
+          android:layout_height="25dp"
+          android:layout_margin="16dp"
+          android:contentDescription="@string/image"
+          android:src="@drawable/ic_trash_can"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:tint="@color/white"
+          />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+      <FrameLayout
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:alpha="1"
+          android:background="@color/white"
+          app:layout_constraintBottom_toBottomOf="@id/ll_text"
+          app:layout_constraintEnd_toEndOf="@id/ll_text"
+          app:layout_constraintStart_toStartOf="@id/ll_text"
+          app:layout_constraintTop_toTopOf="@id/ll_text"
+          />
+
+      <LinearLayout
+          android:id="@+id/ll_text"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingHorizontal="20dp"
+          android:paddingTop="10dp"
+          android:paddingBottom="16dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/ll_text"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal"
+              app:layout_constraintBottom_toTopOf="@id/ll_text"
+              app:layout_constraintStart_toStartOf="parent"
+              >
+
+            <ImageView
+                android:id="@+id/iv_ic_thumbs"
+                android:layout_width="21dp"
+                android:layout_height="15dp"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_thumbs_up_regular"
+                app:tint="@color/cc_gray"
+                />
+
+            <TextView
+                android:id="@+id/tv_upvote_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
+                />
+          </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginHorizontal="8dp"
+              android:gravity="center"
+              android:orientation="horizontal"
+              >
+
+            <ImageView
+                android:id="@+id/iv_ic_reply"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_msg_bubble"
+                app:tint="@color/cc_gray"
+                />
+
+            <TextView
+                android:id="@+id/tv_reply_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:text="-"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
+                />
+          </LinearLayout>
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              >
+
+            <ImageView
+                android:id="@+id/iv_ic_bookmark"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_bookmark_regular"
+                app:tint="@color/cc_gray"
+                />
+
+            <TextView
+                android:id="@+id/tv_bookmark_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/cc_gray"
+                android:textSize="12sp"
+                />
+          </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Healthy Vegetarian and Rice"
+            android:textColor="@color/cc_gray"
+            android:textSize="16sp"
+            />
+
+      </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

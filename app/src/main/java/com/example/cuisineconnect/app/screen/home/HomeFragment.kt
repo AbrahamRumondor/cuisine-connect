@@ -126,12 +126,15 @@ class HomeFragment : Fragment() {
       // Show empty state if no items loaded after refresh is complete
       if (loadStates.refresh is LoadState.NotLoading && adapter.itemCount == 0) {
         hideLoadingAnimation()
+        binding.list.visibility = View.VISIBLE
         binding.ivEmptyState.visibility = View.VISIBLE
       } else if (loadStates.refresh is LoadState.Loading) {
         // Optionally show loading animation while loading
+        binding.list.visibility = View.INVISIBLE
         showLoadingAnimation()
       } else {
         hideLoadingAnimation()
+        binding.list.visibility = View.VISIBLE
         binding.ivEmptyState.visibility = View.GONE
       }
     }

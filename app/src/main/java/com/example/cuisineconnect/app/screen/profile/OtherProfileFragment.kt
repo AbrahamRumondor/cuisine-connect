@@ -66,9 +66,9 @@ class OtherProfileFragment : Fragment() {
     lifecycleScope.launch {
       profileViewModel.otherUser.collectLatest { user ->
         binding.run {
-          tvUsername.text = user.name
-          val unique = "@${user.email}"
-          tvUniqueUsername.text = unique
+          tvUsername.text = user.displayName
+          val username = "@${user.username}"
+          tvUniqueUsername.text = username
 
           Glide.with(root)
             .load(user.image)
@@ -123,7 +123,7 @@ class OtherProfileFragment : Fragment() {
               OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowListFragment(
                 userId = user.id,
                 listType = "follower",
-                username = user.name
+                username = user.displayName
               )
             findNavController().navigate(action)
           }
@@ -133,7 +133,7 @@ class OtherProfileFragment : Fragment() {
               OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowListFragment(
                 userId = user.id,
                 listType = "following",
-                username = user.name
+                username = user.displayName
               )
             findNavController().navigate(action)
           }

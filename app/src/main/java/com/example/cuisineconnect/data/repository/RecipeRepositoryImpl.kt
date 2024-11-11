@@ -125,7 +125,7 @@ class RecipeRepositoryImpl @Inject constructor(
       }
 
       val updatedRecipes = user.recipes.filterNot { recipe -> recipe == recipeId }
-      userRepository.storeUser(userId, user.copy(recipes = updatedRecipes))
+      userRepository.storeUser(userId, user.copy(recipes = updatedRecipes), isUpdate = true)
 
       val recipeDoc = recipesRef.document(recipeId)
       recipeDoc.delete().await()

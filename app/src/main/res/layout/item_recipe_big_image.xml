@@ -69,14 +69,14 @@
         android:textSize="16sp"
         />
 
-    <TextView
-        android:id="@+id/tv_unique_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\@LetsGoCook123"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_unique_username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="\@LetsGoCook123"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:textSize="14sp"-->
+<!--        />-->
   </LinearLayout>
 
   <TextView
