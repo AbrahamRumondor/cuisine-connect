@@ -103,7 +103,7 @@ class ReplyRecipeFragment : Fragment() {
       supportActionBar?.apply {
         setDisplayHomeAsUpEnabled(true) // Enable the back button
         setDisplayShowHomeEnabled(true)
-        title = "Create Recipe" // Set title for the toolbar
+        title = "Reply Recipe" // Set title for the toolbar
       }
     }
 

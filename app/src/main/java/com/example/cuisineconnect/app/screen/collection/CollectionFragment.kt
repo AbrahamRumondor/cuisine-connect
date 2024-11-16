@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCollectionBinding
@@ -46,6 +47,10 @@ class CollectionFragment : Fragment() {
       setConnectionBehaviour()
     }
 
+    binding.inclFab.fabOpenOptions.setOnClickListener {
+      toggleFabOptions()
+    }
+
     return binding.root
   }
 
@@ -61,6 +66,27 @@ class CollectionFragment : Fragment() {
       binding.appbarLayout.visibility = View.VISIBLE
       binding.vp2Collection.visibility = View.VISIBLE
       binding.inclFab.root.visibility = View.VISIBLE
+    }
+  }
+
+  private fun toggleFabOptions() {
+    with(binding.inclFab) {
+      if (fabCreatePost.visibility == View.GONE && fabCreateRecipe.visibility == View.GONE) {
+        fabCreatePost.visibility = View.VISIBLE
+        fabCreateRecipe.visibility = View.VISIBLE
+        fabOpenOptions.setImageResource(R.drawable.ic_close)
+
+        fabCreateRecipe.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+        }
+        fabCreatePost.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+        }
+      } else {
+        fabCreatePost.visibility = View.GONE
+        fabCreateRecipe.visibility = View.GONE
+        fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
+      }
     }
   }
 }

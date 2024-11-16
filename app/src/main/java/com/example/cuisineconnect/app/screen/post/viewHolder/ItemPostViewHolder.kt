@@ -51,6 +51,10 @@ class ItemPostViewHolder(
           .placeholder(R.drawable.ic_bnv_profile)
           .into(ivUserProfile)
 
+        cvProfile.setOnClickListener {
+          listener?.onUserProfileClicked(user.id)
+        }
+
         val formattedDate = getRelativeTime(post.date) // recipe.date is of type Date
         tvDate.text = formattedDate
         tvDate.text = formattedDate

@@ -17,6 +17,7 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.collection.CollectionViewModel
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -113,6 +114,21 @@ class MyRecipeFragment : Fragment() {
       override fun onItemDeleteClicked(itemId: String, type: String) {
         collectionViewModel.deleteRecipe(itemId)
         recipeAdapter.removeData(itemId)
+      }
+
+      override fun onUserProfileClicked(userId: String) {
+        if (userId == currentUser?.id) {
+          val action =
+            CollectionFragmentDirections.actionCollectionFragmentToProfileFragment()
+          findNavController().navigate(action)
+          return
+        } else {
+          val action =
+            CollectionFragmentDirections.actionCollectionFragmentToOtherProfileFragment(
+              userId
+            )
+          findNavController().navigate(action)
+        }
       }
     })
   }

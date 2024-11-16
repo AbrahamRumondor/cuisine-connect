@@ -96,7 +96,8 @@ class CollectionViewModel @Inject constructor(
           return@collectLatest
         }
         val bookmarkedRecipes = currentUser.bookmarks.map { recipeId ->
-          async { Pair(currentUser, recipeUseCase.getRecipeByID(recipeId) ?: Recipe()) }
+          val userId = recipeId.split("_")[1]
+          async { Pair(userUseCase.getUserByUserId(userId), recipeUseCase.getRecipeByID(recipeId) ?: Recipe()) }
         }.awaitAll()
 
         _bookmarkedRecipes.value = bookmarkedRecipes

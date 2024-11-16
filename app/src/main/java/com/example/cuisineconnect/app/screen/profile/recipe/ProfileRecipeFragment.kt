@@ -17,7 +17,9 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.collection.SavedRecipeFragment.Companion.ARG_COLUMN_COUNT
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
+import com.example.cuisineconnect.app.screen.home.HomeFragmentDirections
 import com.example.cuisineconnect.app.screen.profile.ProfileFragmentDirections
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentProfileRecipeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

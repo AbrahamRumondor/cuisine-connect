@@ -42,6 +42,10 @@ class SearchFragment : Fragment() {
       setConnectionBehaviour()
     }
 
+    binding.inclFab.fabOpenOptions.setOnClickListener {
+      toggleFabOptions()
+    }
+
     // Initialize and set up the HashtagAdapter
     binding.list.apply {
       layoutManager = LinearLayoutManager(requireContext())
@@ -119,6 +123,27 @@ class SearchFragment : Fragment() {
 //      binding.appbarLayout.visibility = View.VISIBLE
 //      binding.srlHome.visibility = View.VISIBLE
 //      binding.inclFab.root.visibility = View.VISIBLE
+    }
+  }
+
+  private fun toggleFabOptions() {
+    with(binding.inclFab) {
+      if (fabCreatePost.visibility == View.GONE && fabCreateRecipe.visibility == View.GONE) {
+        fabCreatePost.visibility = View.VISIBLE
+        fabCreateRecipe.visibility = View.VISIBLE
+        fabOpenOptions.setImageResource(R.drawable.ic_close)
+
+        fabCreateRecipe.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+        }
+        fabCreatePost.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+        }
+      } else {
+        fabCreatePost.visibility = View.GONE
+        fabCreateRecipe.visibility = View.GONE
+        fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
+      }
     }
   }
 

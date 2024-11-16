@@ -7,4 +7,5 @@ interface ItemListListener {
   fun onRecipeLongClicked(recipeId: String) {}
   fun onItemDeleteClicked(itemId: String, type: String) {}
   fun onPostClicked(postId: String) {}
+  fun onUserProfileClicked(userId: String) {}
 }

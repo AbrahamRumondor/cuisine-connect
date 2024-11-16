@@ -41,6 +41,10 @@ class ItemRecipeViewHolder(
           .placeholder(R.drawable.ic_bnv_profile)
           .into(ivUserProfile)
 
+        cvProfile.setOnClickListener {
+          listener?.onUserProfileClicked(user.id)
+        }
+
         tvTitle.text = recipe.title
 //        tvDesc.text = recipe.description
 

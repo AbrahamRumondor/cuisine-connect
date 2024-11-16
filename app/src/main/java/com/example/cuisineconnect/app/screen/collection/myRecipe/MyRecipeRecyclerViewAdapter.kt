@@ -137,6 +137,9 @@ class MyRecipeRecyclerViewAdapter(
         .load(userUri)   // Load the image URL into the ImageView
         .placeholder(R.drawable.ic_bnv_profile)
         .into(holder.userProfile)
+      holder.cvProfile.setOnClickListener {
+        recipeListListener?.onUserProfileClicked(user.id)
+      }
     }
 
   }
@@ -155,6 +158,7 @@ class MyRecipeRecyclerViewAdapter(
     val upvoteCount = binding.tvUpvoteCount
     val replyCount = binding.tvReplyCount
     val bookmarkCount = binding.tvBookmarkCount
+    val cvProfile = binding.cvProfile
   }
 
   fun updateData(newItems: List<Pair<User?, Recipe>>) {

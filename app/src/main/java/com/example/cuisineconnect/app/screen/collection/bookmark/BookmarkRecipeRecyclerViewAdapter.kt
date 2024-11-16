@@ -122,7 +122,11 @@ class BookmarkRecipeRecyclerViewAdapter(
         .load(userUri)
         .placeholder(R.drawable.ic_bnv_profile)
         .into(holder.userProfile)
+      holder.userProfile.setOnClickListener {
+        recipeListListener?.onUserProfileClicked(user.id)
+      }
     }
+
   }
 
   override fun getItemCount(): Int = recipes.size

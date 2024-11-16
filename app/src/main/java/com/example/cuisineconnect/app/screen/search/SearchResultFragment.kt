@@ -55,6 +55,10 @@ class SearchResultFragment : Fragment() {
       activity?.supportFragmentManager?.popBackStack()
     }
 
+    binding.inclFab.fabOpenOptions.setOnClickListener {
+      toggleFabOptions()
+    }
+
     val query = args.query
 
     setupRecyclerView()
@@ -214,4 +218,24 @@ class SearchResultFragment : Fragment() {
     binding.progressBar.visibility = View.GONE
   }
 
+  private fun toggleFabOptions() {
+    with(binding.inclFab) {
+      if (fabCreatePost.visibility == View.GONE && fabCreateRecipe.visibility == View.GONE) {
+        fabCreatePost.visibility = View.VISIBLE
+        fabCreateRecipe.visibility = View.VISIBLE
+        fabOpenOptions.setImageResource(R.drawable.ic_close)
+
+        fabCreateRecipe.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+        }
+        fabCreatePost.setOnClickListener {
+          findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+        }
+      } else {
+        fabCreatePost.visibility = View.GONE
+        fabCreateRecipe.visibility = View.GONE
+        fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
+      }
+    }
+  }
 }

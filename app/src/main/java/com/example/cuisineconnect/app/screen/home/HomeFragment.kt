@@ -19,7 +19,9 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
+import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -167,6 +169,21 @@ class HomeFragment : Fragment() {
         val action =
           HomeFragmentDirections.actionHomeFragmentToPostDetailFragment2(postId)
         findNavController().navigate(action)
+      }
+
+      override fun onUserProfileClicked(userId: String) {
+        if (userId == currentUser?.id) {
+          val action =
+            HomeFragmentDirections.actionHomeFragmentToProfileFragment()
+          findNavController().navigate(action)
+          return
+        } else {
+          val action =
+            HomeFragmentDirections.actionHomeFragmentToOtherProfileFragment(
+              userId
+            )
+          findNavController().navigate(action)
+        }
       }
     })
 
