@@ -40,6 +40,12 @@
     <action
         android:id="@+id/action_searchFragment_to_searchResultFragment"
         app:destination="@id/searchResultFragment" />
+    <action
+        android:id="@+id/action_searchFragment_to_createPostFragment"
+        app:destination="@id/createPostFragment" />
+    <action
+        android:id="@+id/action_searchFragment_to_createRecipeFragment"
+        app:destination="@id/createRecipeFragment" />
   </fragment>
   <fragment
       android:id="@+id/collectionFragment"
@@ -55,6 +61,12 @@
     <action
         android:id="@+id/action_collectionFragment_to_otherProfileFragment"
         app:destination="@id/otherProfileFragment" />
+    <action
+        android:id="@+id/action_collectionFragment_to_createPostFragment"
+        app:destination="@id/createPostFragment" />
+    <action
+        android:id="@+id/action_collectionFragment_to_createRecipeFragment"
+        app:destination="@id/createRecipeFragment" />
   </fragment>
   <fragment
       android:id="@+id/createRecipeFragment"
@@ -201,6 +213,12 @@
     <action
         android:id="@+id/action_searchResultFragment_to_searchPromptFragment"
         app:destination="@id/searchPromptFragment" />
+    <action
+        android:id="@+id/action_searchResultFragment_to_createPostFragment"
+        app:destination="@id/createPostFragment" />
+    <action
+        android:id="@+id/action_searchResultFragment_to_createRecipeFragment"
+        app:destination="@id/createRecipeFragment" />
   </fragment>
   <fragment
       android:id="@+id/postDetailFragment2"

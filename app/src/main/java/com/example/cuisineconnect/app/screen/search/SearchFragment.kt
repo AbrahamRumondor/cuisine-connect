@@ -134,10 +134,10 @@ class SearchFragment : Fragment() {
         fabOpenOptions.setImageResource(R.drawable.ic_close)
 
         fabCreateRecipe.setOnClickListener {
-          findNavController().navigate(R.id.action_homeFragment_to_createRecipeFragment)
+          findNavController().navigate(R.id.action_searchFragment_to_createRecipeFragment)
         }
         fabCreatePost.setOnClickListener {
-          findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+          findNavController().navigate(R.id.action_searchFragment_to_createPostFragment)
         }
       } else {
         fabCreatePost.visibility = View.GONE

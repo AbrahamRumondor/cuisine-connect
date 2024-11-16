@@ -89,6 +89,7 @@ class MyRecipeFragment : Fragment() {
     lifecycleScope.launch {
       collectionViewModel.myRecipes.collectLatest {
         if (it.isEmpty()) {
+          recipeAdapter.updateData(it)
           hideLoadingAnimation()
           binding.ivEmptyState.visibility = View.VISIBLE
           binding.tvEmptyState.visibility = View.VISIBLE

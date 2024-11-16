@@ -90,6 +90,7 @@ class BookmarkRecipeFragment : Fragment() {
     lifecycleScope.launch {
       collectionViewModel.bookmarkedRecipes.collectLatest { recipes ->
         if (recipes.isEmpty()) {
+          recipeAdapter.updateData(recipes)
           hideLoadingAnimation()
           binding.ivEmptyState.visibility = View.VISIBLE
           binding.tvEmptyState.visibility = View.VISIBLE
