@@ -12,7 +12,7 @@ class AuthUseCaseImpl @Inject constructor(
     return authRepository.getCurrentUserID()
   }
 
-  override suspend fun registerUser(email: String, password: String): AuthResult? {
+  override suspend fun registerUser(email: String, password: String): Result<String>  {
     return authRepository.registerUser(email, password)
   }
 

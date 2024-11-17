@@ -56,12 +56,16 @@ class LoginActivity : AppCompatActivity() {
         if (email.isEmpty()) {
           Toast.makeText(this@LoginActivity, "Please enter your email", Toast.LENGTH_SHORT)
             .show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
         if (password.isEmpty()) {
           Toast.makeText(this@LoginActivity, "Please enter your password", Toast.LENGTH_SHORT)
             .show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
@@ -87,6 +91,10 @@ class LoginActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT,
               ).show()
             }
+          }.addOnFailureListener {
+            pbCreate.visibility = View.GONE
+            btnLogin.visibility = View.VISIBLE
+            Toast.makeText(this@LoginActivity, "Login failed", Toast.LENGTH_SHORT).show()
           }
       }
     }

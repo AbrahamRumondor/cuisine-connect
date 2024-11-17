@@ -91,15 +91,22 @@ class RegisterActivity : AppCompatActivity() {
           email = email,
           password = password,
           username = username
-        ) {
-          if (it) {
+        ) { success, error ->
+          if (success) {
             pbCreate.visibility = View.GONE
             btnCreate.visibility = View.VISIBLE
-            goToLogin()
-          } else {
             Toast.makeText(
               baseContext,
-              "Authentication failed.",
+              "Registration successful.",
+              Toast.LENGTH_SHORT,
+            ).show()
+            goToLogin()
+          } else {
+            pbCreate.visibility = View.GONE
+            btnCreate.visibility = View.VISIBLE
+            Toast.makeText(
+              baseContext,
+              error ?: "Authentication failed.",
               Toast.LENGTH_SHORT,
             ).show()
           }

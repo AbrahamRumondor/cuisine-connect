@@ -62,17 +62,22 @@ class UserRepositoryImpl @Inject constructor(
 
         if (!result.isEmpty && result.documents[0].id != uid) {
           // If another document with the same unique name exists
-          Timber.tag("UserRepositoryImpl").e("Error saving user: user_unique_name '${user.username}' is already taken.")
-          return Result.failure(Exception("user_unique_name '${user.username}' is already taken."))
+          val errorMessage = "We're sorry, '${user.username}' is already taken."
+          Timber.tag("UserRepositoryImpl").e(errorMessage)
+          return Result.failure(Exception(errorMessage)) // Return failure with custom error message
         }
       }
 
       // If no document with the same unique name exists or it's an update
-      currentUser.set(UserResponse.transform(user))
-      Result.success(Unit)  // Return success
+      currentUser.set(UserResponse.transform(user)).await()
+      Result.success(Unit) // Return success
     } catch (e: Exception) {
-      Timber.tag("UserRepositoryImpl").e(e, "Error saving user")
-      Result.failure(e)  // Return failure with the caught exception
+      if (!isUpdate && e.message?.contains("is already taken") == true) {
+        Result.failure(e) // Return only the specific error for unique username issues
+      } else {
+        Timber.tag("UserRepositoryImpl").e(e, "Error saving user")
+        Result.failure(Exception("An error occurred while saving the user.")) // General error for other issues
+      }
     }
   }
 

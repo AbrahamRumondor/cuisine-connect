@@ -4,7 +4,7 @@ import com.google.firebase.auth.AuthResult
 
 interface AuthRepository {
   fun getCurrentUserID(): String
-  suspend fun registerUser(email: String, password: String): AuthResult?
+  suspend fun registerUser(email: String, password: String): Result<String>
   suspend fun loginUser(email: String, password: String): AuthResult?
   suspend fun updateEmail(newEmail: String): Result<Unit>
   suspend fun updatePassword(newPassword: String): Result<Unit>

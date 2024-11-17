@@ -16,15 +16,14 @@ class AuthRepositoryImpl @Inject constructor(
     return auth.currentUser?.uid ?: ""
   }
 
-  override suspend fun registerUser(email: String, password: String): AuthResult? {
-    return auth.createUserWithEmailAndPassword(email, password)
-      .addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          Result.success(task.result?.user?.uid ?: "")
-        } else {
-          Result.failure(Exception(task.exception))
-        }
-      }.await()
+  override suspend fun registerUser(email: String, password: String): Result<String> {
+    return try {
+      val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+      val uid = authResult.user?.uid ?: throw Exception("User ID is null")
+      Result.success(uid)
+    } catch (e: Exception) {
+      Result.failure(e)
+    }
   }
 
   override suspend fun loginUser(email: String, password: String): AuthResult? {

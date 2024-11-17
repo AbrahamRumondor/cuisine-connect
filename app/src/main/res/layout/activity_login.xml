@@ -78,7 +78,7 @@
       android:background="@drawable/button_radius"
       android:text="@string/login"
       android:textAllCaps="false"
-      android:textColor="@color/cc_gray"/>
+      android:textColor="@color/cc_light_gray"/>
 
   <ProgressBar
       android:id="@+id/pb_create"
