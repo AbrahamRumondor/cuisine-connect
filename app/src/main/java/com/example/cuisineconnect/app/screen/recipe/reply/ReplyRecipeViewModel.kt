@@ -78,18 +78,15 @@ class ReplyRecipeViewModel @Inject constructor(
     recipeId: String,
     userReplies: List<Triple<User?, Reply, User?>>
   ): List<Triple<User?, Reply, User?>> {
-    // Sort replies by date, descending
-    val sortedUserReplies = userReplies.sortedBy { it.second.date }
-
     // Group replies by their parentId
-    val replyMap = sortedUserReplies.groupBy { it.second.parentId }
+    val replyMap = userReplies.groupBy { it.second.parentId }
     val result = mutableListOf<Triple<User?, Reply, User?>>()
 
     // Recursive function to add replies to the result
     fun addRepliesToResult(rootReply: String, parentId: String?) {
       // Get replies that have this parentId
       replyMap[parentId]?.forEach { replyPair ->
-        // Add the reply to the result
+        // Add the reply to the result if its root reply is opened
         if (rootReply in openedReply) {
           result.add(Triple(replyPair.first, replyPair.second.copy(isRoot = 1), replyPair.third))
         }
@@ -109,7 +106,8 @@ class ReplyRecipeViewModel @Inject constructor(
       addRepliesToResult(rootReplyPair.second.id, rootReplyPair.second.id)
     }
 
-    return result
+    // Sort the result by reply_date, descending
+    return result.sortedBy { it.second.date }
   }
 
 //  fun getReplyById(recipeId: String, rootReply: String, replyIds: List<String>) {

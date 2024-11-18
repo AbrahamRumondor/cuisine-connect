@@ -127,6 +127,7 @@
         android:layout_marginHorizontal="16dp"
         android:src="@drawable/ic_thumbs_up_regular"
         android:visibility="visible"
+        app:tint="@color/cc_text_dark_green"
         />
 
     <TextView
@@ -134,6 +135,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="98"
+        android:textColor="@color/cc_text_dark_green"
         />
 
   </LinearLayout>
