@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -79,17 +80,32 @@ class OtherProfileFragment : Fragment() {
             binding.btnFollow.run {
               text = "Following"
               setOnClickListener {
-                profileViewModel.unFollowUser(object : TwoWayCallback {
-                  override fun onSuccess() {
-                    profileViewModel.getUser()
-                    profileViewModel.getUser(user.id)
-                    Toast.makeText(context, "Successfully unfollowed", Toast.LENGTH_SHORT).show()
-                  }
+                // Show confirmation dialog for unfollow
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Unfollow User")
+                builder.setMessage("Are you sure you want to unfollow ${user.displayName}?")
 
-                  override fun onFailure(errorMessage: String) {
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                  }
-                })
+                builder.setPositiveButton("Yes") { dialog, _ ->
+                  // Call unfollow logic
+                  profileViewModel.unFollowUser(object : TwoWayCallback {
+                    override fun onSuccess() {
+                      profileViewModel.getUser() // Refresh the current user's profile
+                      profileViewModel.getUser(user.id) // Refresh the target user's profile
+                      Toast.makeText(context, "Successfully unfollowed", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onFailure(errorMessage: String) {
+                      Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                  })
+                  dialog.dismiss() // Dismiss the dialog
+                }
+
+                builder.setNegativeButton("No") { dialog, _ ->
+                  dialog.dismiss() // Dismiss the dialog if the user cancels
+                }
+
+                builder.show() // Display the dialog
               }
             }
           } else {

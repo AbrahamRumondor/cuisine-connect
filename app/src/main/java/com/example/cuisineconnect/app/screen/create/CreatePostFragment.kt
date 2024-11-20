@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.create
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -30,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.model.Hashtag
@@ -88,6 +91,15 @@ class CreatePostFragment : Fragment() {
 
   private fun setupDisplay() {
     binding.run {
+      currentUser?.let {
+        tvUsername.text = it.displayName
+        Glide
+          .with(binding.root)
+          .load(it.image)
+          .placeholder(R.drawable.ic_bnv_profile)
+          .into(ivUserProfile)
+      }
+
       btnAddText.setOnClickListener {
         addText("", true, null)
       }
@@ -103,16 +115,31 @@ class CreatePostFragment : Fragment() {
         findNavController().navigate(R.id.action_createPostFragment_to_homeFragment)
       }
 
-      val postText = Html.fromHtml("<b><u>Post</u></b>")
-      btnPost.text = postText
       btnPost.setOnClickListener {
-        updateTextPostContent()
-        showLoadingAnimation()
-        createPostViewModel.savePostInDatabase {
-          Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
-          hideLoadingAnimation()
-          findNavController().popBackStack()
-        }
+          val builder = AlertDialog.Builder(context)
+          builder.setTitle("Publish")
+          builder.setMessage("Are you sure you want to publish the post?")
+
+          builder.setPositiveButton("Yes") { dialog, _ ->
+
+            updateTextPostContent()
+            showLoadingAnimation()
+            createPostViewModel.savePostInDatabase {
+              if (createPostViewModel.postContent.isEmpty()){
+                hideLoadingAnimation()
+                Toast.makeText(activity, "Failed to save post, content is empty", Toast.LENGTH_SHORT).show()
+                return@savePostInDatabase
+              }
+              Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
+              hideLoadingAnimation()
+              findNavController().popBackStack()
+            }
+
+          }
+          builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+          }
+          builder.show()
       }
     }
   }

@@ -85,19 +85,40 @@
       android:id="@+id/tv_date"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginHorizontal="24dp"
+      android:layout_marginHorizontal="4dp"
       android:gravity="end"
       android:text="Jan xx"
       android:textColor="@android:color/black"
       android:textSize="12sp"
       app:layout_constraintBottom_toBottomOf="@id/cv_profile"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/btn_delete"
       app:layout_constraintTop_toTopOf="@id/cv_profile"
+      />
+
+  <ImageButton
+      android:id="@+id/btn_delete"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginHorizontal="4dp"
+      android:background="@drawable/ic_trash_can"
+      android:visibility="visible"
+      app:layout_constraintBottom_toBottomOf="@id/ll_username"
+      app:layout_constraintEnd_toStartOf="@id/v_end"
+      app:layout_constraintTop_toTopOf="@id/ll_username"
+      />
+
+  <View
+      android:id="@+id/v_end"
+      android:layout_width="24dp"
+      android:layout_height="1dp"
+      app:layout_constraintBottom_toBottomOf="@id/ll_username"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/ll_username"
       />
 
   <androidx.cardview.widget.CardView
       android:id="@+id/cv_recipe"
-      android:layout_width="250dp"
+      android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginVertical="16dp"
       android:layout_marginEnd="24dp"
@@ -137,17 +158,17 @@
 <!--          />-->
 
 
-      <ImageView
-          android:id="@+id/btn_delete"
-          android:layout_width="25dp"
-          android:layout_height="25dp"
-          android:layout_margin="16dp"
-          android:contentDescription="@string/image"
-          android:src="@drawable/ic_trash_can"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:tint="@color/white"
-          />
+<!--      <ImageView-->
+<!--          android:id="@+id/btn_delete"-->
+<!--          android:layout_width="25dp"-->
+<!--          android:layout_height="25dp"-->
+<!--          android:layout_margin="16dp"-->
+<!--          android:contentDescription="@string/image"-->
+<!--          android:src="@drawable/ic_trash_can"-->
+<!--          app:layout_constraintEnd_toEndOf="parent"-->
+<!--          app:layout_constraintTop_toTopOf="parent"-->
+<!--          app:tint="@color/white"-->
+<!--          />-->
 
 
       <FrameLayout

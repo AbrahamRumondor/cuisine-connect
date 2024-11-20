@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.create
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -26,6 +27,7 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.databinding.FragmentCreateRecipeBinding
 import com.example.cuisineconnect.domain.model.Hashtag
 import com.google.android.material.chip.Chip
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,29 +74,41 @@ class CreateRecipeFragment : Fragment() {
       }
 
       btnPublish.setOnClickListener {
-        showLoadingAnimation()
-        val steps = createRecipeViewModel.toSteps(getSteps())
-        val hashtags = getAllHashtags()
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Publish")
+        builder.setMessage("Are you sure you want to publish the recipe?")
 
-        createRecipeViewModel.saveRecipeInDatabase(
-          title = etTitle.text.toString(),
-          description = etDescription.text.toString(),
-          portion = etPortion.text.toString(),
-          duration = etDuration.text.toString(),
-          image = imageUri.toString(),
-          ingredients = getIngredients(),
-          steps = steps,
-          imageUri = imageUri,
-          hashtags = hashtags
-        ) { text ->
-          hideLoadingAnimation()
-          if (text == null) {
-            Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
-          } else {
-            Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
+        builder.setPositiveButton("Yes") { dialog, _ ->
+
+          showLoadingAnimation()
+          val steps = createRecipeViewModel.toSteps(getSteps())
+          val hashtags = getAllHashtags()
+
+          createRecipeViewModel.saveRecipeInDatabase(
+            title = etTitle.text.toString(),
+            description = etDescription.text.toString(),
+            portion = etPortion.text.toString(),
+            duration = etDuration.text.toString(),
+            image = imageUri.toString(),
+            ingredients = getIngredients(),
+            steps = steps,
+            imageUri = imageUri,
+            hashtags = hashtags
+          ) { text ->
+            hideLoadingAnimation()
+            if (text == null) {
+              Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
+              findNavController().popBackStack()
+            } else {
+              Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
+            }
           }
+
         }
+        builder.setNegativeButton("No") { dialog, _ ->
+          dialog.dismiss()
+        }
+        builder.show()
       }
 
       ivImage.setOnClickListener {

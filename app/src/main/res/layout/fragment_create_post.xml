@@ -55,11 +55,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_post"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:text="Post"
+                android:layout_margin="14dp"
+                android:background="@drawable/button_radius"
+                android:gravity="center"
+                android:text="Publish"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
                 />
 
           </LinearLayout>

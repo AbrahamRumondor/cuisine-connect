@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app.screen.profile
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -73,7 +74,7 @@ class ProfileFragment : Fragment() {
           tvUsername.text = user.displayName
           val username = "@${user.username}"
           tvUniqueUsername.text = username
-          
+
           Glide.with(root)
             .load(user.image)
             .placeholder(R.drawable.ic_bnv_profile)
@@ -129,8 +130,26 @@ class ProfileFragment : Fragment() {
         }
 
         R.id.action_settings -> {
-          FirebaseAuth.getInstance().signOut()
-          goToLogin()
+          val builder = AlertDialog.Builder(view.context)
+          builder.setTitle("Log out")
+          builder.setMessage("Are you sure you want to log out?")
+
+          builder.setPositiveButton("Yes") { dialog, _ ->
+            Toast.makeText(
+              view.context,
+              "Logged out",
+              Toast.LENGTH_SHORT
+            ).show()
+
+            FirebaseAuth.getInstance().signOut()
+            goToLogin()
+            dialog.dismiss() // Dismiss the dialog
+          }
+
+          builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+          }
+          builder.show()
           true
         }
 
