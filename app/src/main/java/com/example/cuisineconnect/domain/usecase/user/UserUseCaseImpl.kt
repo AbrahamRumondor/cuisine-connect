@@ -52,4 +52,19 @@ class UserUseCaseImpl @Inject constructor(
     override suspend fun getUserBookmarks(userId: String): StateFlow<List<String>> {
         return userRepository.getUserBookmarks(userId)
     }
+
+    override fun savePostContentForCurrentUser(
+        postContent: List<Map<String, String>>,
+        callback: TwoWayCallback
+    ) {
+        return userRepository.savePostContentForCurrentUser(postContent, callback)
+    }
+
+    override fun clearPostContentForCurrentUser(callback: TwoWayCallback) {
+        userRepository.clearPostContentForCurrentUser(callback)
+    }
+
+    override fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit)  {
+        return userRepository.fetchPostContentForCurrentUser(callback)
+    }
 }

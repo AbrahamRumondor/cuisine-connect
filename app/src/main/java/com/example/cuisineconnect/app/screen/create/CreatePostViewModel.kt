@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.data.response.PostResponse
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.post.PostUseCase
@@ -41,6 +42,29 @@ class CreatePostViewModel @Inject constructor(
 
   init {
     getUser()
+  }
+
+  fun savePostProgress(callback: TwoWayCallback) {
+    userUseCase.savePostContentForCurrentUser(postContent, callback)
+  }
+
+  fun deletePostProgress(callback: TwoWayCallback) {
+    userUseCase.clearPostContentForCurrentUser(callback)
+  }
+
+  fun fetchSavedPostContent(result: () -> Unit) {
+    viewModelScope.launch {
+      userUseCase.fetchPostContentForCurrentUser {
+        it.onSuccess { content ->
+          Log.d("lololol", "this vm: ${content}")
+          postContent = content
+          result()
+        }
+        it.onFailure {
+          Log.d("lololol", "this vm: ${it}")
+        }
+      }
+    }
   }
 
   private fun getUser() {

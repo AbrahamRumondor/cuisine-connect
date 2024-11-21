@@ -46,7 +46,11 @@ data class UserResponse(
 
     @get:PropertyName("user_following")
     @set:PropertyName("user_following")
-    var following: List<String> = emptyList()
+    var following: List<String> = emptyList(),
+
+    @get:PropertyName("user_ongoing_post")
+    @set:PropertyName("user_ongoing_post")
+    var postContent: MutableList<MutableMap<String, String>> = mutableListOf()
 ) {
 
     constructor() : this("", "", "", "")
@@ -64,7 +68,8 @@ data class UserResponse(
                 image = userResponse.image,
                 posts = userResponse.posts,
                 bookmarks = userResponse.bookmarks,
-                username = userResponse.uniqueUsername
+                username = userResponse.uniqueUsername,
+                postContent = userResponse.postContent
             )
         }
 
@@ -80,7 +85,8 @@ data class UserResponse(
                 image = user.image,
                 posts = user.posts,
                 bookmarks = user.bookmarks,
-                uniqueUsername = user.username
+                uniqueUsername = user.username,
+                postContent = user.postContent
             )
         }
     }

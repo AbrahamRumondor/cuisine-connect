@@ -16,4 +16,6 @@ interface UserRepository {
   fun followUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
   fun unfollowUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
   suspend fun getUserBookmarks(userId: String): StateFlow<List<String>>
-}
+  fun savePostContentForCurrentUser(postContent: List<Map<String, String>>, callback: TwoWayCallback)
+  fun clearPostContentForCurrentUser(callback: TwoWayCallback)
+  fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit) }

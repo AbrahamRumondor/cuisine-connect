@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.data.repository
 
 import android.util.Log
+import com.example.cuisineconnect.app.util.UserUtil
 import com.example.cuisineconnect.data.response.UserResponse
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
@@ -188,6 +189,76 @@ class UserRepositoryImpl @Inject constructor(
       _userBookmarks.value = emptyList()
     }
     return userBookmarks
+  }
+
+  override fun savePostContentForCurrentUser(
+    postContent: List<Map<String, String>>,
+    callback: TwoWayCallback
+  ) {
+    // Ensure the current user is valid
+    val currentUserId = currentUser.value.id
+    if (currentUserId.isBlank()) {
+      callback.onFailure("User is not logged in.")
+      return
+    }
+
+    // Update the 'user_ongoing_post' field in Firestore
+    usersRef.document(currentUserId)
+      .update("user_ongoing_post", postContent)
+      .addOnSuccessListener {
+        callback.onSuccess()
+      }
+      .addOnFailureListener { e ->
+        callback.onFailure("Error saving post content: ${e.message}")
+      }
+  }
+
+  override fun clearPostContentForCurrentUser(callback: TwoWayCallback) {
+    // Ensure the current user is valid
+    val currentUserId = currentUser.value.id
+    if (currentUserId.isBlank()) {
+      callback.onFailure("User is not logged in.")
+      return
+    }
+
+    // Clear the 'user_ongoing_post' field in Firestore
+    usersRef.document(currentUserId)
+      .update("user_ongoing_post", emptyList<Map<String, String>>())
+      .addOnSuccessListener {
+        callback.onSuccess()
+      }
+      .addOnFailureListener { e ->
+        callback.onFailure("Error clearing post content: ${e.message}")
+      }
+  }
+
+  override fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit) {
+    try {
+      UserUtil.currentUser?.let { user ->
+        if (user.id.isBlank()) {
+          callback(Result.failure(Exception("User ID is blank.")))
+          return
+        }
+
+        usersRef.document(user.id).get()
+          .addOnSuccessListener { snapshot ->
+            @Suppress("UNCHECKED_CAST")
+            val postContent =
+              snapshot.get("user_ongoing_post") as? MutableList<MutableMap<String, String>>
+                ?: mutableListOf()
+            callback(Result.success(postContent))
+          }
+          .addOnFailureListener { exception ->
+            Timber.tag("UserRepositoryImpl")
+              .e(exception, "Error fetching post content for current user")
+            callback(Result.failure(exception))
+          }
+      }
+    } catch (e: Exception) {
+      Timber.tag("UserRepositoryImpl")
+        .e(e, "Unexpected error fetching post content for current user")
+      callback(Result.failure(e))
+    }
   }
 
 }

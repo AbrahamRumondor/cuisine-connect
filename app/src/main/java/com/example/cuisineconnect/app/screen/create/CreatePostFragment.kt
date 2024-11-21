@@ -36,6 +36,7 @@ import com.example.cuisineconnect.app.util.UserUtil
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.Hashtag
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +55,8 @@ class CreatePostFragment : Fragment() {
   private var imageUri: Uri? = null
   private var imageToReplaceIndex: Int? = null
 
+  private var isNotFromAddRecipe = true
+
   var SELECT_PICTURE: Int = 200
 
   private lateinit var trendingHashtagAdapter: HashtagAdapter
@@ -65,6 +68,12 @@ class CreatePostFragment : Fragment() {
     binding = FragmentCreatePostBinding.inflate(inflater, container, false)
     setupToolbar()
 
+    if (isNotFromAddRecipe) {
+      createPostViewModel.fetchSavedPostContent {
+
+      }
+    }
+
     setupDisplay()
 
     return binding.root
@@ -72,6 +81,15 @@ class CreatePostFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    if (isNotFromAddRecipe) {
+      createPostViewModel.fetchSavedPostContent {
+        lifecycleScope.launch {
+          Log.d("lololol", "this notfromadd: ${createPostViewModel.postContent}")
+          restorePostContent()
+        }
+      }
+    }
 
     requireActivity().supportFragmentManager.setFragmentResultListener(
       "requestKey",
@@ -85,6 +103,7 @@ class CreatePostFragment : Fragment() {
           Log.d("lololol", "this: ${createPostViewModel.postContent}")
           restorePostContent()
           addRecipe(id, true, null)
+          isNotFromAddRecipe = true
         }
       }
     }
@@ -112,8 +131,33 @@ class CreatePostFragment : Fragment() {
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
       }
       btnAddRecipe.setOnClickListener {
+        isNotFromAddRecipe = false
         updateTextPostContent()
         findNavController().navigate(R.id.action_createPostFragment_to_homeFragment)
+      }
+
+      btnSave.setOnClickListener {
+        createPostViewModel.savePostProgress(object : TwoWayCallback {
+          override fun onSuccess() {
+            Toast.makeText(context, "Successfully saved post", Toast.LENGTH_SHORT).show()
+          }
+
+          override fun onFailure(errorMessage: String) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+          }
+        })
+      }
+
+      btnDelete.setOnClickListener {
+        createPostViewModel.deletePostProgress(object : TwoWayCallback {
+          override fun onSuccess() {
+            Toast.makeText(context, "Successfully delete progress", Toast.LENGTH_SHORT).show()
+          }
+
+          override fun onFailure(errorMessage: String) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+          }
+        })
       }
 
       btnPost.setOnClickListener {

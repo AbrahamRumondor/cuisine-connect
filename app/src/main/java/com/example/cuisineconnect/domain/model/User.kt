@@ -11,5 +11,6 @@ data class User(
     val posts: List<String> = listOf(),
     val image: String = "",
     val follower: List<String> = listOf(),
-    val following: List<String> = listOf()
+    val following: List<String> = listOf(),
+    val postContent: MutableList<MutableMap<String, String>> = mutableListOf()
 )
