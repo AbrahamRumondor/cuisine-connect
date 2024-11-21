@@ -167,7 +167,7 @@ class PostContentRenderer(
         )
 
         // Set margins using the new function
-        setViewMargins(viewRecipe.root, 0, 8)
+        setViewMargins(viewRecipe.root, 4, 4)
 
         viewRecipe.run {
           tvTitle.text = recipe.title

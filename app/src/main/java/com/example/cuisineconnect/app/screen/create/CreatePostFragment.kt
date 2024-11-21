@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -116,73 +117,34 @@ class CreatePostFragment : Fragment() {
       }
 
       btnPost.setOnClickListener {
-          val builder = AlertDialog.Builder(context)
-          builder.setTitle("Publish")
-          builder.setMessage("Are you sure you want to publish the post?")
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Publish")
+        builder.setMessage("Are you sure you want to publish the post?")
 
-          builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton("Yes") { dialog, _ ->
 
-            updateTextPostContent()
-            showLoadingAnimation()
-            createPostViewModel.savePostInDatabase {
-              if (createPostViewModel.postContent.isEmpty()){
-                hideLoadingAnimation()
-                Toast.makeText(activity, "Failed to save post, content is empty", Toast.LENGTH_SHORT).show()
-                return@savePostInDatabase
-              }
-              Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
+          updateTextPostContent()
+          showLoadingAnimation()
+          createPostViewModel.savePostInDatabase {
+            if (createPostViewModel.postContent.isEmpty()) {
               hideLoadingAnimation()
-              findNavController().popBackStack()
+              Toast.makeText(activity, "Failed to save post, content is empty", Toast.LENGTH_SHORT)
+                .show()
+              return@savePostInDatabase
             }
+            Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
+            hideLoadingAnimation()
+            findNavController().popBackStack()
+          }
 
-          }
-          builder.setNegativeButton("No") { dialog, _ ->
-            dialog.dismiss()
-          }
-          builder.show()
+        }
+        builder.setNegativeButton("No") { dialog, _ ->
+          dialog.dismiss()
+        }
+        builder.show()
       }
     }
   }
-
-//  private fun addText(text: String, isFromListener: Boolean, order: Int?) {
-//    // Add text to the container (UI logic)
-//    val customCardView = LayoutInflater.from(context)
-//      .inflate(R.layout.item_post_edit_text_input, binding.llPostContents, false)
-//    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
-//    etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-//
-//    if (order != null && order <= binding.llPostContents.childCount) {
-//      binding.llPostContents.removeViewAt(order)
-//      binding.llPostContents.addView(customCardView, order)
-//    } else {
-//      binding.llPostContents.addView(customCardView, binding.llPostContents.childCount)
-//    }
-//
-//    etUserInput.setText(text)
-//
-//    // If the function is called by a listener, add text content to ViewModel
-//    if (isFromListener) {
-//      Log.d("lololol", "add text")
-//      createPostViewModel.postContent.add(
-//        mutableMapOf(
-//          "type" to "${createPostViewModel.postContent.size}_text",
-//          "value" to etUserInput.text.toString()
-//        )
-//      )
-//    }
-//
-//    // Scroll to the bottom of the ScrollView first, then focus on the EditText
-//    binding.svPost.post {
-//      binding.svPost.fullScroll(View.FOCUS_DOWN)
-//
-//      // Request focus on the new EditText and show the keyboard after scrolling
-//      etUserInput.requestFocus()
-//      etUserInput.post {
-//        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-//        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
-//      }
-//    }
-//  }
 
   private fun addText(text: String, isFromListener: Boolean, order: Int?) {
     val customCardView = LayoutInflater.from(context)
@@ -190,8 +152,9 @@ class CreatePostFragment : Fragment() {
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
     val rvHashtag: RecyclerView = customCardView.findViewById(R.id.rv_hashtag)
     etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+    val deleteBtn: ImageView = customCardView.findViewById(R.id.btn_delete) // Add delete button
 
-    if (order != null && order <= binding.llPostContents.childCount) {
+    if (order != null && order < binding.llPostContents.childCount) {
       binding.llPostContents.removeViewAt(order)
       binding.llPostContents.addView(customCardView, order)
     } else {
@@ -199,6 +162,24 @@ class CreatePostFragment : Fragment() {
     }
 
     etUserInput.setText(text)
+
+    deleteBtn.setOnClickListener {
+      val index = binding.llPostContents.indexOfChild(customCardView)
+      if (index != -1) {
+        binding.llPostContents.removeView(customCardView)
+        createPostViewModel.postContent.removeAt(index)
+
+        for (i in index until createPostViewModel.postContent.size) {
+          val entry = createPostViewModel.postContent[i]
+          val type = entry["type"]
+          if (type != null) {
+            val typeSuffix = type.substringAfter("_")
+            createPostViewModel.postContent[i]["type"] = "${i}_${typeSuffix}"
+          }
+        }
+      }
+      return@setOnClickListener
+    }
 
     // Add TextWatcher to detect "#" and show hashtag suggestions
     etUserInput.addTextChangedListener(object : TextWatcher {
@@ -216,14 +197,16 @@ class CreatePostFragment : Fragment() {
 
         // If valid hashtag is found and no space after "#"
         if (isShowRV && lastHashPosition != -1) {
-          val hashtagQuery = query.substring(lastHashPosition + 1) // Get the hashtag query after the last "#"
+          val hashtagQuery =
+            query.substring(lastHashPosition + 1) // Get the hashtag query after the last "#"
 
           if (hashtagQuery.isNotEmpty()) {
             searchHashtags("#$hashtagQuery")
             rvHashtag.visibility = View.VISIBLE // Show RecyclerView for hashtag suggestions
           }
         } else {
-          rvHashtag.visibility = View.GONE // Hide RecyclerView if "#" is followed by a space or no hashtag after "#"
+          rvHashtag.visibility =
+            View.GONE // Hide RecyclerView if "#" is followed by a space or no hashtag after "#"
         }
       }
 
@@ -341,6 +324,8 @@ class CreatePostFragment : Fragment() {
     val customImageView = LayoutInflater.from(context)
       .inflate(R.layout.item_post_image_view, binding.llPostContents, false)
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
+    val btnDelete: ImageView = customImageView.findViewById(R.id.btn_delete)
+    btnDelete.visibility = View.VISIBLE
 
     // Load image into the ImageView
     context?.let { Glide.with(it).load(imageUri).into(imageView) }
@@ -354,8 +339,26 @@ class CreatePostFragment : Fragment() {
       startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE)
     }
 
+    btnDelete.setOnClickListener {
+      val index = binding.llPostContents.indexOfChild(customImageView)
+      if (index != -1) {
+        binding.llPostContents.removeView(customImageView)
+        createPostViewModel.postContent.removeAt(index) // remove where type is index_image
+
+        for (i in index until createPostViewModel.postContent.size) {
+          val entry = createPostViewModel.postContent[i]
+          val type = entry["type"]
+          if (type != null) {
+            val typeSuffix = type.substringAfter("_")
+            createPostViewModel.postContent[i]["type"] = "${i}_${typeSuffix}"
+          }
+        }
+      }
+      return@setOnClickListener
+    }
+
     // Add the image to the correct position in the layout
-    if (order != null && order <= binding.llPostContents.childCount) {
+    if (order != null && order < binding.llPostContents.childCount) {
       binding.llPostContents.removeViewAt(order)
       binding.llPostContents.addView(customImageView, order)
     } else {
@@ -421,10 +424,28 @@ class CreatePostFragment : Fragment() {
               .placeholder(R.drawable.ic_bnv_profile)
               .into(ivUserProfile)
           }
+
+          btnDelete.visibility = View.VISIBLE
+          btnDelete.setOnClickListener {
+            val index = binding.llPostContents.indexOfChild(bindingRecipe.root)
+            if (index != -1) {
+              binding.llPostContents.removeView(bindingRecipe.root)
+              createPostViewModel.postContent.removeAt(index)
+
+              for (i in index until createPostViewModel.postContent.size) {
+                val entry = createPostViewModel.postContent[i]
+                val type = entry["type"]
+                if (type != null) {
+                  val typeSuffix = type.substringAfter("_")
+                  createPostViewModel.postContent[i]["type"] = "${i}_${typeSuffix}"
+                }
+              }
+            }
+            return@setOnClickListener
+          }
         }
 
-
-        if (order != null && order <= binding.llPostContents.childCount) {
+        if (order != null && order < binding.llPostContents.childCount) {
           binding.llPostContents.removeViewAt(order)
           binding.llPostContents.addView(bindingRecipe.root, order)
         } else {
@@ -589,3 +610,43 @@ class CreatePostFragment : Fragment() {
   }
 
 }
+
+//  private fun addText(text: String, isFromListener: Boolean, order: Int?) {
+//    // Add text to the container (UI logic)
+//    val customCardView = LayoutInflater.from(context)
+//      .inflate(R.layout.item_post_edit_text_input, binding.llPostContents, false)
+//    val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
+//    etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+//
+//    if (order != null && order <= binding.llPostContents.childCount) {
+//      binding.llPostContents.removeViewAt(order)
+//      binding.llPostContents.addView(customCardView, order)
+//    } else {
+//      binding.llPostContents.addView(customCardView, binding.llPostContents.childCount)
+//    }
+//
+//    etUserInput.setText(text)
+//
+//    // If the function is called by a listener, add text content to ViewModel
+//    if (isFromListener) {
+//      Log.d("lololol", "add text")
+//      createPostViewModel.postContent.add(
+//        mutableMapOf(
+//          "type" to "${createPostViewModel.postContent.size}_text",
+//          "value" to etUserInput.text.toString()
+//        )
+//      )
+//    }
+//
+//    // Scroll to the bottom of the ScrollView first, then focus on the EditText
+//    binding.svPost.post {
+//      binding.svPost.fullScroll(View.FOCUS_DOWN)
+//
+//      // Request focus on the new EditText and show the keyboard after scrolling
+//      etUserInput.requestFocus()
+//      etUserInput.post {
+//        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+//        imm?.showSoftInput(etUserInput, InputMethodManager.SHOW_IMPLICIT)
+//      }
+//    }
+//  }
