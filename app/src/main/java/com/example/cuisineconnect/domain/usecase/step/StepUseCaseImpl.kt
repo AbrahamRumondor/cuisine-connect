@@ -14,6 +14,10 @@ class StepUseCaseImpl @Inject constructor(
     return stepRepository.getSteps(recipeId)
   }
 
+  override suspend fun getSteps(userId: String, recipeId: String): StateFlow<List<Step>> {
+    return stepRepository.getSteps(userId, recipeId)
+  }
+
   override fun setSteps(steps: List<Pair<String, StepResponse>>) {
     stepRepository.setSteps(steps)
   }

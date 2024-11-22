@@ -1,10 +1,10 @@
 package com.example.cuisineconnect.domain.usecase.user
 
+import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.AuthRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
-import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
@@ -66,5 +66,21 @@ class UserUseCaseImpl @Inject constructor(
 
     override fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit)  {
         return userRepository.fetchPostContentForCurrentUser(callback)
+    }
+
+    override fun saveRecipeContentForCurrentUser(
+        recipeId: String,
+        recipeResponse: RecipeResponse,
+        callback: TwoWayCallback
+    ) {
+        userRepository.saveCurrentUserProgressRecipe(recipeId, recipeResponse, callback)
+    }
+
+    override fun clearRecipeContentForCurrentUser(callback: TwoWayCallback) {
+        userRepository.clearRecipeContentForCurrentUser(callback)
+    }
+
+    override fun fetchRecipeContentForCurrentUser(callback: (Map<String, Any>?) -> Unit) {
+        userRepository.fetchRecipeContentForCurrentUser(callback)
     }
 }

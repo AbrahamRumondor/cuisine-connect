@@ -1,9 +1,8 @@
 package com.example.cuisineconnect.domain.repository
 
+import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.StateFlow
 
 interface UserRepository {
@@ -16,6 +15,14 @@ interface UserRepository {
   fun followUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
   fun unfollowUser(currentUserId: String, targetUserId: String, callback: TwoWayCallback)
   suspend fun getUserBookmarks(userId: String): StateFlow<List<String>>
-  fun savePostContentForCurrentUser(postContent: List<Map<String, String>>, callback: TwoWayCallback)
+  fun savePostContentForCurrentUser(
+    postContent: List<Map<String, String>>,
+    callback: TwoWayCallback
+  )
+
   fun clearPostContentForCurrentUser(callback: TwoWayCallback)
-  fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit) }
+  fun fetchPostContentForCurrentUser(callback: (result: Result<MutableList<MutableMap<String, String>>>) -> Unit)
+  fun saveCurrentUserProgressRecipe(recipeId: String, recipeResponse: RecipeResponse, callback: TwoWayCallback)
+  fun clearRecipeContentForCurrentUser(callback: TwoWayCallback)
+  fun fetchRecipeContentForCurrentUser(callback: (Map<String, Any>?) -> Unit)
+}

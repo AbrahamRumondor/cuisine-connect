@@ -48,4 +48,11 @@ class HashtagUseCaseImpl @Inject constructor(
   ) {
     hashtagRepository.getSortedTrendingHashtags(limit, callback)
   }
+
+  override suspend fun removeItemIdFromHashtag(
+    hashtagBody: String,
+    itemId: String,
+  ) {
+    hashtagRepository.removeItemIdFromHashtag(hashtagBody, itemId)
+  }
 }

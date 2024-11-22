@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.StateFlow
 interface StepUseCase {
   suspend fun getSteps(recipeId: String): StateFlow<List<Step>>
   fun setSteps(steps: List<Pair<String, StepResponse>>)
+  suspend fun getSteps(userId: String, recipeId: String): StateFlow<List<Step>>
 }

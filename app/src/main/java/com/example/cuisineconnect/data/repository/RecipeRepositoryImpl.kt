@@ -3,6 +3,7 @@ package com.example.cuisineconnect.data.repository
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
+import com.example.cuisineconnect.domain.repository.HashtagRepository
 import com.example.cuisineconnect.domain.repository.RecipeRepository
 import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.firebase.firestore.CollectionReference
@@ -19,6 +20,7 @@ import javax.inject.Named
 class RecipeRepositoryImpl @Inject constructor(
   @Named("recipesRef") private val recipesRef: CollectionReference,
   @Named("usersRef") private val usersRef: CollectionReference,
+  private val hashtagRepository: HashtagRepository,
   private val userRepository: UserRepository
 ) : RecipeRepository {
 
@@ -118,18 +120,36 @@ class RecipeRepositoryImpl @Inject constructor(
     try {
       val userId = recipeId.substringAfter("_").substringBefore("_")
 
+      // Fetch user by userId
       val user = userRepository.getUserByUserId(userId)
       if (user == null) {
         Timber.tag("RemoveRecipe").e("User with id $userId not found, aborting recipe deletion")
         return
       }
 
+      // Update user's recipes list
       val updatedRecipes = user.recipes.filterNot { recipe -> recipe == recipeId }
       userRepository.storeUser(userId, user.copy(recipes = updatedRecipes), isUpdate = true)
 
-      val recipeDoc = recipesRef.document(recipeId)
-      recipeDoc.delete().await()
+      // Fetch the recipe object
+      val recipe = getRecipeByID(recipeId)
+      if (recipe == null) {
+        Timber.tag("RemoveRecipe").e("Recipe with id $recipeId not found, skipping hashtag removal")
+        return // Return early if recipe is not found
+      }
 
+      // Remove the recipeId from all associated hashtags in parallel
+      recipe.hashtags.forEach { hashtag ->
+        try {
+          hashtagRepository.removeItemIdFromHashtag(hashtag, recipeId) // Uses the suspend function directly
+          Timber.tag("RemoveRecipe").d("Removed recipeId $recipeId from hashtag $hashtag")
+        } catch (e: Exception) {
+          Timber.tag("RemoveRecipe").e(e, "Error removing recipeId $recipeId from hashtag $hashtag")
+        }
+      }
+
+      // Delete the recipe document from Firestore
+      recipesRef.document(recipeId).delete().await()
       Timber.tag("RemoveRecipe").d("Recipe $recipeId deleted successfully")
     } catch (e: Exception) {
       Timber.tag("RemoveRecipe").e(e, "Error deleting recipe $recipeId")

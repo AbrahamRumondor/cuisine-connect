@@ -6,6 +6,8 @@ import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.repository.HashtagRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -160,7 +162,10 @@ class HashtagRepositoryImpl @Inject constructor(
       }
   }
 
-  override fun findSearchPromptHashtags(query: String, callback: (List<Hashtag>, Exception?) -> Unit) {
+  override fun findSearchPromptHashtags(
+    query: String,
+    callback: (List<Hashtag>, Exception?) -> Unit
+  ) {
     hashtagRef
       .orderBy("hashtag_body")
       .startAt(query)
@@ -170,7 +175,7 @@ class HashtagRepositoryImpl @Inject constructor(
         val hashtagList = snapshot.documents.mapNotNull { document ->
           document.toObject(HashtagResponse::class.java)?.let { HashtagResponse.transform(it) }
         }
-          callback(hashtagList, null)
+        callback(hashtagList, null)
       }
       .addOnFailureListener { e ->
         callback(emptyList(), e)
@@ -214,7 +219,10 @@ class HashtagRepositoryImpl @Inject constructor(
       }
   }
 
-  override fun getSortedTrendingHashtags(limit: Int, callback: (List<Hashtag>, Exception?) -> Unit) {
+  override fun getSortedTrendingHashtags(
+    limit: Int,
+    callback: (List<Hashtag>, Exception?) -> Unit
+  ) {
     updateTrendingScores { success, error ->
       if (success) {
         // Proceed to fetch trending hashtags if scores were successfully updated
@@ -238,4 +246,33 @@ class HashtagRepositoryImpl @Inject constructor(
     }
   }
 
+  override suspend fun removeItemIdFromHashtag(hashtagBody: String, itemId: String) {
+    try {
+      val snapshot = hashtagRef.whereEqualTo("hashtag_body", hashtagBody).get().await()
+      if (snapshot.isEmpty) {
+        Timber.tag("RemoveHashtag").d("No hashtag found with the body: $hashtagBody")
+        return
+      }
+
+      val document = snapshot.documents.first()
+      val hashtag = document.toObject(HashtagResponse::class.java)
+      val currentListId = hashtag?.listId?.toMutableList() ?: mutableListOf()
+
+      if (currentListId.contains(itemId)) {
+        currentListId.remove(itemId)
+
+        if (currentListId.isEmpty()) {
+          hashtagRef.document(document.id).delete().await()
+          Timber.tag("RemoveHashtag").d("Hashtag $hashtagBody removed successfully.")
+        } else {
+          hashtagRef.document(document.id).update("hashtag_list_id", currentListId).await()
+          Timber.tag("RemoveHashtag").d("Updated hashtag $hashtagBody successfully.")
+        }
+      } else {
+        Timber.tag("RemoveHashtag").d("Item ID $itemId not found in hashtag $hashtagBody.")
+      }
+    } catch (e: Exception) {
+      Timber.tag("RemoveHashtag").e(e, "Error removing itemId $itemId from hashtag $hashtagBody")
+    }
+  }
 }

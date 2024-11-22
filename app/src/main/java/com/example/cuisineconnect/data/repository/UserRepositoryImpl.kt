@@ -2,6 +2,7 @@ package com.example.cuisineconnect.data.repository
 
 import android.util.Log
 import com.example.cuisineconnect.app.util.UserUtil
+import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.UserResponse
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.User
@@ -261,4 +262,73 @@ class UserRepositoryImpl @Inject constructor(
     }
   }
 
+  override fun saveCurrentUserProgressRecipe(
+    recipeId: String,
+    recipeResponse: RecipeResponse,
+    callback: TwoWayCallback
+  ) {
+    UserUtil.currentUser?.let { currentUser ->
+
+      val currentUserId = currentUser.id
+      if (currentUserId.isBlank()) {
+        callback.onFailure("User is not logged in.")
+        return
+      }
+
+      val progressData = mapOf(
+        "recipeId" to recipeId,
+        "recipeResponse" to recipeResponse
+      )
+
+      usersRef.document(currentUserId)
+        .update("user_ongoing_recipe", progressData)
+        .addOnSuccessListener {
+          callback.onSuccess()
+        }
+        .addOnFailureListener { e ->
+          callback.onFailure("Error saving recipe progress: ${e.message}")
+        }
+    }
+  }
+
+  override fun fetchRecipeContentForCurrentUser(callback: (Map<String, Any>?) -> Unit) {
+    UserUtil.currentUser?.let { currentUser ->
+
+      val currentUserId = currentUser.id
+      if (currentUserId.isBlank()) {
+        callback(null) // User not logged in
+        return
+      }
+
+      usersRef.document(currentUserId)
+        .get()
+        .addOnSuccessListener { snapshot ->
+          val progress = snapshot.get("user_ongoing_recipe") as? Map<String, Any>
+          callback(progress)
+        }
+        .addOnFailureListener { e ->
+          Timber.tag("UserRepositoryImpl").e(e, "Error fetching recipe progress")
+          callback(null)
+        }
+    }
+  }
+
+  override fun clearRecipeContentForCurrentUser(callback: TwoWayCallback) {
+    UserUtil.currentUser?.let { currentUser ->
+      val currentUserId = currentUser.id
+      if (currentUserId.isBlank()) {
+        callback.onFailure("User is not logged in.")
+        return
+      }
+
+      usersRef.document(currentUserId)
+        .update("user_ongoing_recipe", null)
+        .addOnSuccessListener {
+          callback.onSuccess()
+        }
+        .addOnFailureListener { e ->
+          callback.onFailure("Error clearing recipe progress: ${e.message}")
+        }
+    }
+  }
 }

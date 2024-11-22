@@ -7,9 +7,11 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.data.response.RecipeResponse
 import com.example.cuisineconnect.data.response.StepResponse
 import com.example.cuisineconnect.domain.callbacks.FirestoreCallback
+import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.Step
@@ -21,7 +23,11 @@ import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
@@ -40,6 +46,30 @@ class CreateRecipeViewModel @Inject constructor(
 ) : ViewModel() {
 
   private val storageReference = FirebaseStorage.getInstance().reference
+
+  fun saveRecipeProgress(recipeId: String, recipeResponse: RecipeResponse,callback: TwoWayCallback) {
+    userUseCase.saveRecipeContentForCurrentUser(recipeId, recipeResponse, callback)
+  }
+
+  fun deleteRecipeProgress(callback: TwoWayCallback) {
+    userUseCase.clearRecipeContentForCurrentUser(callback)
+  }
+
+  fun fetchSavedRecipeContent(callback: (Map<String, Any>?) -> Unit) {
+    viewModelScope.launch {
+      userUseCase.fetchRecipeContentForCurrentUser(callback)
+    }
+  }
+
+  fun fetchSavedRecipeSteps(recipeId: String, callback: (List<Step>) -> Unit) {
+    viewModelScope.launch {
+      currentUser?.let { user ->
+        stepUseCase.getSteps(user.id, recipeId).collectLatest {
+          callback(it)
+        }
+      }
+    }
+  }
 
   fun toSteps(
     body: List<String>
@@ -155,6 +185,139 @@ class CreateRecipeViewModel @Inject constructor(
     })
   }
 
+  fun saveRecipeProgressForCurrentUser(
+    title: String,
+    description: String,
+    portion: String,
+    duration: String,
+    image: String,
+    steps: List<Step>,
+    ingredients: List<String>,
+    imageUri: Uri?,
+    hashtags: List<String>,
+    existId: String?,
+    onResult: (msg: Int?) -> Unit
+  ) {
+    getUserFromDB(object : FirestoreCallback {
+      override fun onSuccess(user: User?) {
+        user?.let { me ->
+          try {
+            Log.d("createRecipeViewModel", "inge: ${ingredients}")
+            Log.d("createRecipeViewModel", "step: ${steps}")
+
+            val recipeId = if (!existId.isNullOrEmpty()) existId else getRecipeDocumentId(me.id)
+
+            // Create the Recipe object
+            val recipe = Recipe(
+              id = recipeId,
+              userId = me.id,
+              title = title,
+              description = description,
+              portion = portion,
+              duration = duration,
+              image = image,
+              ingredients = ingredients,
+              date = Date(),
+              referencedBy = mapOf(me.id to true),
+              hashtags = hashtags,
+              recipeTitleSplit = title.split(" ").map { it.lowercase() }
+            )
+            val recipeToFirebase = RecipeResponse.transform(recipe)
+
+            // Fetch existing steps first (no need for a coroutine)
+            val userRecipeRef = db.collection("users")
+              .document(me.id)
+              .collection("recipes")
+              .document(recipeId)
+            val stepsRef = userRecipeRef.collection("steps")
+
+            stepsRef.get().addOnSuccessListener { existingStepsSnapshot ->
+              // Transaction to update recipe and steps
+              db.runTransaction { transaction ->
+                // Delete the existing recipe document
+                transaction.delete(userRecipeRef)
+
+                // Set the new recipe document
+                transaction.set(userRecipeRef, recipeToFirebase)
+
+                // Delete existing steps under the Recipe's "steps" subcollection
+                existingStepsSnapshot.documents.forEach { document ->
+                  transaction.delete(document.reference) // Delete each step
+                }
+
+                // Save the new Steps under the Recipe's "steps" subcollection
+                steps.forEach { step ->
+                  val newStep = step.copy(id = getRecipeStepDocumentId(recipeId))
+                  val stepRef = userRecipeRef.collection("steps").document(newStep.id)
+                  transaction.set(stepRef, StepResponse.transform(newStep)) // Add new steps
+                }
+              }.addOnSuccessListener {
+                // After transaction, handle image upload if there's an image
+                imageUri?.let { uri ->
+                  uploadImage(uri) { link ->
+                    if (link != null) {
+                      // Update the recipe document with the image link after upload success
+                      db.collection("users")
+                        .document(me.id)
+                        .collection("recipes")
+                        .document(recipeId)
+                        .update("recipe_image", link.toString())
+                        .addOnSuccessListener {
+                          Log.d("createRecipeViewModel", "Recipe image updated")
+                        }
+                        .addOnFailureListener { e ->
+                          Timber.tag("createRecipeViewModel").d("Image update failed: %s", e.message)
+                        }
+                    } else {
+                      // Handle image upload failure
+                      onResult(R.string.image_upload_failed)
+                    }
+                  }
+                }
+
+//                // Handle hashtags
+//                if (hashtags.isNotEmpty()) {
+//                  hashtags.forEach { hashtag ->
+//                    addNewHashtag(hashtag, recipeId)
+//                  }
+//                }
+
+                // Now save the recipe progress using your method
+                saveRecipeProgress(recipeId, recipeToFirebase, object : TwoWayCallback {
+                  override fun onSuccess() {
+                    Log.d("createRecipeViewModel", "success save progress")
+                  }
+
+                  override fun onFailure(errorMessage: String) {
+                    Log.d("createRecipeViewModel", "failed save progress: ${errorMessage}")
+                    onResult(R.string.save_failed)
+                  }
+                })
+
+                // Success callback
+                Log.d("createRecipeViewModel", "success")
+                onResult(null)
+              }.addOnFailureListener { e ->
+                Timber.tag("createRecipeViewModel").d("Transaction failed: %s", e.message)
+                onResult(R.string.save_failed)
+              }
+            }.addOnFailureListener { e ->
+              Timber.tag("createRecipeViewModel").d("Failed to get existing steps: %s", e.message)
+              onResult(R.string.save_failed_2)
+            }
+          } catch (e: Exception) {
+            Timber.tag("createRecipeViewModel").d("Transaction failed: %s", e.message)
+            onResult(R.string.save_failed_2)
+          }
+        } ?: onResult(R.string.save_failed_user)
+      }
+
+      override fun onFailure(exception: Exception) {
+        Timber.tag("createRecipeViewModel").d("User fetch failed: %s", exception.message)
+        onResult(R.string.save_failed_user)
+      }
+    })
+  }
 
   private fun uploadImage(imageUri: Uri, result: (Uri?) -> Unit) {
     // Unique name for the image
