@@ -106,7 +106,6 @@ class CreateRecipeFragment : Fragment() {
     // Restore hashtags
     binding.cgChips.removeAllViews()
     recipe.hashtags.forEach { hashtag ->
-      // TODO
       addHashtagChip(hashtag)
     }
   }

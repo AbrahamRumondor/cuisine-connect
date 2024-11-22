@@ -169,6 +169,7 @@
             android:contentDescription="@string/image"
             android:padding="5dp"
             android:src="@drawable/ic_thumbs_up_regular"
+            app:tint="@color/cc_text_dark_green"
             />
 
         <TextView
@@ -176,6 +177,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
+            android:textColor="@color/cc_text_dark_green"
             android:text="-"
             />
       </LinearLayout>
@@ -198,6 +200,7 @@
             android:contentDescription="@string/image"
             android:padding="5dp"
             android:src="@drawable/ic_msg_bubble"
+            app:tint="@color/cc_text_dark_green"
             />
 
         <TextView
@@ -205,6 +208,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
+            android:textColor="@color/cc_text_dark_green"
             android:text="-"
             />
       </LinearLayout>

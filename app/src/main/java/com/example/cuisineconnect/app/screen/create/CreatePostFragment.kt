@@ -137,27 +137,49 @@ class CreatePostFragment : Fragment() {
       }
 
       btnSave.setOnClickListener {
-        createPostViewModel.savePostProgress(object : TwoWayCallback {
-          override fun onSuccess() {
-            Toast.makeText(context, "Successfully saved post", Toast.LENGTH_SHORT).show()
-          }
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Save Progress")
+        builder.setMessage("Are you sure to save current recipe progress?")
 
-          override fun onFailure(errorMessage: String) {
-            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-          }
-        })
+        builder.setPositiveButton("Yes") { dialog, _ ->
+          createPostViewModel.savePostProgress(object : TwoWayCallback {
+            override fun onSuccess() {
+              Toast.makeText(context, "Successfully saved post", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(errorMessage: String) {
+              Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+          })
+        }
+        builder.setNegativeButton("No") { dialog, _ ->
+          dialog.dismiss()
+        }
+        builder.show()
       }
 
       btnDelete.setOnClickListener {
-        createPostViewModel.deletePostProgress(object : TwoWayCallback {
-          override fun onSuccess() {
-            Toast.makeText(context, "Successfully delete progress", Toast.LENGTH_SHORT).show()
-          }
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Clear Progress")
+        builder.setMessage("Are you sure to clear current recipe progress?")
 
-          override fun onFailure(errorMessage: String) {
-            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-          }
-        })
+        builder.setPositiveButton("Yes") { dialog, _ ->
+          createPostViewModel.deletePostProgress(object : TwoWayCallback {
+            override fun onSuccess() {
+              Toast.makeText(context, "Successfully delete progress", Toast.LENGTH_SHORT).show()
+              binding.llPostContents.removeAllViews()
+              createPostViewModel.postContent.clear()
+            }
+
+            override fun onFailure(errorMessage: String) {
+              Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+          })
+        }
+        builder.setNegativeButton("No") { dialog, _ ->
+          dialog.dismiss()
+        }
+        builder.show()
       }
 
       btnPost.setOnClickListener {
