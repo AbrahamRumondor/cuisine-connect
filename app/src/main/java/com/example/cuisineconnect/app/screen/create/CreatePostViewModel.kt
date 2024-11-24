@@ -11,6 +11,7 @@ import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.post.PostUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
+import com.example.cuisineconnect.domain.usecase.reply.ReplyUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
@@ -39,6 +41,9 @@ class CreatePostViewModel @Inject constructor(
 
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
+
+  private val _replyCount: MutableStateFlow<Int> = MutableStateFlow(0)
+  val replyCount: StateFlow<Int> = _replyCount
 
   init {
     getUser()
@@ -85,6 +90,7 @@ class CreatePostViewModel @Inject constructor(
       val recipe = withContext(Dispatchers.IO) {
         recipeUseCase.getRecipeByID(recipeId)
       }
+
 
       // If recipe is not null, fetch the user
       val user = recipe?.let {

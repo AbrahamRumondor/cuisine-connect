@@ -197,7 +197,6 @@ class ReplyRecipeFragment : Fragment() {
       binding.inclInternet.root.visibility = View.GONE
       binding.cvToolbar.visibility = View.VISIBLE
       binding.rvReplies.visibility = View.VISIBLE
-      binding.clReplyOther.visibility = View.VISIBLE
       binding.vDivider.visibility = View.VISIBLE
       binding.clInputReply.visibility = View.VISIBLE
     }

@@ -246,5 +246,4 @@ class RecipeDetailFragment : Fragment() {
       binding.cvBottomDetail.visibility = View.VISIBLE
     }
   }
-
 }

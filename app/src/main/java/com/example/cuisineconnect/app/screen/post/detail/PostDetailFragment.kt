@@ -20,6 +20,7 @@ import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -102,7 +103,8 @@ class PostDetailFragment : Fragment() {
 //          )
 
           tvUpvoteCount.text = post.upvotes.size.toString()
-          tvReplyCount.text = post.replyCount.toString()
+
+//          tvReplyCount.text = post.replyCount.toString()
           // Render the post content
           postContentRenderer.renderPostContent(post.postContent)
 
@@ -273,6 +275,15 @@ class PostDetailFragment : Fragment() {
       binding.inclInternet.root.visibility = View.GONE
       binding.cvBottomDetail.visibility = View.VISIBLE
       binding.scrollableContent.visibility = View.VISIBLE
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    lifecycleScope.launch {
+      postDetailViewModel.replyCount.collectLatest {
+        binding.tvReplyCount.text = it.toString()
+      }
     }
   }
 }

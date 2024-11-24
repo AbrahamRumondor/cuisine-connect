@@ -10,6 +10,7 @@ import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
 import com.example.cuisineconnect.domain.usecase.post.PostUseCase
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
+import com.example.cuisineconnect.domain.usecase.reply.ReplyUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +38,9 @@ class PostDetailViewModel @Inject constructor(
 
   private val _user: MutableStateFlow<User> = MutableStateFlow(User())
   val user: StateFlow<User> = _user
+
+  private val _replyCount: MutableStateFlow<Int> = MutableStateFlow(0)
+  val replyCount: StateFlow<Int> = _replyCount
 
   init {
     getUser()

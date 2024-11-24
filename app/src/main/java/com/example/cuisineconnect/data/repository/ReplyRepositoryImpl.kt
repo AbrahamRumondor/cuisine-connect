@@ -64,21 +64,50 @@ class ReplyRepositoryImpl @Inject constructor(
     val docRef = ref.document(id)
     val repliesRef = docRef.collection("replies")
 
+    // Parse the replyId to get the feedsType and feedId
+    val replyParts = replyId.split("_")
+    if (replyParts.size < 4) {
+      Timber.tag("TEST").e("Invalid replyId format: $replyId")
+      return
+    }
+
+    val feedsType = replyParts[0] // 'r' for recipe, 'p' for post
+    val feedId = replyParts.subList(0, 3).joinToString("_") // Combine the first three parts to reconstruct the feedId
+
     repliesRef.document(replyId).set(replyResponse)
       .addOnSuccessListener {
         Timber.tag("TEST").d("SUCCESS ON reply INSERTION, $replyResponse")
+
         if (isNewReply) {
-          docRef.update("reply_count", FieldValue.increment(1))
+          // Determine the field to update
+          val replyCountField = if (feedsType == "r") {
+            "recipe_reply_count"
+          } else if (feedsType == "p") {
+            "post_reply_count"
+          } else {
+            Timber.tag("TEST").e("Invalid feedsType: $feedsType")
+            return@addOnSuccessListener
+          }
+
+          // Determine the correct reference to update
+          val updateRef = if (feedsType == "r") {
+            recipesRef.document(feedId) // Recipe reply count
+          } else {
+            postsRef.document(feedId) // Post reply count
+          }
+
+          // Update the reply count
+          updateRef.update(replyCountField, FieldValue.increment(1))
             .addOnSuccessListener {
-              Timber.tag("TEST").d("Successfully incremented reply count")
+              Timber.tag("TEST").d("Successfully incremented reply count for $feedId")
             }
             .addOnFailureListener { e ->
-              Timber.tag("TEST").d("Failed to increment reply count: ${e.message}")
+              Timber.tag("TEST").e("Failed to increment reply count for $feedId: ${e.message}")
             }
         }
       }
       .addOnFailureListener { e ->
-        Timber.tag("TEST").d("ERROR ON reply INSERTION: ${e.message}")
+        Timber.tag("TEST").e("ERROR ON reply INSERTION: ${e.message}")
       }
   }
 

@@ -19,6 +19,7 @@ import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
+import kotlinx.coroutines.flow.collectLatest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
