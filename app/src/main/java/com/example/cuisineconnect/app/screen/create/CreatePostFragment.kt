@@ -137,6 +137,8 @@ class CreatePostFragment : Fragment() {
       }
 
       btnSave.setOnClickListener {
+        updateTextPostContent()
+
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Save Progress")
         builder.setMessage("Are you sure to save current recipe progress?")

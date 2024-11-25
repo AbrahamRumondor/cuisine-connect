@@ -138,6 +138,12 @@ class PostDetailFragment : Fragment() {
             goToProfile(user.id)
           }
         }
+
+        val getPostHashtags = postDetailViewModel.getPostHashtags(post.postContent)
+        postDetailViewModel.updateTrendingCounter(
+          getPostHashtags,
+          post.id
+        )
       } ?: run {
         // Handle the case where either post or user is null
       }

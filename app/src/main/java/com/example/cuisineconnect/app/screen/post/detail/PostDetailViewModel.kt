@@ -124,6 +124,25 @@ class PostDetailViewModel @Inject constructor(
     }
   }
 
+  fun getPostHashtags(postContent: List<Map<String, String>>): List<String> {
+    val hashtagRegex = Regex("#\\w+") // Matches hashtags starting with '#' and followed by word characters
+    val hashtags = mutableListOf<String>()
+
+    postContent.forEach { contentItem ->
+      val type = contentItem["type"]
+      val value = contentItem["value"]
+
+      // Check if the type contains "text" and the value is not null
+      if (type == "text" && value != null) {
+        // Find all matches for the hashtag pattern
+        hashtagRegex.findAll(value).forEach { match ->
+          hashtags.add(match.value) // Add the matched hashtag to the list
+        }
+      }
+    }
+    return hashtags
+  }
+
   fun updateTrendingCounter(hashtagsBody: List<String>, itemId: String) {
     viewModelScope.launch {
       val newTimestamp = Date().time
