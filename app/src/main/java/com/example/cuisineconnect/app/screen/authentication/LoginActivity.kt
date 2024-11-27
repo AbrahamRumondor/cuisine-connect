@@ -29,7 +29,8 @@ class LoginActivity : AppCompatActivity() {
     super.onStart()
     // Check if user is signed in (non-null) and update UI accordingly.
     val currentUser = auth.currentUser
-    if (currentUser != null) {
+    if (currentUser != null && !currentUser.email.isNullOrEmpty()) {
+      Log.d("loginActivity", "${currentUser.email}")
       goToHome()
     }
   }
