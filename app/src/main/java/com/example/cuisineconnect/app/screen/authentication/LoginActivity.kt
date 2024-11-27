@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -53,17 +54,58 @@ class LoginActivity : AppCompatActivity() {
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
+        // Email field validation
         if (email.isEmpty()) {
-          Toast.makeText(this@LoginActivity, "Please enter your email", Toast.LENGTH_SHORT)
-            .show()
+          Toast.makeText(this@LoginActivity, "Please enter your email", Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
+        if (!email.contains("@")) {
+          Toast.makeText(this@LoginActivity, "Email must contain '@' symbol", Toast.LENGTH_SHORT).show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
+          return@setOnClickListener
+        }
+
+        if (!email.contains(".")) {
+          Toast.makeText(this@LoginActivity, "Email must contain a domain (e.g., '.com')", Toast.LENGTH_SHORT).show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
+          return@setOnClickListener
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+          Toast.makeText(this@LoginActivity, "Please enter a valid email ex:'example@gmail.com'", Toast.LENGTH_SHORT).show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
+          return@setOnClickListener
+        }
+
+// Password field validation
         if (password.isEmpty()) {
-          Toast.makeText(this@LoginActivity, "Please enter your password", Toast.LENGTH_SHORT)
-            .show()
+          Toast.makeText(this@LoginActivity, "Please enter your password", Toast.LENGTH_SHORT).show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
+          return@setOnClickListener
+        }
+
+        if (password.length < 5) {
+          Toast.makeText(this@LoginActivity, "Password must be more than 4 characters", Toast.LENGTH_SHORT).show()
+          pbCreate.visibility = View.GONE
+          btnLogin.visibility = View.VISIBLE
+          return@setOnClickListener
+        }
+
+// Password complexity validation (optional)
+        val passwordRegex = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{5,}\$")
+        if (!passwordRegex.matches(password)) {
+          Toast.makeText(
+            this@LoginActivity,
+            "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+            Toast.LENGTH_SHORT
+          ).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener

@@ -1,10 +1,15 @@
 package com.example.cuisineconnect.app.screen.authentication
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
@@ -36,7 +41,7 @@ class RegisterViewModel @Inject constructor(
             username = username,
             email = email,
             displayName = displayName,
-            password = hashPassword(password)
+            password = hashPassword(password) // Assuming you have a function to hash passwords
           )
 
           // Attempt to store the user in Firestore
@@ -45,19 +50,32 @@ class RegisterViewModel @Inject constructor(
             onComplete(true, null) // Registration and storage succeeded
           }.onFailure { error ->
             // Handle failure in storing user, pass error message
-            onComplete(false, error.message)
+            Log.e("RegisterUser", "Error storing user in Firestore: ${error.message}")
+            onComplete(false, "Failed to save user data. Please try again.")
           }
         } else {
           // General failure in user registration
-          onComplete(false, "Registration failed: Unable to create user")
+          val exception = registerResult.exceptionOrNull()
+          Log.e("RegisterUser", "Registration failed: ${exception?.message}")
+          onComplete(false, getFirebaseErrorMessage(exception))
         }
       } catch (e: Exception) {
         // Catch and handle any unexpected exceptions
+        Log.e("RegisterUser", "Unexpected error: ${e.message}")
         onComplete(false, e.message ?: "An unexpected error occurred")
       }
     }
   }
 
+  private fun getFirebaseErrorMessage(exception: Throwable?): String {
+    return when (exception) {
+      is FirebaseAuthUserCollisionException -> "This email is already registered."
+      is FirebaseAuthWeakPasswordException -> "Your password is too weak. Please choose a stronger password."
+      is FirebaseAuthInvalidCredentialsException -> "Invalid email format. Please enter a valid email."
+      is FirebaseAuthInvalidUserException -> "This account doesn't exist or has been disabled."
+      else -> "An unknown error occurred. Please try again later."
+    }
+  }
   private fun hashPassword(password: String): String {
     return MessageDigest.getInstance("SHA-256")
       .digest(password.toByteArray())

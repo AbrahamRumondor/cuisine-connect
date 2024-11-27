@@ -2,6 +2,7 @@ package com.example.cuisineconnect.app.screen.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -48,53 +49,148 @@ class RegisterActivity : AppCompatActivity() {
         pbCreate.visibility = View.VISIBLE
         btnCreate.visibility = View.GONE
 
-        val displayName = etDisplayName.text.toString()
-        val username = etUsername.text.toString()
-        val email = etEmail.text.toString()
-        val password = etPassword.text.toString()
+        val displayName = etDisplayName.text.toString().trim()
+        val username = etUsername.text.toString().trim()
+        val email = etEmail.text.toString().trim()
+        val password = etPassword.text.toString().trim()
 
         // Define regex pattern for allowed characters (alphanumeric and underscore)
         val usernamePattern = "^[a-zA-Z0-9_]+$".toRegex()
 
+        // Display Name Validation
         if (displayName.isEmpty() || !displayName.matches(usernamePattern)) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Display name must contain only letters, numbers, or underscores",
+            "display name must only letters, numbers, or underscores",
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
         }
 
+        // Username Validation
         if (username.isEmpty() || !username.matches(usernamePattern)) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Username must contain only letters, numbers, or underscores",
+            "username must only letters, numbers, or underscores",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+        if (username.length < 3 || username.length > 15) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Username must be between 3 and 15 characters",
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
         }
 
+        // Email Validation
         if (email.isEmpty()) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
           Toast.makeText(this@RegisterActivity, "Please enter your email", Toast.LENGTH_SHORT)
             .show()
           return@setOnClickListener
         }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Please enter a valid email address",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
 
+        // Password Validation
         if (password.isEmpty()) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
           Toast.makeText(this@RegisterActivity, "Please enter your password", Toast.LENGTH_SHORT)
             .show()
           return@setOnClickListener
         }
+        if (password.length < 6) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Password must be at least 6 characters",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+        if (!password.matches(".*[A-Z].*".toRegex())) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Password must contain at least one uppercase letter",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+        if (!password.matches(".*[a-z].*".toRegex())) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Password must contain at least one lowercase letter",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+        if (!password.matches(".*\\d.*".toRegex())) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Password must contain at least one number",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+        if (!password.matches(".*[@#\$%^&+=!].*".toRegex())) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Password must contain at least one special character",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
 
+        val confirmPassword = etPasswordComparator.text?.toString()?.trim() ?: ""
+        if (password != confirmPassword) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(
+            this@RegisterActivity,
+            "Passwords do not match",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+
+        // Proceed with registration
         registerViewModel.registerUser(
           displayName = displayName,
           email = email,
           password = password,
           username = username
         ) { success, error ->
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
           if (success) {
-            pbCreate.visibility = View.GONE
-            btnCreate.visibility = View.VISIBLE
             Toast.makeText(
               baseContext,
               "Registration successful.",
@@ -102,8 +198,6 @@ class RegisterActivity : AppCompatActivity() {
             ).show()
             goToLogin()
           } else {
-            pbCreate.visibility = View.GONE
-            btnCreate.visibility = View.VISIBLE
             Toast.makeText(
               baseContext,
               error ?: "Authentication failed.",

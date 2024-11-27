@@ -63,7 +63,7 @@ class ProfileViewModel @Inject constructor(
   }
 
   fun updateUser(
-    username: String,
+    displayName: String,
     email: String,
     password: String,
     imageUri: Uri?,
@@ -74,7 +74,7 @@ class ProfileViewModel @Inject constructor(
       val updateUserSuccess = try {
         userUseCase.storeUser(
           user.value.id,
-          user.value.copy(displayName = username)
+          user.value.copy(displayName = displayName)
         )
         true // Update successful
       } catch (e: Exception) {

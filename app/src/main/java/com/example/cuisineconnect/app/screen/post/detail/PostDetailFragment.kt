@@ -130,6 +130,8 @@ class PostDetailFragment : Fragment() {
             .placeholder(R.drawable.ic_bnv_profile)
             .into(ivUserProfile)
 
+          tvReplyCount.text = post.replyCount.toString()
+
           cvProfile.setOnClickListener {
             goToProfile(user.id)
           }
@@ -286,10 +288,5 @@ class PostDetailFragment : Fragment() {
 
   override fun onResume() {
     super.onResume()
-    lifecycleScope.launch {
-      postDetailViewModel.replyCount.collectLatest {
-        binding.tvReplyCount.text = it.toString()
-      }
-    }
   }
 }

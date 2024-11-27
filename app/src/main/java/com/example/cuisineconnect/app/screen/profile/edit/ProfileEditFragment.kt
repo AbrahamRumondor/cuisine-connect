@@ -58,25 +58,37 @@ class ProfileEditFragment : Fragment() {
     return binding.root
   }
 
-
-
   private fun onSaveClicked() {
     binding.run {
       btnSave.setOnClickListener {
-        val username = etDisplayName.text.toString()
-//        val email = etEmail.text.toString()
-//        val password = etPassword.text.toString()
+        val displayName = etDisplayName.text.toString()
 
-        if (username.isEmpty()) {
-          Toast.makeText(activity, "Please enter your username", Toast.LENGTH_SHORT)
-            .show()
+        // Define regex pattern for allowed characters (alphanumeric and underscores)
+        val displayNamePattern = "^[a-zA-Z0-9_]+$".toRegex()
+
+        if (displayName.isEmpty()) {
+          Toast.makeText(
+            activity,
+            "Please enter your display name",
+            Toast.LENGTH_SHORT
+          ).show()
           return@setOnClickListener
         }
 
+        if (!displayName.matches(displayNamePattern)) {
+          Toast.makeText(
+            activity,
+            "Display name must contain only letters, numbers, or underscores",
+            Toast.LENGTH_SHORT
+          ).show()
+          return@setOnClickListener
+        }
+
+        // Confirmation dialog
         val builder = AlertDialog.Builder(binding.root.context)
-        builder.setTitle("Are you sure with the changes?")
+        builder.setTitle("Are you sure about the changes?")
         builder.setPositiveButton("Yes") { dialog, _ ->
-          applySaveEdit(username)
+          applySaveEdit(displayName)
           dialog.dismiss()
         }
         builder.setNegativeButton("No") { dialog, _ ->
@@ -86,10 +98,9 @@ class ProfileEditFragment : Fragment() {
       }
     }
   }
-
-  private fun FragmentProfileEditBinding.applySaveEdit(username: String) {
+  private fun FragmentProfileEditBinding.applySaveEdit(displayName: String) {
     llLoading.root.visibility = View.VISIBLE
-    profileViewModel.updateUser(username, "", "", imageUri) {
+    profileViewModel.updateUser(displayName, "", "", imageUri) {
       llLoading.root.visibility = View.GONE
       Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
       findNavController().navigateUp() // Navigate back to the previous fragment
