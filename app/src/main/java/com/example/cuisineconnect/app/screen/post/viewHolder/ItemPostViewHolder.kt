@@ -176,7 +176,7 @@ class ItemPostViewHolder(
     setViewMargins(customImageView, 4, 0, 8)
 
     val imageView: ImageView = customImageView.findViewById(R.id.iv_image)
-    Glide.with(view.root).load(imageUri).placeholder(R.drawable.ic_no_image).into(imageView)
+    Glide.with(view.root).load(imageUri).placeholder(R.drawable.recipe_img).into(imageView)
 
     // Set click listener to open the image in full screen
     imageView.setOnClickListener {
@@ -185,7 +185,7 @@ class ItemPostViewHolder(
       dialog.setContentView(R.layout.dialog_full_image)
 
       val fullImageView = dialog.findViewById<ImageView>(R.id.iv_full_image)
-      Glide.with(view.root).load(imageUri).placeholder(R.drawable.ic_no_image).into(fullImageView)
+      Glide.with(view.root).load(imageUri).placeholder(R.drawable.recipe_img).into(fullImageView)
 
       // Set dialog layout parameters to fill 90-95% of the screen
       val params = dialog.window?.attributes
@@ -251,7 +251,7 @@ class ItemPostViewHolder(
           tvReplyCount.text = recipe.replyCount.toString()
           tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
-          Glide.with(view.root).load(recipe.image).placeholder(R.drawable.ic_no_image)
+          Glide.with(view.root).load(recipe.image).placeholder(R.drawable.recipe_img)
             .into(ivImage)
 
           user.let {

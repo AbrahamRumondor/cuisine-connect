@@ -21,7 +21,7 @@ class RecipeDetailMainImageViewHolder(
             if (recipe != null) {
                 Glide.with(root)
                     .load(recipe.image)
-                    .placeholder(R.drawable.ic_no_image)
+                    .placeholder(R.drawable.recipe_img)
                     .into(ivRecipeImg)
 
                 ivRecipeImg.setOnClickListener {

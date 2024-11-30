@@ -175,7 +175,7 @@ class PostContentRenderer(
           tvReplyCount.text = recipe.replyCount.toString()
           tvBookmarkCount.text = recipe.bookmarks.size.toString()
 
-          Glide.with(container).load(recipe.image).placeholder(R.drawable.ic_no_image)
+          Glide.with(container).load(recipe.image).placeholder(R.drawable.recipe_img)
             .into(ivImage)
 
           user.let {

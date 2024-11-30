@@ -481,7 +481,7 @@ class CreatePostFragment : Fragment() {
           Glide
             .with(binding.root)
             .load(recipe.image)
-            .placeholder(R.drawable.ic_no_image)
+            .placeholder(R.drawable.recipe_img)
             .into(ivImage)
 
           user.let {

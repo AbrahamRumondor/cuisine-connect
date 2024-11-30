@@ -1,12 +1,17 @@
 package com.example.cuisineconnect.app.screen.recipe.viewHolder
 
 import android.app.AlertDialog
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
@@ -17,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import com.bumptech.glide.request.target.Target
 
 class ItemRecipeViewHolder(
   private val view: ItemRecipeBigImageBinding,
@@ -108,8 +114,8 @@ class ItemRecipeViewHolder(
         }
         val uri = Uri.parse(recipe.image)
         Glide.with(view.root)
-          .load(uri)   // Load the image URL into the ImageView
-          .placeholder(R.drawable.ic_no_image)
+          .load(uri)
+          .placeholder(R.drawable.recipe_img)
           .into(ivImage)
 
 //        if (isMyRecipes) holder.editRecipe.visibility = View.VISIBLE
