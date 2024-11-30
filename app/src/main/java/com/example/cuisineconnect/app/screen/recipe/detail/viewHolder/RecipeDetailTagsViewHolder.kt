@@ -17,9 +17,9 @@ class RecipeDetailTagsViewHolder(
         text = hashtag
         isClickable = false // Disable click if not needed
         isCheckable = false
-        chipStrokeColor = ContextCompat.getColorStateList(context, R.color.cc_text_dark_green)
-        chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.cc_green) // Set background color
-        setTextColor(ContextCompat.getColor(context, R.color.cc_text_dark_green)) // Set text color
+        chipStrokeColor = ContextCompat.getColorStateList(context, R.color.white)
+        chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.cc_text_dark_green) // Set background color
+        setTextColor(ContextCompat.getColor(context, R.color.white)) // Set text color
       }
       view.cgChips.addView(chip)
     }

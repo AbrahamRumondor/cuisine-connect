@@ -20,6 +20,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -444,12 +445,21 @@ class CreateRecipeFragment : Fragment() {
     }
   }
 
+
   private fun addHashtagChip(hashtag: String) {
     if (!chipExists(hashtag)) {
       val chip = Chip(context).apply {
         text = hashtag
         isCloseIconVisible = true
         setOnCloseIconClickListener { removeChip(this) }
+
+        // Apply custom styles
+        isClickable = false
+        isCheckable = false
+        chipStrokeColor = ContextCompat.getColorStateList(context, R.color.white)
+        chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.cc_text_dark_green)
+        setTextColor(ContextCompat.getColor(context, R.color.white))
+        closeIconTint = ContextCompat.getColorStateList(context, R.color.white) // Make close icon white
       }
       binding.cgChips.addView(chip)
       binding.etTags.setText("")
