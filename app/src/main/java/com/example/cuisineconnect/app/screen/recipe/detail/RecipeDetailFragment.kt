@@ -204,12 +204,10 @@ class RecipeDetailFragment : Fragment() {
 
   private fun handleUpvote(recipeId: String, userId: String) {
     recipeDetailViewModel.upvoteRecipe(recipeId, userId)
-    showToast("UPVOTED")
   }
 
   private fun handleDownvote(recipeId: String, userId: String) {
     recipeDetailViewModel.downVoteRecipe(recipeId, userId)
-    showToast("DOWNVOTED")
   }
 
   private fun showToast(message: String) {

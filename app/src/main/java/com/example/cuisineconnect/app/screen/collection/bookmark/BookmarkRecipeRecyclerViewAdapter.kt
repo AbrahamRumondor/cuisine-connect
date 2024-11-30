@@ -55,11 +55,6 @@ class BookmarkRecipeRecyclerViewAdapter(
 
     holder.recipeItem.setOnClickListener {
       recipeListListener?.onRecipeClicked(item.second.id)
-      Toast.makeText(
-        bookmarkRecipeFragmentBinding.root.context,
-        "you clicked ${item.second.title}",
-        Toast.LENGTH_SHORT
-      ).show()
     }
 
     holder.recipeItem.setOnLongClickListener {

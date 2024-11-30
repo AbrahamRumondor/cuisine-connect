@@ -65,11 +65,6 @@ class MyRecipeRecyclerViewAdapter(
     holder.date.text = formattedDate
     holder.recipeItem.setOnClickListener {
       recipeListListener?.onRecipeClicked(item.second.id)
-      Toast.makeText(
-        myRecipeFragment.root.context,
-        "you clicked ${item.second.title}",
-        Toast.LENGTH_SHORT
-      ).show()
     }
     holder.recipeItem.setOnLongClickListener {
       recipeListListener?.onRecipeLongClicked(item.second.id)

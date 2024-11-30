@@ -375,7 +375,6 @@ class CreateRecipeFragment : Fragment() {
         }
       }
       addHashtagChip(hashtag.body)
-      Toast.makeText(context, "Clicked on: #${hashtag.body}", Toast.LENGTH_SHORT).show()
     }
 
     binding.rvTagList.apply {

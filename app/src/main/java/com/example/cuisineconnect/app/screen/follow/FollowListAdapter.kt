@@ -53,7 +53,6 @@ class FollowListAdapter : RecyclerView.Adapter<FollowListAdapter.ViewHolder>() {
 
       binding.root.setOnClickListener {
         listener?.onUserClicked(user.id)
-        Toast.makeText(binding.root.context, "Clicked on ${user.displayName}", Toast.LENGTH_SHORT).show()
       }
     }
   }

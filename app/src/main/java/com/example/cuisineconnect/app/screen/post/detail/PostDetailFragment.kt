@@ -238,14 +238,12 @@ class PostDetailFragment : Fragment() {
   private fun handleUpvote(postId: String, userId: String) {
     postDetailViewModel.upvotePost(postId, userId) {
       loadPostDetails(postId)
-      showToast("Upvoted")
     }
   }
 
   private fun handleDownvote(postId: String, userId: String) {
     postDetailViewModel.downVotePost(postId, userId) {
       loadPostDetails(postId)
-      showToast("Downvoted")
     }
   }
 

@@ -59,11 +59,6 @@ class ItemRecipeViewHolder(
 
         cvRecipe.setOnClickListener {
           listener?.onRecipeClicked(recipe.id)
-          Toast.makeText(
-            view.root.context,
-            "you clicked ${recipe.title}",
-            Toast.LENGTH_SHORT
-          ).show()
         }
 
         cvRecipe.setOnLongClickListener {
