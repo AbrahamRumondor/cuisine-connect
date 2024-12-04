@@ -9,46 +9,45 @@
     tools:context=".app.MainActivity"
     >
 
-<!--  <androidx.appcompat.widget.Toolbar-->
-<!--      android:id="@+id/toolbar"-->
-<!--      android:layout_width="match_parent"-->
-<!--      android:layout_height="130dp"-->
-<!--      android:background="@drawable/gradient_cc_yellow"-->
-<!--      android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
-<!--      app:layout_constraintEnd_toEndOf="parent"-->
-<!--      app:layout_constraintStart_toStartOf="parent"-->
-<!--      app:layout_constraintTop_toTopOf="parent"-->
-<!--      >-->
+  <!--  <androidx.appcompat.widget.Toolbar-->
+  <!--      android:id="@+id/toolbar"-->
+  <!--      android:layout_width="match_parent"-->
+  <!--      android:layout_height="130dp"-->
+  <!--      android:background="@drawable/gradient_cc_yellow"-->
+  <!--      android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+  <!--      app:layout_constraintEnd_toEndOf="parent"-->
+  <!--      app:layout_constraintStart_toStartOf="parent"-->
+  <!--      app:layout_constraintTop_toTopOf="parent"-->
+  <!--      >-->
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        >-->
+  <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+  <!--        android:layout_width="match_parent"-->
+  <!--        android:layout_height="match_parent"-->
+  <!--        >-->
 
-<!--      <TextView-->
-<!--          android:id="@+id/tb_title"-->
-<!--          android:layout_width="wrap_content"-->
-<!--          android:layout_height="wrap_content"-->
-<!--          app:layout_constraintStart_toStartOf="parent"-->
-<!--          app:layout_constraintTop_toTopOf="parent"-->
-<!--          app:layout_constraintBottom_toBottomOf="parent"-->
-<!--          android:text="Cuisine Connect"-->
-<!--          android:textSize="20sp"-->
-<!--          android:textStyle="bold"-->
-<!--          />-->
+  <!--      <TextView-->
+  <!--          android:id="@+id/tb_title"-->
+  <!--          android:layout_width="wrap_content"-->
+  <!--          android:layout_height="wrap_content"-->
+  <!--          app:layout_constraintStart_toStartOf="parent"-->
+  <!--          app:layout_constraintTop_toTopOf="parent"-->
+  <!--          app:layout_constraintBottom_toBottomOf="parent"-->
+  <!--          android:text="Cuisine Connect"-->
+  <!--          android:textSize="20sp"-->
+  <!--          android:textStyle="bold"-->
+  <!--          />-->
 
-<!--      <TextView-->
-<!--          android:id="@+id/tb_body"-->
-<!--          android:layout_width="wrap_content"-->
-<!--          android:layout_height="wrap_content"-->
-<!--          app:layout_constraintStart_toStartOf="parent"-->
-<!--          app:layout_constraintTop_toBottomOf="@id/tb_title"-->
-<!--          android:text="What should we cook up today?"-->
-<!--          />-->
+  <!--      <TextView-->
+  <!--          android:id="@+id/tb_body"-->
+  <!--          android:layout_width="wrap_content"-->
+  <!--          android:layout_height="wrap_content"-->
+  <!--          app:layout_constraintStart_toStartOf="parent"-->
+  <!--          app:layout_constraintTop_toBottomOf="@id/tb_title"-->
+  <!--          android:text="What should we cook up today?"-->
+  <!--          />-->
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--  </androidx.appcompat.widget.Toolbar>-->
-
+  <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+  <!--  </androidx.appcompat.widget.Toolbar>-->
   <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/bnv_main"
       style="@style/CustomBottomNavigationView"
@@ -74,4 +73,61 @@
       app:layout_constraintTop_toTopOf="parent"
       app:navGraph="@navigation/cc_nav"
       />
+
+  <FrameLayout
+      android:id="@+id/fl_choose_recipe"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:visibility="gone"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="2dp"
+        >
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:orientation="horizontal"
+          android:gravity="center"
+          >
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_tips"
+            app:tint="@color/cc_text_dark_green"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press and hold on a recipe to select it."
+            android:textColor="@android:color/darker_gray"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_close_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/cc_gray"
+            android:backgroundTint="@android:color/transparent"
+            />
+      </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+  </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

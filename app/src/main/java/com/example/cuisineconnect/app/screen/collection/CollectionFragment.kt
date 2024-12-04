@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentCollectionBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.delay
@@ -87,6 +89,15 @@ class CollectionFragment : Fragment() {
         fabCreateRecipe.visibility = View.GONE
         fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
       }
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (isSelectingRecipe) {
+      binding.inclFab.fabOpenOptions.visibility = View.GONE
+    } else {
+      binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
     }
   }
 }

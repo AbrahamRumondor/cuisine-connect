@@ -22,6 +22,7 @@ import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -262,5 +263,14 @@ class HomeFragment : Fragment() {
     val intent = Intent(context, LoginActivity::class.java)
     startActivity(intent)
     activity?.finish()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (isSelectingRecipe) {
+      binding.inclFab.fabOpenOptions.visibility = View.GONE
+    } else {
+      binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
+    }
   }
 }

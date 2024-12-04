@@ -12,10 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.listener.OnClickItemListener
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.app.screen.search.trending.TrendingHashtagAdapter
 import com.example.cuisineconnect.app.screen.search.trending.TrendingViewModel
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -147,4 +149,12 @@ class SearchFragment : Fragment() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    if (isSelectingRecipe) {
+      binding.inclFab.fabOpenOptions.visibility = View.GONE
+    } else {
+      binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
+    }
+  }
 }

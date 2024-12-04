@@ -32,8 +32,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.util.UserUtil
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
@@ -95,6 +97,7 @@ class CreatePostFragment : Fragment() {
       "requestKey",
       viewLifecycleOwner
     ) { requestKey, bundle ->
+
       val recipeId = bundle.getString("recipeId")
       Log.d("oofoof", recipeId ?: "none")
 
@@ -133,6 +136,13 @@ class CreatePostFragment : Fragment() {
       btnAddRecipe.setOnClickListener {
         isNotFromAddRecipe = false
         updateTextPostContent()
+
+        requireActivity().let { activity ->
+          if (activity is MainActivity) {
+            activity.showChooseRecipeView(true) // To show the view
+            // activity.showChooseRecipeView(false) // To hide the view
+          }
+        }
         findNavController().navigate(R.id.action_createPostFragment_to_homeFragment)
       }
 
@@ -675,6 +685,16 @@ class CreatePostFragment : Fragment() {
     binding.progressBar.cancelAnimation() // Stop the Lottie animation
     binding.progressBar.visibility = View.GONE
     binding.flShadow.visibility = View.GONE
+  }
+
+  override fun onResume() {
+    super.onResume()
+    requireActivity().let { activity ->
+      if (activity is MainActivity) {
+        activity.showChooseRecipeView(false) // To show the view
+        // activity.showChooseRecipeView(false) // To hide the view
+      }
+    }
   }
 
 }

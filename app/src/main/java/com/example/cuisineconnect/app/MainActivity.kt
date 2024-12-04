@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 
     checkConnectivityStatus()
 
+    binding.btnCloseTips.setOnClickListener {
+      binding.flChooseRecipe.visibility = View.GONE
+    }
 
     val navHostFragment =
       supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -99,4 +103,8 @@ class MainActivity : AppCompatActivity() {
     binding.bnvMain.visibility = View.VISIBLE
   }
 
+  fun showChooseRecipeView(show: Boolean) {
+    isSelectingRecipe = show
+    binding.flChooseRecipe.visibility = if (show) View.VISIBLE else View.GONE
+  }
 }

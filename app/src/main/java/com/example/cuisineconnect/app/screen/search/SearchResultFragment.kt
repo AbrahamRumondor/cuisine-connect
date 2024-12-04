@@ -16,10 +16,12 @@ import androidx.paging.map
 import com.airbnb.lottie.LottieDrawable
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.home.HomeAdapter
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
+import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentSearchResultBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -236,6 +238,15 @@ class SearchResultFragment : Fragment() {
         fabCreateRecipe.visibility = View.GONE
         fabOpenOptions.setImageResource(R.drawable.ic_create_recipe)
       }
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (isSelectingRecipe) {
+      binding.inclFab.fabOpenOptions.visibility = View.GONE
+    } else {
+      binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
     }
   }
 }
