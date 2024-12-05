@@ -81,7 +81,15 @@ class ItemRecipeViewHolder(
         }
 
         val isAuthor = createPostViewModel?.user?.value?.id == user.id
-        btnDelete.visibility = View.INVISIBLE
+        val isNotFollowing = createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
+
+        if (isNotFollowing && !isAuthor) {
+          llRecommendation.visibility = View.VISIBLE
+        } else {
+          llRecommendation.visibility = View.GONE
+        }
+
+        btnDelete.visibility = View.GONE
         if (isAuthor) {
           btnDelete.visibility = View.VISIBLE
           btnDelete.setOnClickListener {

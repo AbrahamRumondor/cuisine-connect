@@ -57,20 +57,34 @@ class RegisterActivity : AppCompatActivity() {
         // Define regex pattern for allowed characters (alphanumeric and underscore)
         val usernamePattern = "^[a-zA-Z0-9_]+$".toRegex()
 
+        if (displayName.isEmpty()) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(this@RegisterActivity, "Please enter your display name", Toast.LENGTH_SHORT)
+            .show()
+          return@setOnClickListener
+        }
         // Display Name Validation
-        if (displayName.isEmpty() || !displayName.matches(usernamePattern)) {
+        if (!displayName.matches(usernamePattern)) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "display name must only letters, numbers, or underscores",
+            "display must only letters, numbers, or underscores",
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
         }
 
+        if (username.isEmpty()) {
+          pbCreate.visibility = View.GONE
+          btnCreate.visibility = View.VISIBLE
+          Toast.makeText(this@RegisterActivity, "Please enter your username", Toast.LENGTH_SHORT)
+            .show()
+          return@setOnClickListener
+        }
         // Username Validation
-        if (username.isEmpty() || !username.matches(usernamePattern)) {
+        if (!username.matches(usernamePattern)) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(

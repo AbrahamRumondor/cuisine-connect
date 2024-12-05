@@ -50,7 +50,7 @@ class RecipeDetailAdapter :
       is User -> SHOW_USER
       is String -> {
         when (item) {
-          "Bahan-bahan", "Langkah-langkah" -> SHOW_SUB_TITLE
+          "Ingredients", "Steps" -> SHOW_SUB_TITLE
           else -> SHOW_INGREDIENT
         }
       }
@@ -131,7 +131,7 @@ class RecipeDetailAdapter :
       is Step -> (holder as RecipeDetailStepViewHolder).bind(item)
       is String -> {
         when (item) {
-          "Bahan-bahan", "Langkah-langkah" -> (holder as RecipeDetailSubTitleViewHolder).bind(item)
+          "Ingredients", "Steps" -> (holder as RecipeDetailSubTitleViewHolder).bind(item)
           else -> (holder as RecipeDetailIngredientViewHolder).bind(item)
         }
       }

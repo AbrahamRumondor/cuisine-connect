@@ -39,6 +39,8 @@ class ItemPostViewHolder(
     view.run {
       if (user != null) {
 
+
+
         Log.d("lilil", "this is post ${user} and ${post}")
 
         tvUsername.text = user.displayName
@@ -61,7 +63,16 @@ class ItemPostViewHolder(
         tvDate.text = formattedDate
 
         val isAuthor = createPostViewModel?.user?.value?.id == user.id
-        btnEdit.visibility = View.INVISIBLE
+        val isNotFollowing = createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
+        Log.d("itemPostViewHolder", "isnotFollowing${createPostViewModel?.user?.value?.following?.none { it == user.id }}")
+
+        if (isNotFollowing && !isAuthor) {
+          llRecommendation.visibility = View.VISIBLE
+        } else {
+          llRecommendation.visibility = View.GONE
+        }
+
+        btnEdit.visibility = View.GONE
         if (isAuthor) {
           btnEdit.visibility = View.VISIBLE
           btnEdit.setOnClickListener {

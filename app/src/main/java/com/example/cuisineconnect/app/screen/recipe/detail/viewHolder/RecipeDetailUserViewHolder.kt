@@ -17,7 +17,8 @@ class RecipeDetailUserViewHolder(
       if (user != null) {
 
         tvUsername.text = user.displayName
-        tvFollower.text = user.follower.size.toString()
+        val follower = if (user.follower.size == 1) "${user.follower.size} follower" else "${user.follower.size} followers"
+        tvFollower.text = follower
 
         Glide.with(root)
           .load(user.image)

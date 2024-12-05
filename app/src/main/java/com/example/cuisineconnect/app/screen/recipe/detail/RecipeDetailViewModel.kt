@@ -98,7 +98,7 @@ class RecipeDetailViewModel @Inject constructor(
       "Header" to recipe,
       user,
       "Estimation" to recipe,
-      "Bahan-bahan"
+      "Ingredients"
     )
 
     // Add ingredients if available
@@ -106,7 +106,7 @@ class RecipeDetailViewModel @Inject constructor(
       detailRecipe.addAll(ingredients)
     }
 
-    detailRecipe.add("Langkah-langkah")
+    detailRecipe.add("Steps")
 
     // Add steps if available
     if (steps != null) {

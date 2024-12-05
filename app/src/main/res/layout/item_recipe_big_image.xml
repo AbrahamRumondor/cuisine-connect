@@ -6,6 +6,32 @@
     android:layout_height="wrap_content"
     >
 
+  <LinearLayout
+      android:id="@+id/ll_recommendation"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/btn_delete"
+      android:orientation="horizontal"
+      android:layout_marginTop="12dp"
+      android:layout_marginBottom="4dp"
+      app:layout_constraintBottom_toTopOf="@id/tv_date"
+      android:visibility="gone"
+      android:gravity="end"
+      >
+
+    <TextView
+        android:id="@+id/tv_not_following"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_might_like_thisgit "
+        android:textSize="12sp"
+        android:textColor="@color/cc_text_dark_green"
+        android:gravity="end"
+        />
+
+  </LinearLayout>
+
   <androidx.cardview.widget.CardView
       android:id="@+id/cv_profile"
       android:layout_width="40dp"

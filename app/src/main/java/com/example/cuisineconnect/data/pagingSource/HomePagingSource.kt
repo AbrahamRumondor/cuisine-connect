@@ -162,8 +162,15 @@ class HomePagingSource(
             is FeedItem.RecipeItem -> it.recipe.date
           }
         }
+      }
 
-        // Append fallback posts and recipes sorted by upvotes
+      val lastVisibleSnapshot =
+        lastPostSnapshots.values.lastOrNull() ?: lastRecipeSnapshots.values.lastOrNull()
+      val nextPage = lastVisibleSnapshot?.let {
+        postsRef.startAfter(it).limit(params.loadSize.toLong()).get().await()
+      }
+
+      if (nextPage == null) {
         val fallbackItems = fetchPostsAndRecipes(params.loadSize)
         for (fallbackItem in fallbackItems) {
           val id = when (fallbackItem) {
@@ -174,12 +181,6 @@ class HomePagingSource(
             feedItems.add(fallbackItem)
           }
         }
-      }
-
-      val lastVisibleSnapshot =
-        lastPostSnapshots.values.lastOrNull() ?: lastRecipeSnapshots.values.lastOrNull()
-      val nextPage = lastVisibleSnapshot?.let {
-        postsRef.startAfter(it).limit(params.loadSize.toLong()).get().await()
       }
 
       LoadResult.Page(
