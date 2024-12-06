@@ -63,7 +63,8 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           item.user,
           item.post,
           postNRecipeItemListener,
-          createPostViewModel
+          createPostViewModel,
+          fromHomePage = true
         )
       }
 
@@ -72,7 +73,8 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           item.user,
           item.recipe,
           postNRecipeItemListener,
-          createPostViewModel
+          createPostViewModel,
+          fromHomePage = true
         )
       }
 

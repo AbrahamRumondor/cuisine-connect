@@ -34,7 +34,8 @@ class ItemPostViewHolder(
     user: User?,
     post: Post,
     listener: ItemListListener?,
-    createPostViewModel: CreatePostViewModel?
+    createPostViewModel: CreatePostViewModel?,
+    fromHomePage: Boolean = false
   ) {
     view.run {
       if (user != null) {
@@ -66,7 +67,7 @@ class ItemPostViewHolder(
         val isNotFollowing = createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
         Log.d("itemPostViewHolder", "isnotFollowing${createPostViewModel?.user?.value?.following?.none { it == user.id }}")
 
-        if (isNotFollowing && !isAuthor) {
+        if (isNotFollowing && !isAuthor && fromHomePage) {
           llRecommendation.visibility = View.VISIBLE
         } else {
           llRecommendation.visibility = View.GONE

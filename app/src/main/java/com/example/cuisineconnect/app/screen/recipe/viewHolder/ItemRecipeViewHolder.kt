@@ -33,7 +33,8 @@ class ItemRecipeViewHolder(
     user: User?,
     recipe: Recipe?,
     listener: ItemListListener?,
-    createPostViewModel: CreatePostViewModel?
+    createPostViewModel: CreatePostViewModel?,
+    fromHomePage: Boolean = false
   ) {
     view.run {
       if (user != null && recipe != null) {
@@ -83,7 +84,7 @@ class ItemRecipeViewHolder(
         val isAuthor = createPostViewModel?.user?.value?.id == user.id
         val isNotFollowing = createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
 
-        if (isNotFollowing && !isAuthor) {
+        if (isNotFollowing && !isAuthor && fromHomePage) {
           llRecommendation.visibility = View.VISIBLE
         } else {
           llRecommendation.visibility = View.GONE
