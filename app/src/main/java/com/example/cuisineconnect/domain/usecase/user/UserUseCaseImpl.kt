@@ -21,6 +21,14 @@ class UserUseCaseImpl @Inject constructor(
         return userRepository.getUserByUserId(userId)
     }
 
+    override fun isUsernameTaken(
+        username: String,
+        onSuccess: (Boolean) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        userRepository.isUsernameTaken(username, onSuccess, onFailure)
+    }
+
     override suspend fun storeUser(uid: String, user: User, isUpdate: Boolean): Result<Unit> {
         return userRepository.storeUser(uid, user, isUpdate)
     }

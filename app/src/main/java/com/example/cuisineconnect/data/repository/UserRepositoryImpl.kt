@@ -9,9 +9,13 @@ import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.repository.UserRepository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -25,6 +29,39 @@ class UserRepositoryImpl @Inject constructor(
 
   private val _userBookmarks = MutableStateFlow<List<String>>(emptyList())
   private val userBookmarks: StateFlow<List<String>> = _userBookmarks
+
+  override fun isUsernameTaken(
+    username: String,
+    onSuccess: (Boolean) -> Unit,
+    onFailure: (Exception) -> Unit
+  ) {
+    // Perform the username check asynchronously
+    CoroutineScope(Dispatchers.IO).launch {
+      try {
+        val uniqueNameQuery = usersRef.whereEqualTo("user_unique_name", username).get()
+        val result = uniqueNameQuery.await()
+
+        // Check if there is any document with the same username, and it's not the current user's UID
+        if (!result.isEmpty) {
+          // If the username is taken by another user, call onSuccess with true
+          withContext(Dispatchers.Main) {
+            onSuccess(true)
+          }
+        } else {
+          // Username is either not taken or belongs to the current user, call onSuccess with false
+          withContext(Dispatchers.Main) {
+            onSuccess(false)
+          }
+        }
+      } catch (e: Exception) {
+        Timber.tag("UserRepositoryImpl").e(e, "Error checking if username is taken")
+        // Call onFailure in case of any error
+        withContext(Dispatchers.Main) {
+          onFailure(e)
+        }
+      }
+    }
+  }
 
   override suspend fun getCurrentUser(uid: String): StateFlow<User> {
     try {

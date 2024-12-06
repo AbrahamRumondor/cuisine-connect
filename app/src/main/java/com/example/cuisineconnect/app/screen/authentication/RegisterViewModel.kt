@@ -28,43 +28,59 @@ class RegisterViewModel @Inject constructor(
     password: String,
     onComplete: (Boolean, String?) -> Unit // Callback with success status and error message
   ) {
-    viewModelScope.launch {
-      try {
-        // Register user in Firebase Authentication
-        val registerResult = authUseCase.registerUser(email, password)
-        if (registerResult.isSuccess) {
-          val uid = registerResult.getOrThrow() // Get the UID of the created user
+      // First check if the username is taken
+      userUseCase.isUsernameTaken(username,
+        onSuccess = { isTaken ->
+          if (isTaken) {
+            // If username is taken, return the error message
+            onComplete(false, "Username is already taken. Please choose another.")
+          } else {
+            viewModelScope.launch {
+              // If username is not taken, proceed with registration
+              try {
+                // Register user in Firebase Authentication
+                val registerResult = authUseCase.registerUser(email, password)
+                if (registerResult.isSuccess) {
+                  val uid = registerResult.getOrThrow() // Get the UID of the created user
 
-          // Create the User object
-          val user = User(
-            id = uid,
-            username = username,
-            email = email,
-            displayName = displayName,
-            password = hashPassword(password) // Assuming you have a function to hash passwords
-          )
+                  // Create the User object
+                  val user = User(
+                    id = uid,
+                    username = username,
+                    email = email,
+                    displayName = displayName,
+                    password = hashPassword(password) // Assuming you have a function to hash passwords
+                  )
 
-          // Attempt to store the user in Firestore
-          val storeResult = userUseCase.storeUser(uid, user, isUpdate = false)
-          storeResult.onSuccess {
-            onComplete(true, null) // Registration and storage succeeded
-          }.onFailure { error ->
-            // Handle failure in storing user, pass error message
-            Log.e("RegisterUser", "Error storing user in Firestore: ${error.message}")
-            onComplete(false, "Failed to save user data. Please try again.")
+                  // Attempt to store the user in Firestore
+                  val storeResult = userUseCase.storeUser(uid, user, isUpdate = false)
+                  storeResult.onSuccess {
+                    onComplete(true, null) // Registration and storage succeeded
+                  }.onFailure { error ->
+                    // Handle failure in storing user, pass error message
+                    Log.e("RegisterUser", "Error storing user in Firestore: ${error.message}")
+                    onComplete(false, "Failed to save user data. Please try again.")
+                  }
+                } else {
+                  // General failure in user registration
+                  val exception = registerResult.exceptionOrNull()
+                  Log.e("RegisterUser", "Registration failed: ${exception?.message}")
+                  onComplete(false, getFirebaseErrorMessage(exception))
+                }
+              } catch (e: Exception) {
+                // Catch and handle any unexpected exceptions
+                Log.e("RegisterUser", "Unexpected error: ${e.message}")
+                onComplete(false, e.message ?: "An unexpected error occurred")
+              }
+            }
           }
-        } else {
-          // General failure in user registration
-          val exception = registerResult.exceptionOrNull()
-          Log.e("RegisterUser", "Registration failed: ${exception?.message}")
-          onComplete(false, getFirebaseErrorMessage(exception))
+        },
+        onFailure = { error ->
+          // Handle failure in checking if username is taken
+          Log.e("RegisterUser", "Error checking username availability: ${error.message}")
+          onComplete(false, "Error checking username availability. Please try again.")
         }
-      } catch (e: Exception) {
-        // Catch and handle any unexpected exceptions
-        Log.e("RegisterUser", "Unexpected error: ${e.message}")
-        onComplete(false, e.message ?: "An unexpected error occurred")
-      }
-    }
+      )
   }
 
   private fun getFirebaseErrorMessage(exception: Throwable?): String {
