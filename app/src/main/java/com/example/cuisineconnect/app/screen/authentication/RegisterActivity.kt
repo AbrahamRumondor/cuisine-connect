@@ -1,9 +1,11 @@
 package com.example.cuisineconnect.app.screen.authentication
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -46,6 +48,8 @@ class RegisterActivity : AppCompatActivity() {
   private fun setRegisterButton() {
     binding.run {
       btnCreate.setOnClickListener {
+        closeKeyboard()
+
         pbCreate.visibility = View.VISIBLE
         btnCreate.visibility = View.GONE
 
@@ -220,6 +224,14 @@ class RegisterActivity : AppCompatActivity() {
           }
         }
       }
+    }
+  }
+
+  private fun closeKeyboard() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val currentFocusView = this.currentFocus
+    if (currentFocusView != null) {
+      imm.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
     }
   }
 

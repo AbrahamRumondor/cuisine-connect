@@ -1,11 +1,13 @@
 package com.example.cuisineconnect.app.screen.authentication
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +51,8 @@ class LoginActivity : AppCompatActivity() {
   private fun setLoginButton() {
     binding.run {
       btnLogin.setOnClickListener {
+        closeKeyboard()
+
         pbCreate.visibility = View.VISIBLE
         btnLogin.visibility = View.GONE
 
@@ -140,6 +144,14 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this@LoginActivity, "Login failed", Toast.LENGTH_SHORT).show()
           }
       }
+    }
+  }
+
+  private fun closeKeyboard() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val currentFocusView = this.currentFocus
+    if (currentFocusView != null) {
+      imm.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
     }
   }
 
