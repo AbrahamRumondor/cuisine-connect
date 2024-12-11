@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".app.screen.authentication.RegisterActivity"
+    android:background="@color/cc_vanilla_cream"
     >
 
   <LinearLayout
@@ -15,18 +16,32 @@
       android:gravity="center"
       android:orientation="vertical"
       >
-    
+
     <View
         android:layout_width="wrap_content"
-        android:layout_height="150dp"/>
+        android:layout_height="40dp"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_cc_logo_colored"
+        />
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:src="@drawable/login_img"
+        android:layout_marginHorizontal="40dp"
+      />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:text="@string/welcome"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
+        android:textColor="@color/cc_text_dark_green"
         />
 
     <TextView
@@ -35,7 +50,8 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="40dp"
         android:text="@string/please_enter_your_e_mail_and_password_to_create_an_account"
-        android:textSize="16sp"
+        android:textSize="18sp"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <TextView
@@ -44,6 +60,8 @@
         android:layout_marginHorizontal="20dp"
         android:text="Display name"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -51,6 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="15dp"
+        app:boxStrokeColor="@color/cc_russet_brown"
+        app:boxStrokeWidth="2dp"
+        app:hintTextColor="@color/cc_russet_brown"
+        android:textColorHint="@color/cc_russet_brown"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
         >
 
       <com.google.android.material.textfield.TextInputEditText
@@ -68,6 +93,8 @@
         android:layout_marginHorizontal="20dp"
         android:text="Username"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -75,6 +102,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="15dp"
+        app:boxStrokeColor="@color/cc_russet_brown"
+        app:boxStrokeWidth="2dp"
+        app:hintTextColor="@color/cc_russet_brown"
+        android:textColorHint="@color/cc_russet_brown"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
         >
 
       <com.google.android.material.textfield.TextInputEditText
@@ -93,6 +127,8 @@
         android:layout_marginHorizontal="20dp"
         android:text="@string/email"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -100,6 +136,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="15dp"
+        app:boxStrokeColor="@color/cc_russet_brown"
+        app:boxStrokeWidth="2dp"
+        app:hintTextColor="@color/cc_russet_brown"
+        android:textColorHint="@color/cc_russet_brown"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
         >
 
       <com.google.android.material.textfield.TextInputEditText
@@ -117,12 +160,22 @@
         android:layout_marginHorizontal="20dp"
         android:text="@string/password"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="15dp"
+        app:boxStrokeColor="@color/cc_russet_brown"
+        app:boxStrokeWidth="2dp"
+        app:hintTextColor="@color/cc_russet_brown"
+        android:textColorHint="@color/cc_russet_brown"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
         >
 
       <com.google.android.material.textfield.TextInputEditText
@@ -130,6 +183,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:inputType="textPassword"
+          android:hint="@string/must_include_upper_lower_number_symbol"
           />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,12 +193,22 @@
         android:layout_marginHorizontal="20dp"
         android:text="Confirm password"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_russet_brown"
         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="15dp"
+        app:boxStrokeColor="@color/cc_russet_brown"
+        app:boxStrokeWidth="2dp"
+        app:hintTextColor="@color/cc_russet_brown"
+        android:textColorHint="@color/cc_russet_brown"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
         >
 
       <com.google.android.material.textfield.TextInputEditText
@@ -152,6 +216,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:inputType="textPassword"
+          android:hint="@string/must_include_upper_lower_number_symbol"
           />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -189,6 +254,8 @@
         android:layout_marginHorizontal="20dp"
         android:text="@string/login_here"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/cc_text_dark_green"
         />
 
     <View

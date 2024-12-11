@@ -30,7 +30,7 @@
   <string name="welcome_back">Welcome Back!</string>
   <string name="kindly_sign_in_to_continue">Kindly Sign in to continue.</string>
   <string name="login">Login</string>
-  <string name="or_register_here">Or register here</string>
+  <string name="or_register_here"><u>Or register here</u></string>
   <string name="username">Username</string>
   <string name="namasayadaniel">Eg nama_saya_daniel</string>
   <string name="add_image">add image</string>
@@ -43,4 +43,5 @@
   <string name="your_internet_connection_is_currently_not_available_please_check_or_try_again">Your internet connection is currently not available please check or try again.</string>
   <string name="available">Available</string>
   <string name="you_might_like_this"><u>You might like this</u></string>
+  <string name="must_include_upper_lower_number_symbol"><![CDATA[include upper, lower, number & symbol]]></string>
 </resources>

@@ -7,5 +7,8 @@
   <color name="cc_green">#A8D5BA</color>
   <color name="cc_light_gray">#F7F7F8</color>
   <color name="cc_button_yellow">#FFE5A9</color>
+  <color name="cc_fire_red">#D23D2D</color>
+  <color name="cc_russet_brown">#6E433D</color>
+  <color name="cc_vanilla_cream">#F8EECB</color>
   <color name="cc_text_dark_green">#4F805D</color>
 </resources>
