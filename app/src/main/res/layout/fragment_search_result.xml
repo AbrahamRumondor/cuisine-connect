@@ -18,7 +18,7 @@
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@drawable/gradient_cc_light_gray"
+        android:background="@color/white"
         app:contentScrim="@color/cc_green"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         >
@@ -118,7 +118,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/white"
+        android:background="@color/cc_vanilla_cream_light"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
         tools:listitem="@layout/fragment_my_recipe"

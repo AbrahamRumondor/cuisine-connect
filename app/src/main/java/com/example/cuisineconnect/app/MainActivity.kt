@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
           R.id.otherProfileFragment -> hideBottomNav()
           R.id.homeFragment -> {
             showBottomNav()
-            this.window.statusBarColor = this.getColor(R.color.cc_light_gray)
+            this.window.statusBarColor = this.getColor(R.color.cc_vanilla_cream)
           }
           else -> {
             this.window.statusBarColor = this.getColor(R.color.white)

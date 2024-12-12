@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".app.screen.home.HomeFragment"
-    android:background="@color/cc_light_gray">
+    android:background="@color/cc_vanilla_cream">
 
   <!-- AppBarLayout for collapsing header -->
   <com.google.android.material.appbar.AppBarLayout
@@ -18,7 +18,7 @@
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentScrim="@color/cc_light_gray"
+        app:contentScrim="@color/cc_vanilla_cream"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
       <!-- Replace your header with a layout that collapses -->
@@ -26,7 +26,7 @@
           android:id="@+id/cl_header"
           android:layout_width="match_parent"
           android:layout_height="120dp"
-          android:background="@color/cc_light_gray"
+          android:background="@color/cc_vanilla_cream"
           android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
           app:layout_collapseMode="parallax">
 
@@ -38,6 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_cc_logo_colored"
+            android:scaleType="centerCrop"
             android:padding="10dp"
             />
 
@@ -59,13 +60,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="@color/cc_vanilla_cream_light"
         >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/cc_vanilla_cream_light"
         android:layout_marginTop="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"

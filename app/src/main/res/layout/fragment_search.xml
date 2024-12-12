@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".app.screen.search.SearchFragment"
+    android:background="@color/cc_vanilla_cream_light"
     >
 
   <!-- AppBarLayout for collapsing header -->
@@ -18,8 +19,8 @@
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@color/white"
-        app:contentScrim="@color/cc_green"
+        android:background="@drawable/gradient_cc_cream_to_light"
+        app:contentScrim="@color/cc_vanilla_cream_light"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         >
 
@@ -120,7 +121,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/white"
+        android:background="@color/cc_vanilla_cream_light"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.screen.collection.myRecipe.MyRecipeFragment"
         tools:listitem="@layout/hashtag_trending_list"

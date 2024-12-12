@@ -18,7 +18,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
-      android:background="@color/white"
+      android:background="@color/cc_vanilla_cream_light"
       app:layoutManager="LinearLayoutManager"
       tools:listitem="@layout/fragment_my_recipe" />
 

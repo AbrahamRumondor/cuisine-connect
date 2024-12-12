@@ -16,6 +16,7 @@
       android:layout_margin="16dp"
       android:contentDescription="@string/icon_create_recipe"
       android:src="@drawable/ic_create_recipe"
+      android:tint="@color/cc_russet_brown"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
