@@ -29,7 +29,7 @@
           android:id="@+id/ll_toolbar"
           android:layout_width="match_parent"
           android:layout_height="56dp"
-          android:background="@drawable/gradient_cc_light_gray"
+          android:background="@drawable/gradient_cc_cream_to_light"
           android:gravity="center_vertical"
           android:orientation="horizontal"
           app:layout_collapseMode="parallax"

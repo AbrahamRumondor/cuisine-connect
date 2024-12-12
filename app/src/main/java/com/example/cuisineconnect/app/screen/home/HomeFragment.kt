@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
 
     setupView()
     loadData()
+    adapter.isFromHome()
     adapter.addViewModel(createPostViewModel)
     loadingAnimation()
 

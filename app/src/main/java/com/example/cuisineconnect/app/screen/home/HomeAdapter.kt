@@ -23,6 +23,8 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
   private var postNRecipeItemListener: ItemListListener? = null
   private var createPostViewModel: CreatePostViewModel? = null
 
+  private var isFromHome: Boolean = true
+
   // Use MutableStateFlow to track population state
   private val _isPopulated = MutableStateFlow(false)
   val isPopulated: StateFlow<Boolean> get() = _isPopulated
@@ -64,7 +66,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           item.post,
           postNRecipeItemListener,
           createPostViewModel,
-          fromHomePage = true
+          fromHomePage = isFromHome
         )
       }
 
@@ -74,7 +76,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           item.recipe,
           postNRecipeItemListener,
           createPostViewModel,
-          fromHomePage = true
+          fromHomePage = isFromHome
         )
       }
 
@@ -91,6 +93,14 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
 
   fun addViewModel(createPostViewModel: CreatePostViewModel) {
     this.createPostViewModel = createPostViewModel
+  }
+
+  fun isNotFromHome() {
+    isFromHome = false
+  }
+
+  fun isFromHome() {
+    isFromHome = true
   }
 
   companion object {

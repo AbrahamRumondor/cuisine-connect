@@ -32,17 +32,18 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"
           >
-        
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:background="@color/cc_vanilla_cream_light"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/cc_vanilla_cream"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
-            <LinearLayout
+        <LinearLayout
                 android:id="@+id/ll_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

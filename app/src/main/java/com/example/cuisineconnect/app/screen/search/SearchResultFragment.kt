@@ -90,6 +90,7 @@ class SearchResultFragment : Fragment() {
 
   private fun setupRecyclerView() {
     binding.list.adapter = adapter  // Assuming `list` is the RecyclerView ID in `FragmentSearchResultBinding`
+    adapter.isNotFromHome()
 
     adapter.setItemListener(object : ItemListListener {
       override fun onRecipeClicked(recipeId: String) {
