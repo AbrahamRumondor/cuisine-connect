@@ -110,10 +110,13 @@ class CreatePostViewModel @Inject constructor(
   }
 
   fun savePostInDatabase(result: () -> Unit) {
-    if (postContent.isEmpty()) {
+
+    val contentIsEmpty = postContent.isEmpty() || postContent.any { it["value"].isNullOrEmpty() }
+    if (contentIsEmpty) {
       result()
       return
     }
+
     viewModelScope.launch {
       val id = createPostDoc()
 

@@ -204,9 +204,10 @@ class CreatePostFragment : Fragment() {
           updateTextPostContent()
           showLoadingAnimation()
           createPostViewModel.savePostInDatabase {
-            if (createPostViewModel.postContent.isEmpty()) {
+            val contentIsEmpty = createPostViewModel.postContent.isEmpty() || createPostViewModel.postContent.any { it["value"].isNullOrEmpty() }
+            if (contentIsEmpty) {
               hideLoadingAnimation()
-              Toast.makeText(activity, "Failed to save post, content is empty", Toast.LENGTH_SHORT)
+              Toast.makeText(activity, "Please ensure all fields are filled in.", Toast.LENGTH_SHORT)
                 .show()
               return@savePostInDatabase
             }

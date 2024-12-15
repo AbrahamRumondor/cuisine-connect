@@ -220,32 +220,65 @@ class CreateRecipeFragment : Fragment() {
         builder.setMessage("Are you sure you want to publish the recipe?")
 
         builder.setPositiveButton("Yes") { dialog, _ ->
-
-          showLoadingAnimation()
-          val steps = createRecipeViewModel.toSteps(getSteps())
+          // Validate required fields
+          val title = etTitle.text.toString().trim()
+          val description = etDescription.text.toString().trim()
+          val portion = etPortion.text.toString().trim()
+          val duration = etDuration.text.toString().trim()
+          val ingredients = getIngredients()
+          val steps = getSteps()
           val hashtags = getAllHashtags()
 
+          when {
+            title.isEmpty() -> {
+              showError("Title is required to publish the recipe.")
+              return@setPositiveButton
+            }
+//            description.isEmpty() -> {
+//              showError("Description is required to publish the recipe.")
+//              return@setPositiveButton
+//            }
+            portion.isEmpty() -> {
+              showError("Portion size is required to publish the recipe.")
+              return@setPositiveButton
+            }
+            duration.isEmpty() -> {
+              showError("Duration is required to publish the recipe.")
+              return@setPositiveButton
+            }
+            ingredients.isEmpty() -> {
+              showError("Please add at least one ingredient.")
+              return@setPositiveButton
+            }
+            steps.isEmpty() -> {
+              showError("Please add at least one step.")
+              return@setPositiveButton
+            }
+          }
+
+          // Show loading and proceed to save in the database
+          showLoadingAnimation()
           createRecipeViewModel.saveRecipeInDatabase(
-            title = etTitle.text.toString(),
-            description = etDescription.text.toString(),
-            portion = etPortion.text.toString(),
-            duration = etDuration.text.toString(),
+            title = title,
+            description = description,
+            portion = portion,
+            duration = duration,
             image = imageUri.toString(),
-            ingredients = getIngredients(),
-            steps = steps,
+            ingredients = ingredients,
+            steps = createRecipeViewModel.toSteps(steps),
             imageUri = imageUri,
             hashtags = hashtags
           ) { text ->
             hideLoadingAnimation()
             if (text == null) {
-              Toast.makeText(context, "Success! Recipe created", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, "Success! Recipe created.", Toast.LENGTH_SHORT).show()
               findNavController().popBackStack()
             } else {
               Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
             }
           }
-
         }
+
         builder.setNegativeButton("No") { dialog, _ ->
           dialog.dismiss()
         }
@@ -263,6 +296,10 @@ class CreateRecipeFragment : Fragment() {
       setupTagsBar()
     }
     return binding.root
+  }
+
+  private fun showError(message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
   }
 
   @Deprecated("Deprecated in Java")
