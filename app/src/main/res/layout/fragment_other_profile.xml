@@ -162,8 +162,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="@color/cc_gray"
-        app:tabTextColor="@color/cc_gray"
+        app:tabIndicatorColor="@color/cc_russet_brown"
+        app:tabTextColor="@color/cc_russet_brown"
         />
 
   </com.google.android.material.appbar.AppBarLayout>

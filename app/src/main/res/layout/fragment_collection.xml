@@ -54,7 +54,8 @@
             android:layout_height="28dp"
             android:layout_marginHorizontal="24dp"
             android:text="All Your Inspirations in One Place"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/cc_russet_brown"
+            android:alpha="1"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_title"
@@ -70,8 +71,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="@color/cc_gray"
-        app:tabTextColor="@color/cc_gray"
+        app:tabIndicatorColor="@color/cc_russet_brown"
+        app:tabTextColor="@color/cc_russet_brown"
         />
 
   </com.google.android.material.appbar.AppBarLayout>
