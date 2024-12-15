@@ -166,7 +166,7 @@ class HomePagingSource(
 
       val lastVisibleSnapshot =
         lastPostSnapshots.values.lastOrNull() ?: lastRecipeSnapshots.values.lastOrNull()
-      val nextPage = lastVisibleSnapshot?.let {
+      val nextPage = if (feedItems.size < 2) null else lastVisibleSnapshot?.let {
         postsRef.startAfter(it).limit(params.loadSize.toLong()).get().await()
       }
 

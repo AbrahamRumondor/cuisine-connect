@@ -281,17 +281,7 @@ class CreateRecipeFragment : Fragment() {
   }
 
   private fun setupToolbar() {
-    (activity as? AppCompatActivity)?.apply {
-      setSupportActionBar(binding.toolbar)
-      supportActionBar?.apply {
-        setDisplayHomeAsUpEnabled(true)
-        setDisplayShowHomeEnabled(true)
-        title = "Create Recipe"
-      }
-    }
-
-    // Handle back button click
-    binding.toolbar.setNavigationOnClickListener {
+    binding.btnBack.setOnClickListener {
       findNavController().navigateUp()
     }
   }

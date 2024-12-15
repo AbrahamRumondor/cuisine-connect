@@ -627,16 +627,9 @@ class CreatePostFragment : Fragment() {
   // TODO pake list of map
 
   private fun setupToolbar() {
-    binding.toolbar.apply {
-
-      // Set the back button icon
-      setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-
-      // Handle the back button click event
-      setNavigationOnClickListener {
-        createPostViewModel.clearPostContents()
-        findNavController().navigateUp() // Navigate back to the previous fragment
-      }
+    binding.btnBack.setOnClickListener {
+      createPostViewModel.clearPostContents()
+      findNavController().navigateUp()
     }
   }
 

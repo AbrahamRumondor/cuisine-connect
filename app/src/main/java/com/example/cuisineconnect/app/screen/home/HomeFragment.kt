@@ -118,8 +118,11 @@ class HomeFragment : Fragment() {
   }
 
   private fun loadData() {
+    binding.srlHome.isRefreshing = true
     lifecycleScope.launch {
       mainActivityViewModel.postsNRecipesList.collectLatest { pagingData ->
+        Log.d("homeFragment", "data loaded...")
+        binding.srlHome.isRefreshing = false
         binding.ivEmptyState.visibility = View.GONE // Hide empty state initially
         adapter.submitData(pagingData)
       }
@@ -129,7 +132,6 @@ class HomeFragment : Fragment() {
     adapter.addLoadStateListener { loadStates ->
       // Show empty state if no items loaded after refresh is complete
       if (loadStates.refresh is LoadState.NotLoading && adapter.itemCount == 0) {
-        hideLoadingAnimation()
         binding.list.visibility = View.VISIBLE
         binding.ivEmptyState.visibility = View.VISIBLE
       } else if (loadStates.refresh is LoadState.Loading) {
@@ -273,5 +275,6 @@ class HomeFragment : Fragment() {
     } else {
       binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
     }
+    showLoadingAnimation()
   }
 }
