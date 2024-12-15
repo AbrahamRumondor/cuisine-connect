@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cuisineconnect.R
@@ -46,6 +48,37 @@ class LoginActivity : AppCompatActivity() {
 
     setLoginButton()
     setToRegisterScreen()
+    setPasswordVisibility()
+  }
+
+  private fun setPasswordVisibility() {
+    // Get reference to the password EditText and TextInputLayout
+    val passwordEditText = binding.etPassword
+    val textInputLayout = binding.tilPassword // Ensure you use the correct ID for TextInputLayout
+
+    // Keep track of the visibility state
+    var isPasswordVisible = false
+
+    // Set an OnClickListener for the end icon
+    textInputLayout.setEndIconOnClickListener {
+      // Toggle password visibility
+      isPasswordVisible = !isPasswordVisible
+
+      // Update input type and cursor position
+      passwordEditText.inputType = if (isPasswordVisible) {
+        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+      } else {
+        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+      }
+      passwordEditText.setSelection(passwordEditText.text?.length ?: 0)
+
+      // Update the end icon drawable
+      textInputLayout.endIconDrawable = if (isPasswordVisible) {
+        ContextCompat.getDrawable(this, R.drawable.ic_eye_closed) // Replace with your "eye closed" icon
+      } else {
+        ContextCompat.getDrawable(this, R.drawable.ic_eye_open) // Replace with your "eye open" icon
+      }
+    }
   }
 
   private fun setLoginButton() {
