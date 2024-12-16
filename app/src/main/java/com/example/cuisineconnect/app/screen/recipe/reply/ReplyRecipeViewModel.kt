@@ -98,7 +98,7 @@ class ReplyRecipeViewModel @Inject constructor(
     }
 
     // Start from the root replies
-    replyMap[recipeId]?.forEach { rootReplyPair ->
+    replyMap[recipeId]?.sortedByDescending { it.second.date }?.forEach { rootReplyPair ->
       // Add the root reply to the result
       val rootReply = rootReplyPair.second.copy(isRoot = 0)
       result.add(Triple(rootReplyPair.first, rootReply, rootReplyPair.third))
