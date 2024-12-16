@@ -8,5 +8,6 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginTop="32dp"
     android:layout_marginBottom="8dp"
+    android:paddingBottom="10dp"
     android:letterSpacing="0.05"
   />

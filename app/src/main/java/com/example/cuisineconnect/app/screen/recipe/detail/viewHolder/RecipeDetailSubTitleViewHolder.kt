@@ -12,8 +12,9 @@ class RecipeDetailSubTitleViewHolder(
   fun bind(string: String) {
     view.run {
       if (string.isNotEmpty()) {
-        root.textSize = 20f
+        root.textSize = 24f
         root.text = string
+        root.setTypeface(root.typeface, android.graphics.Typeface.BOLD) // Set text to bold
       }
     }
   }

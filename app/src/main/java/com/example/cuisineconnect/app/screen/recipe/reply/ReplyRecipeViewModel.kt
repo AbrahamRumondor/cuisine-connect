@@ -83,12 +83,13 @@ class ReplyRecipeViewModel @Inject constructor(
     val result = mutableListOf<Triple<User?, Reply, User?>>()
 
     // Recursive function to add replies to the result
+    val semiResult = mutableListOf<Triple<User?, Reply, User?>>()
     fun addRepliesToResult(rootReply: String, parentId: String?) {
       // Get replies that have this parentId
       replyMap[parentId]?.forEach { replyPair ->
         // Add the reply to the result if its root reply is opened
         if (rootReply in openedReply) {
-          result.add(Triple(replyPair.first, replyPair.second.copy(isRoot = 1), replyPair.third))
+          semiResult.add(Triple(replyPair.first, replyPair.second.copy(isRoot = 1), replyPair.third))
         }
 
         // Recursively add all children of this reply
@@ -104,10 +105,12 @@ class ReplyRecipeViewModel @Inject constructor(
 
       // Recursively add all replies under this root reply
       addRepliesToResult(rootReplyPair.second.id, rootReplyPair.second.id)
+      result.addAll(semiResult.sortedBy { it.second.date })
+      semiResult.clear()
     }
 
     // Sort the result by reply_date, descending
-    return result.sortedBy { it.second.date }
+    return result
   }
 
 //  fun getReplyById(recipeId: String, rootReply: String, replyIds: List<String>) {
