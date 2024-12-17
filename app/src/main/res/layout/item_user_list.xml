@@ -9,8 +9,8 @@
 
   <androidx.cardview.widget.CardView
       android:id="@+id/cv_profile"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
       android:layout_gravity="top"
       app:cardCornerRadius="250dp"
       app:layout_constraintStart_toStartOf="parent"

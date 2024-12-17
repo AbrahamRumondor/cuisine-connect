@@ -5,6 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +21,7 @@ import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.collection.CollectionFragmentDirections
 import com.example.cuisineconnect.app.screen.collection.CollectionViewModel
+import com.example.cuisineconnect.app.util.Sort
 import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentMyRecipeListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +77,39 @@ class BookmarkRecipeFragment : Fragment() {
       refreshContent()
     }
 
+    setupSpinner()
+
     return binding.root
+  }
+
+  private fun setupSpinner() {
+    val spinner: Spinner = binding.spinnerSortBy // Assuming you have the Spinner in your binding
+    val sortingOptions = arrayOf("Latest", "Most Liked", "Oldest", "Least Liked")
+
+    val adapter = ArrayAdapter(requireContext(), R.layout.spinner_collection_item, sortingOptions)
+    adapter.setDropDownViewResource(R.layout.spinner_dropdown_collection_item)
+    spinner.adapter = adapter
+
+    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+      override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        if (view != null) { // Check if view is not null
+          val selectedOption = sortingOptions[position]
+          val sortBy = when (selectedOption) {
+            "Latest" -> Sort.Latest
+            "Most Liked" -> Sort.MostLiked
+            "Oldest" -> Sort.Oldest
+            "Least Liked" -> Sort.LeastLiked
+
+            else -> Sort.Latest // Default case
+          }
+          collectionViewModel.getBookmarkedRecipes(sortBy) // Call the function with the selected sorting option
+        }
+      }
+
+      override fun onNothingSelected(parent: AdapterView<*>) {
+        // Handle case when nothing is selected if needed
+      }
+    }
   }
 
   private fun refreshContent() {
@@ -102,6 +138,22 @@ class BookmarkRecipeFragment : Fragment() {
         recipeAdapter.updateData(recipes)
       }
     }
+
+    binding.list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      private var isSpinnerVisible = true
+
+      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        if (dy > 0 && isSpinnerVisible) { // Scrolling up
+          binding.spinnerSortBy.visibility = View.GONE
+          isSpinnerVisible = false
+        } else if (dy < 0 && !isSpinnerVisible) { // Scrolling down
+          binding.spinnerSortBy.visibility = View.VISIBLE
+          isSpinnerVisible = true
+        }
+      }
+    })
 
     recipeAdapter.setItemListener(object : RecipeListListener {
       override fun onRecipeClicked(recipeId: String) {

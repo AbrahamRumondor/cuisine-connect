@@ -86,7 +86,11 @@ class FollowListFragment : Fragment() {
       supportActionBar?.apply {
         setDisplayHomeAsUpEnabled(true)
         setDisplayShowHomeEnabled(true)
-        title = args.username
+        title = if (args.listType == "follower") {
+          args.listType.replaceFirstChar { 'F' } + "s" // Append 's' if listType is "follower"
+        } else {
+          args.listType.replaceFirstChar { 'F' } // Just replace the first character if not
+        }
       }
     }
 

@@ -3,6 +3,11 @@ package com.example.cuisineconnect.app.screen.collection
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cuisineconnect.app.util.Sort
+import com.example.cuisineconnect.app.util.Sort.Latest
+import com.example.cuisineconnect.app.util.Sort.LeastLiked
+import com.example.cuisineconnect.app.util.Sort.MostLiked
+import com.example.cuisineconnect.app.util.Sort.Oldest
 import com.example.cuisineconnect.domain.model.Recipe
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.recipe.RecipeUseCase
@@ -26,7 +31,8 @@ class CollectionViewModel @Inject constructor(
   private val _recipes: MutableStateFlow<List<Pair<User?, Recipe>>?> = MutableStateFlow(null)
   val recipes: StateFlow<List<Pair<User?, Recipe>>?> = _recipes
 
-  private val _myRecipes: MutableStateFlow<List<Pair<User?, Recipe>>> = MutableStateFlow(emptyList())
+  private val _myRecipes: MutableStateFlow<List<Pair<User?, Recipe>>> =
+    MutableStateFlow(emptyList())
   val myRecipes: StateFlow<List<Pair<User?, Recipe>>> = _myRecipes
 
   private val _bookmarkedRecipes: MutableStateFlow<List<Pair<User?, Recipe>>> =
@@ -73,21 +79,33 @@ class CollectionViewModel @Inject constructor(
     }
   }
 
-  fun getMyRecipes() {
-    getRecipes()
+  fun getMyRecipes(sortBy: Sort = Latest) {
+    getRecipes() // Fetch all recipes without sorting
+
     viewModelScope.launch {
       recipes.collectLatest { allRecipes ->
         userUseCase.getCurrentUser().collectLatest { currentUser ->
           allRecipes?.let { recipes ->
-            _myRecipes.value = recipes.filter { it.first?.id == currentUser.id }.ifEmpty { emptyList() }
+            // Filter recipes to get only the user's recipes
+            val userRecipes = recipes.filter { it.first?.id == currentUser.id }
+
+            // Sort the filtered recipes based on the sortBy parameter
+            _myRecipes.value = when (sortBy) {
+              Latest -> userRecipes.sortedByDescending { it.second.date.time } // Sort by date descending
+              MostLiked -> userRecipes.sortedByDescending { it.second.upvotes.size } // Sort by likes descending
+              LeastLiked -> userRecipes.sortedBy { it.second.upvotes.size }
+              Oldest -> userRecipes.sortedBy { it.second.date.time }
+            }.ifEmpty { emptyList() }
           }
+
+          // Log the updated _myRecipes value
           Log.d("brobruh", "tes: ${_myRecipes.value.toString()}")
         }
       }
     }
   }
 
-  fun getBookmarkedRecipes() {
+  fun getBookmarkedRecipes(sortBy: Sort = Latest) {
     viewModelScope.launch {
       userUseCase.getCurrentUser().collectLatest { currentUser ->
         Log.d("collectionViewModel", "njir: ${currentUser.bookmarks}")
@@ -97,10 +115,20 @@ class CollectionViewModel @Inject constructor(
         }
         val bookmarkedRecipes = currentUser.bookmarks.map { recipeId ->
           val userId = recipeId.split("_")[1]
-          async { Pair(userUseCase.getUserByUserId(userId), recipeUseCase.getRecipeByID(recipeId) ?: Recipe()) }
+          async {
+            Pair(
+              userUseCase.getUserByUserId(userId),
+              recipeUseCase.getRecipeByID(recipeId) ?: Recipe()
+            )
+          }
         }.awaitAll()
 
-        _bookmarkedRecipes.value = bookmarkedRecipes
+        _bookmarkedRecipes.value = when (sortBy) {
+          Latest -> bookmarkedRecipes.sortedByDescending { it.second.date.time } // Sort by date descending
+          MostLiked -> bookmarkedRecipes.sortedByDescending { it.second.upvotes.size } // Sort by likes descending
+          LeastLiked -> bookmarkedRecipes.sortedBy { it.second.upvotes.size }
+          Oldest -> bookmarkedRecipes.sortedBy { it.second.date.time }
+        }.ifEmpty { emptyList() }
       }
     }
   }

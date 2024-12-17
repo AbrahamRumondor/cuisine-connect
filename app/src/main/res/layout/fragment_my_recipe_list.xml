@@ -64,4 +64,23 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:lottie_loop="true" />
 
+  <com.google.android.material.card.MaterialCardView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:layout_margin="16dp"
+      android:backgroundTint="@color/cc_vanilla_cream"
+      app:cardCornerRadius="500dp"
+      app:strokeColor="@android:color/transparent"
+      >
+  <Spinner
+      android:id="@+id/spinner_sort_by"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      />
+  </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
