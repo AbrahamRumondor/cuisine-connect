@@ -32,7 +32,11 @@ class ProfileEditFragment : Fragment() {
   private val profileViewModel: ProfileViewModel by activityViewModels()
 
   private var imageUri: Uri? = null
+  private var imageProfileUri: Uri? = null
+  private var imageBackgroundUri: Uri? = null
   var SELECT_PICTURE: Int = 200
+
+  var imageFrom = ""
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +66,7 @@ class ProfileEditFragment : Fragment() {
     binding.run {
       btnSave.setOnClickListener {
         val displayName = etDisplayName.text.toString()
+        val bio = etBio.text.toString()
 
         // Define regex pattern for allowed characters (alphanumeric and underscores)
         val displayNamePattern = "^[a-zA-Z0-9_]+$".toRegex()
@@ -88,7 +93,7 @@ class ProfileEditFragment : Fragment() {
         val builder = AlertDialog.Builder(binding.root.context)
         builder.setTitle("Are you sure about the changes?")
         builder.setPositiveButton("Yes") { dialog, _ ->
-          applySaveEdit(displayName)
+          applySaveEdit(displayName, bio)
           dialog.dismiss()
         }
         builder.setNegativeButton("No") { dialog, _ ->
@@ -98,9 +103,10 @@ class ProfileEditFragment : Fragment() {
       }
     }
   }
-  private fun FragmentProfileEditBinding.applySaveEdit(displayName: String) {
+
+  private fun FragmentProfileEditBinding.applySaveEdit(displayName: String, bio: String) {
     llLoading.root.visibility = View.VISIBLE
-    profileViewModel.updateUser(displayName, "", "", imageUri) {
+    profileViewModel.updateUser(displayName, "", "", bio, imageProfileUri, imageBackgroundUri) {
       llLoading.root.visibility = View.GONE
       Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
       findNavController().navigateUp() // Navigate back to the previous fragment
@@ -130,16 +136,33 @@ class ProfileEditFragment : Fragment() {
             .placeholder(R.drawable.ic_bnv_profile)
             .into(ivProfilePicture)
 
+          Glide.with(root)
+            .load(user.background)
+            .into(ivBackground)
+
           etDisplayName.setText(user.displayName)
+
+          etBio.setText(user.bio)
+
 //          etEmail.setText(user.email)
 //          etPassword.setText(user.password)
 
           ivProfilePicture.setOnClickListener {
-              val i = Intent()
-              i.setType("image/*")
-              i.setAction(Intent.ACTION_GET_CONTENT)
+            imageFrom = "profile"
+            val i = Intent()
+            i.setType("image/*")
+            i.setAction(Intent.ACTION_GET_CONTENT)
 
-              startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+          }
+
+          flBackground.setOnClickListener {
+            imageFrom = "background"
+            val i = Intent()
+            i.setType("image/*")
+            i.setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
           }
         }
       }
@@ -160,9 +183,16 @@ class ProfileEditFragment : Fragment() {
         if (null != imageUri) {
           // update the preview image in the layout
 //          IVPreviewImage.setImageURI(selectedImageUri)
+          val implementedView = if (imageFrom == "profile") {
+            imageProfileUri = imageUri
+            binding.ivProfilePicture
+          } else {
+            imageBackgroundUri = imageUri
+            binding.ivBackground
+          }
           Glide.with(this)
             .load(imageUri)   // Load the image URL into the ImageView
-            .into(binding.ivProfilePicture)
+            .into(implementedView)
         }
       }
     }

@@ -24,6 +24,10 @@ data class UserResponse(
     @set:PropertyName("user_password")
     var password: String = "",
 
+    @get:PropertyName("user_bio")
+    @set:PropertyName("user_bio")
+    var bio: String = "",
+
     @get:PropertyName("user_recipes")
     @set:PropertyName("user_recipes")
     var recipes: List<String> = emptyList(),
@@ -39,6 +43,10 @@ data class UserResponse(
     @get:PropertyName("user_image")
     @set:PropertyName("user_image")
     var image: String = "",
+
+    @get:PropertyName("user_background")
+    @set:PropertyName("user_background")
+    var background: String = "",
 
     @get:PropertyName("user_follower")
     @set:PropertyName("user_follower")
@@ -69,7 +77,9 @@ data class UserResponse(
                 posts = userResponse.posts,
                 bookmarks = userResponse.bookmarks,
                 username = userResponse.uniqueUsername,
-                postContent = userResponse.postContent
+                postContent = userResponse.postContent,
+                background = userResponse.background,
+                bio = userResponse.bio
             )
         }
 
@@ -86,7 +96,9 @@ data class UserResponse(
                 posts = user.posts,
                 bookmarks = user.bookmarks,
                 uniqueUsername = user.username,
-                postContent = user.postContent
+                postContent = user.postContent,
+                background = user.background,
+                bio = user.bio
             )
         }
     }

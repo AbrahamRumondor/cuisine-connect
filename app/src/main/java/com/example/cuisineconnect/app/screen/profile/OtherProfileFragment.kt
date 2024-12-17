@@ -76,6 +76,17 @@ class OtherProfileFragment : Fragment() {
             .placeholder(R.drawable.ic_bnv_profile)
             .into(ivUserProfile)
 
+          Glide.with(root)
+            .load(user.background)
+            .into(ivBackground)
+
+          if (user.bio.isNotEmpty()) {
+            tvBio.visibility = View.VISIBLE
+            tvBio.text = user.bio
+          } else {
+            tvBio.visibility = View.GONE
+          }
+
           if (user.follower.contains(currentUser?.id)) {
             binding.btnFollow.run {
               text = "Following"

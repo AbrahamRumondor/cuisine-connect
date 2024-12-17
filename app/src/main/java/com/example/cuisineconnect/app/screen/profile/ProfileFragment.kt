@@ -80,6 +80,17 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.ic_bnv_profile)
             .into(ivUserProfile)
 
+          Glide.with(root)
+            .load(user.background)
+            .into(ivBackground)
+
+          if (user.bio.isNotEmpty()) {
+            tvBio.visibility = View.VISIBLE
+            tvBio.text = user.bio
+          } else {
+            tvBio.visibility = View.GONE
+          }
+
           val posts = Html.fromHtml("<b>${user.recipes.size}</b> recipes")
           tvPosts.text = posts
           val followers = Html.fromHtml("<b>${user.follower.size}</b> followers")

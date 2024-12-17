@@ -24,7 +24,7 @@
 
       <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
-          android:layout_height="230dp"
+          android:layout_height="wrap_content"
           android:background="@color/white"
           android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
           app:layout_collapseMode="parallax"
@@ -33,22 +33,44 @@
           app:layout_constraintTop_toTopOf="parent"
           >
 
+        <FrameLayout
+            android:id="@+id/fl_background"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/cc_vanilla_cream"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+          <ImageView
+              android:id="@+id/iv_background"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:scaleType="centerCrop"
+              />
+        </FrameLayout>
+
         <LinearLayout
             android:id="@+id/ll_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_background"
             android:orientation="vertical"
           >
 
-          <androidx.cardview.widget.CardView
+          <com.google.android.material.card.MaterialCardView
               android:layout_width="80dp"
               android:layout_height="80dp"
-              app:cardCornerRadius="250dp"
               android:layout_marginHorizontal="24dp"
               android:layout_marginBottom="8dp"
+              android:backgroundTint="@color/white"
+              app:cardCornerRadius="250dp"
+              app:strokeColor="@color/white"
+              app:strokeWidth="3dp"
               >
 
             <ImageView
@@ -59,7 +81,7 @@
                 android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars"
                 />
-          </androidx.cardview.widget.CardView>
+          </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tv_username"
@@ -67,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:text="Guest#819"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,12 +106,27 @@
             />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:text=""
+            android:textSize="16sp"
+            android:lineSpacingExtra="2dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_profile"
+            />
+
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_profile"
+            app:layout_constraintTop_toBottomOf="@id/tv_bio"
             >
 
           <LinearLayout
@@ -147,8 +184,9 @@
             android:backgroundTint="@color/cc_light_gray"
             android:text="Follow"
             android:textAllCaps="false"
+            android:layout_marginVertical="16dp"
             android:background="@drawable/button_radius_profile"
-            app:layout_constraintTop_toTopOf="@id/ll_profile"
+            app:layout_constraintTop_toBottomOf="@id/fl_background"
             android:layout_marginHorizontal="16dp"
           />
 
