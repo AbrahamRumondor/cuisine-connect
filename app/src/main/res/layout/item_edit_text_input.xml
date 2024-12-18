@@ -25,8 +25,7 @@
   <ImageButton
       android:id="@+id/btn_delete"
       android:layout_width="24dp"
-      android:layout_height="match_parent"
-      android:padding="10dp"
+      android:layout_height="24dp"
       android:src="@drawable/ic_close"
       android:scaleType="centerCrop"
       android:background="@android:color/transparent"

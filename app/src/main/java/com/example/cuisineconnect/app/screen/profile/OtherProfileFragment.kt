@@ -87,7 +87,9 @@ class OtherProfileFragment : Fragment() {
             tvBio.visibility = View.GONE
           }
 
-          if (user.follower.contains(currentUser?.id)) {
+          if (user.id == currentUser?.id) {
+            binding.btnFollow.visibility = View.GONE
+          } else if (user.follower.contains(currentUser?.id)) {
             binding.btnFollow.run {
               text = "Following"
               setOnClickListener {

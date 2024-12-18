@@ -176,18 +176,18 @@ class HomeFragment : Fragment() {
       }
 
       override fun onUserProfileClicked(userId: String) {
-        if (userId == currentUser?.id) {
-          val action =
-            HomeFragmentDirections.actionHomeFragmentToProfileFragment()
-          findNavController().navigate(action)
-          return
-        } else {
+//        if (userId == currentUser?.id) {
+//          val action =
+//            HomeFragmentDirections.actionHomeFragmentToProfileFragment()
+//          findNavController().navigate(action)
+//          return
+//        } else {
           val action =
             HomeFragmentDirections.actionHomeFragmentToOtherProfileFragment(
               userId
             )
           findNavController().navigate(action)
-        }
+//        }
       }
     })
 
