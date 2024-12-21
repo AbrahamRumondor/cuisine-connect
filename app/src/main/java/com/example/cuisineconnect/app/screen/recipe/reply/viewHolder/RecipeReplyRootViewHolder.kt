@@ -60,15 +60,15 @@ class RecipeReplyRootViewHolder(
           val replyCountCallback = object : ReplyCountCallback {
             override fun onReplyCountRetrieved(count: Int) {
               // Only update the reply count if it's not currently showing "Hide replies"
-              if (tvShowReply.text != "Hide replies") {
-                val repliesText = "view $count replies"
+              if (tvShowReply.text != view.root.context.getString(R.string.hide_replies)) {
+                val repliesText = view.root.context.getString(R.string.view_replies, count)
                 tvShowReply.text = repliesText
               }
             }
 
             override fun onError(e: Exception) {
-              if (tvShowReply.text != "Hide replies") {
-                tvShowReply.text = "Error loading replies"
+              if (tvShowReply.text != view.root.context.getString(R.string.hide_replies)) {
+                tvShowReply.text = view.root.context.getString(R.string.error_loading_replies)
               }
             }
           }
@@ -81,13 +81,13 @@ class RecipeReplyRootViewHolder(
           )
 
           llShowReply.setOnClickListener {
-            if (tvShowReply.text == "Hide replies") {
+            if (tvShowReply.text == view.root.context.getString(R.string.hide_replies)) {
               // Change text back to the number of replies when hiding
-              tvShowReply.text = "view ${reply.repliesId.size} replies"
+              tvShowReply.text = view.root.context.getString(R.string.view_replies, reply.repliesId.size)
               itemListener?.onReplyListSecondClicked(position, reply.id, reply.repliesId)
             } else {
               // Change text to "Hide replies" when showing the replies
-              tvShowReply.text = "Hide replies"
+              tvShowReply.text = view.root.context.getString(R.string.hide_replies)
               itemListener?.onReplyListClicked(position, reply.id, reply.repliesId)
             }
           }
@@ -120,25 +120,25 @@ class RecipeReplyRootViewHolder(
       // Less than 1 minute ago
       diff < TimeUnit.MINUTES.toMillis(1) -> {
         val seconds = TimeUnit.MILLISECONDS.toSeconds(diff)
-        if (seconds <= 1) "$seconds second ago" else "$seconds seconds ago"
+        if (seconds <= 1) "$seconds ${view.root.context.getString(R.string.second_ago)}" else "$seconds ${view.root.context.getString(R.string.seconds_ago)}"
       }
 
       // Less than 1 hour ago
       diff < TimeUnit.HOURS.toMillis(1) -> {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
-        if (minutes == 1L) "$minutes minute ago" else "$minutes minutes ago"
+        if (minutes == 1L) "$minutes ${view.root.context.getString(R.string.minute_ago)}" else "$minutes ${view.root.context.getString(R.string.minutes_ago)}"
       }
 
       // Less than 1 day ago
       diff < TimeUnit.HOURS.toMillis(24) -> {
         val hours = TimeUnit.MILLISECONDS.toHours(diff)
-        if (hours == 1L) "$hours hour ago" else "$hours hours ago"
+        if (hours == 1L) "$hours ${view.root.context.getString(R.string.hour_ago)}" else "$hours ${view.root.context.getString(R.string.hours_ago)}"
       }
 
       // Less than 5 days ago
       diff < TimeUnit.DAYS.toMillis(5) -> {
         val days = TimeUnit.MILLISECONDS.toDays(diff)
-        if (days == 1L) "$days day ago" else "$days days ago"
+        if (days == 1L) "$days ${view.root.context.getString(R.string.day_ago)}" else "$days ${view.root.context.getString(R.string.days_ago)}"
       }
 
       // Default to the "MMM dd" format for anything older

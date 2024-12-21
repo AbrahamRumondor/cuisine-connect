@@ -26,7 +26,7 @@ class RecipeDetailMainImageViewHolder(
 
                 ivRecipeImg.setOnClickListener {
                     if (recipe.image == "null") {
-                        Toast.makeText(root.context, "No image", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(root.context, root.context.getString(R.string.no_image), Toast.LENGTH_SHORT).show()
                     } else {
                         // Create and display a dialog to show the full image
                         val dialog = Dialog(view.root.context)

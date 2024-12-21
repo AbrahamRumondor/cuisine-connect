@@ -222,12 +222,12 @@ class RecipeDetailFragment : Fragment() {
 
   private fun handleAddBookmark(postId: String, userId: String) {
     recipeDetailViewModel.addToBookmark(postId, userId)
-    showToast("Added to bookmarks")
+    showToast(getString(R.string.added_to_bookmarks))
   }
 
   private fun handleRemoveBookmark(postId: String, userId: String) {
     recipeDetailViewModel.removeFromBookmark(postId, userId)
-    showToast("Removed from bookmarks")
+    showToast(getString(R.string.removed_from_bookmarks))
   }
 
   private fun setConnectionBehaviour() {

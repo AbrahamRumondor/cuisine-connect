@@ -70,6 +70,17 @@
   <string name="guest819">\@guest819</string>
   <string name="recipes">resep</string>
   <string name="followers">pengikut</string>
+  <string name="followers_s">pengikut</string>
+  <string name="ingredients">Bahan-bahan</string>
+  <string name="steps">Langkah-Langkah</string>
+
+  <string name="added_to_bookmarks">Berhasil ditambahkan ke bookmark</string>
+  <string name="removed_from_bookmarks">Berhasil dihapus dari bookmark</string>
+
+  <string name="hide_replies">Sembunyikan balasan</string>
+  <string name="view_replies">lihat %1$d balasan</string>
+  <string name="error_loading_replies">Kesalahan saat memuat balasan</string>
+
   <string name="following">mengikuti</string>
   <string name="follow">Ikuti</string>
   <string name="post">post</string>
@@ -205,6 +216,8 @@
   <string name="successfully_followed">Berhasil mengikuti</string>
   <string name="following_caps">Mengikuti</string>
   <string name="follow_caps">Follow</string>
+
+  <string name="no_image">Tidak ada gambar</string>
 
 
 </resources>

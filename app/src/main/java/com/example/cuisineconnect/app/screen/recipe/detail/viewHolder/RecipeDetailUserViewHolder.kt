@@ -17,7 +17,7 @@ class RecipeDetailUserViewHolder(
       if (user != null) {
 
         tvUsername.text = user.displayName
-        val follower = if (user.follower.size == 1) "${user.follower.size} follower" else "${user.follower.size} followers"
+        val follower = if (user.follower.size == 1) "${user.follower.size} ${root.context.getString(R.string.followers)}" else "${user.follower.size} ${root.context.getString(R.string.followers_s)}"
         tvFollower.text = follower
 
         Glide.with(root)

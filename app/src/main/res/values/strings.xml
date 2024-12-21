@@ -176,7 +176,17 @@
   <string name="duration_required">Duration is required to publish the recipe.</string>
   <string name="add_ingredient_message">Please add at least one ingredient.</string>
   <string name="add_step_message">Please add at least one step.</string>
-  <string name="carrot_2">"2 Carrots"</string>
+  <string name="carrot_2">2 Carrots</string>
+  <string name="ingredients">Ingredients</string>
+  <string name="steps">Steps</string>
+
+  <string name="added_to_bookmarks">Added to bookmarks</string>
+  <string name="removed_from_bookmarks">Removed from bookmarks</string>
+
+  <string name="hide_replies">Hide replies</string>
+  <string name="view_replies">view %1$d replies</string>
+  <string name="error_loading_replies">Error loading replies</string>
+
   <string name="step_hint">Start by putting all the ingredients together…</string>
   <string name="hashtag_already_added">Hashtag already added</string>
   <string name="hashtag_added_successfully">Hashtag added successfully!</string>
@@ -206,4 +216,8 @@
   <string name="unfollow_user_message">Are you sure you want to unfollow</string>
   <string name="successfully_unfollowed">Successfully unfollowed</string>
   <string name="successfully_followed">Successfully followed</string>
+
+  <string name="no_image">No image</string>
+  <string name="followers_s">followers</string>
+
 </resources>
