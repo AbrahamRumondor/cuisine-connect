@@ -151,7 +151,7 @@ class CreatePostFragment : Fragment() {
 
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Save Progress")
-        builder.setMessage("Are you sure to save current recipe progress?")
+        builder.setMessage("Are you sure to save current post progress?")
 
         builder.setPositiveButton("Yes") { dialog, _ ->
           createPostViewModel.savePostProgress(object : TwoWayCallback {
@@ -173,7 +173,7 @@ class CreatePostFragment : Fragment() {
       btnDelete.setOnClickListener {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Clear Progress")
-        builder.setMessage("Are you sure to clear current recipe progress?")
+        builder.setMessage("Are you sure to clear current post progress?")
 
         builder.setPositiveButton("Yes") { dialog, _ ->
           createPostViewModel.deletePostProgress(object : TwoWayCallback {

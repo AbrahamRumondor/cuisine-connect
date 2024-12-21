@@ -1,8 +1,10 @@
 package com.example.cuisineconnect.app.screen.authentication
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.auth.AuthUseCase
 import com.example.cuisineconnect.domain.usecase.user.UserUseCase
@@ -11,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
@@ -18,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
   private val userUseCase: UserUseCase,
-  private val authUseCase: AuthUseCase
+  private val authUseCase: AuthUseCase,
+  private val application: Application
 ) : ViewModel() {
 
   fun registerUser(
@@ -33,7 +37,7 @@ class RegisterViewModel @Inject constructor(
         onSuccess = { isTaken ->
           if (isTaken) {
             // If username is taken, return the error message
-            onComplete(false, "Username is already taken. Please choose another.")
+            onComplete(false, application.getString(R.string.username_is_already_taken))
           } else {
             viewModelScope.launch {
               // If username is not taken, proceed with registration
@@ -85,11 +89,11 @@ class RegisterViewModel @Inject constructor(
 
   private fun getFirebaseErrorMessage(exception: Throwable?): String {
     return when (exception) {
-      is FirebaseAuthUserCollisionException -> "This email is already registered."
-      is FirebaseAuthWeakPasswordException -> "Your password is too weak. Please choose a stronger password."
-      is FirebaseAuthInvalidCredentialsException -> "Invalid email format. Please enter a valid email."
-      is FirebaseAuthInvalidUserException -> "This account doesn't exist or has been disabled."
-      else -> "An unknown error occurred. Please try again later."
+      is FirebaseAuthUserCollisionException -> application.getString(R.string.this_email_is_already_registered)
+      is FirebaseAuthWeakPasswordException -> application.getString(R.string.your_password_is_too_weak)
+      is FirebaseAuthInvalidCredentialsException -> application.getString(R.string.invalid_email_format)
+      is FirebaseAuthInvalidUserException -> application.getString(R.string.this_account_does_not_exist_or_has_been_disabled)
+      else -> application.getString(R.string.an_unknown_error_occurred)
     }
   }
   private fun hashPassword(password: String): String {

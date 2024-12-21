@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,6 @@ import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.model.Post
 import com.example.cuisineconnect.domain.model.User
-import kotlinx.coroutines.flow.collectLatest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,12 +35,11 @@ class ItemPostViewHolder(
     post: Post,
     listener: ItemListListener?,
     createPostViewModel: CreatePostViewModel?,
-    fromHomePage: Boolean = false
+    fromHomePage: Boolean = false,
+    alreadyDisplayed: () -> Unit
   ) {
     view.run {
       if (user != null) {
-
-
 
         Log.d("lilil", "this is post ${user} and ${post}")
 
@@ -64,8 +63,12 @@ class ItemPostViewHolder(
         tvDate.text = formattedDate
 
         val isAuthor = createPostViewModel?.user?.value?.id == user.id
-        val isNotFollowing = createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
-        Log.d("itemPostViewHolder", "isnotFollowing${createPostViewModel?.user?.value?.following?.none { it == user.id }}")
+        val isNotFollowing =
+          createPostViewModel?.user?.value?.following?.none { it == user.id } ?: true
+        Log.d(
+          "itemPostViewHolder",
+          "isnotFollowing${createPostViewModel?.user?.value?.following?.none { it == user.id }}"
+        )
 
         if (isNotFollowing && !isAuthor && fromHomePage) {
           llRecommendation.visibility = View.VISIBLE
@@ -76,26 +79,26 @@ class ItemPostViewHolder(
         btnEdit.visibility = View.GONE
         if (isAuthor) {
           btnEdit.visibility = View.VISIBLE
-          btnEdit.setOnClickListener {
-            val builder = AlertDialog.Builder(view.root.context)
-            builder.setTitle("Delete Recipe")
-            builder.setMessage("Are you sure you want to delete the recipe?")
+          btnEdit.setOnClickListener { view ->
+            // Create a PopupMenu
+            val popupMenu = PopupMenu(view.context, view)
+            popupMenu.menuInflater.inflate(R.menu.item_options, popupMenu.menu)
 
-            builder.setPositiveButton("Yes") { dialog, _ ->
-              Toast.makeText(
-                view.root.context,
-                "post deleted",
-                Toast.LENGTH_SHORT
-              ).show()
+            // Set click listeners for menu items
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+              when (menuItem.itemId) {
+                R.id.action_delete -> {
+                  // Show delete confirmation dialog
+                  showDeleteConfirmationDialog(post.id, view, listener)
+                  true
+                }
 
-              listener?.onItemDeleteClicked(post.id, "post")
-              dialog.dismiss() // Dismiss the dialog
+                else -> false
+              }
             }
 
-            builder.setNegativeButton("No") { dialog, _ ->
-              dialog.dismiss()
-            }
-            builder.show()
+            // Show the PopupMenu
+            popupMenu.show()
           }
         }
 
@@ -112,7 +115,36 @@ class ItemPostViewHolder(
 //                }
       }
     }
+    alreadyDisplayed()
   }
+
+  // Function to show delete confirmation dialog
+  private fun showDeleteConfirmationDialog(
+    postId: String,
+    view: View,
+    listener: ItemListListener?
+  ) {
+    val builder = AlertDialog.Builder(view.context)
+    builder.setTitle("Delete Recipe")
+    builder.setMessage("Are you sure you want to delete the recipe?")
+
+    builder.setPositiveButton("Yes") { dialog, _ ->
+      Toast.makeText(
+        view.context,
+        "Post deleted",
+        Toast.LENGTH_SHORT
+      ).show()
+
+      listener?.onItemDeleteClicked(postId, "post")
+      dialog.dismiss() // Dismiss the dialog
+    }
+
+    builder.setNegativeButton("No") { dialog, _ ->
+      dialog.dismiss()
+    }
+    builder.show()
+  }
+
 
   private fun restorePostContent(
     createPostViewModel: CreatePostViewModel?,
@@ -156,7 +188,13 @@ class ItemPostViewHolder(
       val heightInDp = view.llPostContents.height / view.root.resources.displayMetrics.density
       val bottomPadding = 16
 
-      setViewPadding(view.llPostContents, 0, 0, 0, (bottomPadding * view.root.resources.displayMetrics.density).toInt())
+      setViewPadding(
+        view.llPostContents,
+        0,
+        0,
+        0,
+        (bottomPadding * view.root.resources.displayMetrics.density).toInt()
+      )
     }
   }
 
@@ -306,7 +344,13 @@ class ItemPostViewHolder(
     view.layoutParams = layoutParams
   }
 
-  private fun setViewPadding(view: android.view.View, leftDp: Int, topDp: Int, rightDp: Int, bottomDp: Int) {
+  private fun setViewPadding(
+    view: android.view.View,
+    leftDp: Int,
+    topDp: Int,
+    rightDp: Int,
+    bottomDp: Int
+  ) {
     val density = view.context.resources.displayMetrics.density
     val leftPx = (leftDp * density).toInt()
     val topPx = (topDp * density).toInt()

@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.search
 
 import android.os.Bundle
+import android.provider.Settings.Global
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +75,9 @@ class SearchFragment : Fragment() {
   private fun loadHashtagData() {
     trendingViewModel.fetchTrendingHashtags { hashtags, error ->
       if (error == null) {
-        hashtagAdapter.submitData(hashtags)
+        val trendingToday = getString(R.string.trending_today)
+        val list = listOf(trendingToday) + hashtags
+        hashtagAdapter.submitData(list)
       } else {
         Toast.makeText(
           context,

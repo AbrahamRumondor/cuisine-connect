@@ -2,6 +2,7 @@ package com.example.cuisineconnect.domain.model
 
 data class User(
     var id: String = "",
+    var language: String = "id",
     val displayName: String = "loading...",
     val username: String = "",
     val email: String = "",

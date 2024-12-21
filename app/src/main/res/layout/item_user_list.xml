@@ -42,7 +42,7 @@
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LetsGoCook123"
+        android:text="@string/guest_819"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         />
@@ -51,7 +51,7 @@
         android:id="@+id/tv_unique_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\@LetsGoCook123"
+        android:text="@string/guest819"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         />

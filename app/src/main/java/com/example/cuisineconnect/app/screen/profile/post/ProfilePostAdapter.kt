@@ -34,7 +34,9 @@ class ProfilePostAdapter :
   override fun onBindViewHolder(holder: ItemPostViewHolder, position: Int) {
     _isPopulated.value = true // Set the value to true once the item is bound
     val (user, post) = items[position]
-    holder.bind(user, post?:Post(), postItemListener, createPostViewModel)
+    holder.bind(user, post?:Post(), postItemListener, createPostViewModel){
+
+    }
   }
 
   override fun getItemCount(): Int {

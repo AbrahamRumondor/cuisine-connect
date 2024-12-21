@@ -1,8 +1,10 @@
 package com.example.cuisineconnect.app.screen.search.trending
 
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.OnClickItemListener
 import com.example.cuisineconnect.databinding.HashtagTrendingListBinding
 import com.example.cuisineconnect.databinding.SubTitleBinding
@@ -54,7 +56,6 @@ class TrendingHashtagAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   fun submitData(newItems: List<Any>) {
     items.clear()
-    items.add("Trending Today")
     items.addAll(newItems)
     notifyDataSetChanged()
   }

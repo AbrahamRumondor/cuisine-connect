@@ -57,7 +57,7 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    _isPopulated.value = true // Set the value to true once the item is bound
+    _isPopulated.value = false
     Log.d("homeAdapter", " item ${getItem(position)}")
     when (val item = getItem(position)) {
       is PostItem -> {
@@ -67,7 +67,9 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           postNRecipeItemListener,
           createPostViewModel,
           fromHomePage = isFromHome
-        )
+        ) {
+          _isPopulated.value = true // Set the value to true once the item is bound
+        }
       }
 
       is RecipeItem -> {
@@ -77,7 +79,9 @@ class HomeAdapter : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(FeedIte
           postNRecipeItemListener,
           createPostViewModel,
           fromHomePage = isFromHome
-        )
+        ) {
+          _isPopulated.value = true // Set the value to true once the item is bound
+        }
       }
 
       null -> {

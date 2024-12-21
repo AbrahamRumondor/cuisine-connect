@@ -17,7 +17,7 @@
         android:id="@+id/tv_hashtag_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="#Ayam"
+        android:text="@string/hashtag_strip"
         android:textColor="@color/cc_gray"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,7 @@
       android:id="@+id/tv_hashtags_count"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="200 posts"
+      android:text="@string/posts"
       android:textSize="16sp"
       android:textColor="@android:color/darker_gray"
       />

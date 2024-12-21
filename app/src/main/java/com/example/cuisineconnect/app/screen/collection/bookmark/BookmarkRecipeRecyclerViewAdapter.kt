@@ -45,6 +45,8 @@ class BookmarkRecipeRecyclerViewAdapter(
 
   @SuppressLint("SimpleDateFormat")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val app = bookmarkRecipeFragmentBinding.root.context
+
     _isPopulated.value = true // Set the value to true once the item is bound
     val item = recipes[position]
     holder.title.text = item.second.title
@@ -59,17 +61,17 @@ class BookmarkRecipeRecyclerViewAdapter(
 
     holder.recipeItem.setOnLongClickListener {
       val builder = AlertDialog.Builder(bookmarkRecipeFragmentBinding.root.context)
-      builder.setTitle("Choose this recipe?")
-      builder.setPositiveButton("Yes") { dialog, _ ->
+      builder.setTitle(app.getString(R.string.choose_this_recipe))
+      builder.setPositiveButton(app.getString(R.string.yes)) { dialog, _ ->
         Toast.makeText(
           bookmarkRecipeFragmentBinding.root.context,
-          "${item.second.title} is chosen",
+          "${item.second.title} ${app.getString(R.string.recipe_chosen)}",
           Toast.LENGTH_SHORT
         ).show()
         recipeListListener?.onRecipeLongClicked(item.second.id)
         dialog.dismiss()
       }
-      builder.setNegativeButton("No") { dialog, _ ->
+      builder.setNegativeButton(app.getString(R.string.no)) { dialog, _ ->
         dialog.dismiss()
       }
       builder.create().show()
@@ -78,18 +80,18 @@ class BookmarkRecipeRecyclerViewAdapter(
 
     holder.deleteRecipe.setOnClickListener {
       val builder = AlertDialog.Builder(bookmarkRecipeFragmentBinding.root.context)
-      builder.setTitle("Delete Recipe")
-      builder.setMessage("Are you sure you want to delete the recipe?")
-      builder.setPositiveButton("Yes") { dialog, _ ->
+      builder.setTitle(app.getString(R.string.delete_recipe))
+      builder.setMessage(app.getString(R.string.are_you_sure_you_want_to_delete_the_recipe))
+      builder.setPositiveButton(app.getString(R.string.yes)) { dialog, _ ->
         Toast.makeText(
           bookmarkRecipeFragmentBinding.root.context,
-          "${item.second.title} deleted",
+          "${item.second.title} ${app.getString(R.string.recipe_deleted)}",
           Toast.LENGTH_SHORT
         ).show()
         recipeListListener?.onItemDeleteClicked(item.second.id, "recipe")
         dialog.dismiss()
       }
-      builder.setNegativeButton("No") { dialog, _ ->
+      builder.setNegativeButton(app.getString(R.string.no)) { dialog, _ ->
         dialog.dismiss()
       }
       builder.create().show()

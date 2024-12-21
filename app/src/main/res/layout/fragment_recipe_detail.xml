@@ -115,7 +115,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="98"
             android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>
@@ -145,7 +144,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:text="98"
             android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>
@@ -174,7 +172,6 @@
             android:id="@+id/tv_bookmark_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="98"
             android:textColor="@color/cc_text_dark_green"
             />
       </LinearLayout>

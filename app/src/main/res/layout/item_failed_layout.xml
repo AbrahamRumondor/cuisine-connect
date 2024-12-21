@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
         android:background="@android:color/transparent"
-        android:text="Item failed to reload or has been removed"
+        android:text="@string/item_failed_to_reload_or_has_been_removed"
         android:textColor="@android:color/darker_gray"
         />
 </LinearLayout>

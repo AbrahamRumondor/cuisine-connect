@@ -14,7 +14,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:background="@android:color/transparent"
-      android:hint="Enter text here"
+      android:hint="@string/enter_text_here"
       android:inputType="text"
       android:minHeight="48dp"
       android:layout_weight="1"

@@ -16,6 +16,7 @@ import androidx.paging.LoadState
 import com.airbnb.lottie.LottieDrawable
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
@@ -47,8 +48,7 @@ class HomeFragment : Fragment() {
     loadData()
     adapter.isFromHome()
     adapter.addViewModel(createPostViewModel)
-    loadingAnimation()
-
+    showLoadingAnimation()
 
     binding.run {
 
@@ -83,11 +83,10 @@ class HomeFragment : Fragment() {
   private fun loadingAnimation() {
     lifecycleScope.launch {
       adapter.isPopulated.collectLatest {
-        if (it) {
-          hideLoadingAnimation()
-        } else {
-          showLoadingAnimation()
-        }
+//        showLoadingAnimation()
+//        if (it){
+//          hideLoadingAnimation()
+//        }
       }
     }
   }
@@ -275,6 +274,5 @@ class HomeFragment : Fragment() {
     } else {
       binding.inclFab.fabOpenOptions.visibility = View.VISIBLE
     }
-    showLoadingAnimation()
   }
 }

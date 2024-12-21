@@ -75,7 +75,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@null"
-                android:hint="Search"
+                android:hint="@string/search"
                 android:padding="8dp"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +89,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="16dp"
-                android:contentDescription="Search Icon"
+                android:contentDescription="@string/search_icon"
                 android:src="@drawable/ic_bnv_search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -139,7 +139,7 @@
       android:layout_width="144dp"
       android:layout_height="144dp"
       android:layout_gravity="center"
-      android:contentDescription="empty state"
+      android:contentDescription="@string/empty_state"
       android:visibility="visible"
       android:src="@drawable/ic_empty_recipes"
       android:scaleType="fitCenter"
@@ -150,7 +150,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="Nothing to see here yet.\nStart exploring to fill up your feed!"
+      android:text="@string/nothing_to_see_here_yet_nstart_exploring_to_fill_up_your_feed"
       />
 
   </LinearLayout>

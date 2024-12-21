@@ -17,7 +17,7 @@
       android:layout_weight="1"
       android:background="@android:color/transparent"
       android:backgroundTint="@color/black"
-      android:text="..."
+      android:text="@string/dotdotdot"
       android:textSize="14sp"
       />
 

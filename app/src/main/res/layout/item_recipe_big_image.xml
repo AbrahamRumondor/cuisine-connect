@@ -69,7 +69,7 @@
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="r\ne\nc\ni\np\ne"
+      android:text="@string/r_ne_nc_ni_np_ne"
       android:textColor="@color/cc_gray"
       android:textSize="12dp"
       app:layout_constraintEnd_toEndOf="@id/cv_profile"
@@ -92,7 +92,7 @@
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LetsGoCook123"
+        android:text="@string/guest_819"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         />
@@ -113,7 +113,7 @@
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="4dp"
       android:gravity="end"
-      android:text="Jan xx"
+      android:text="@string/mm_dd"
       android:textColor="@android:color/black"
       android:textSize="12sp"
       app:layout_constraintBottom_toBottomOf="@id/cv_profile"
@@ -125,12 +125,13 @@
       android:id="@+id/btn_delete"
       android:layout_width="24dp"
       android:layout_height="24dp"
-      android:layout_marginHorizontal="4dp"
-      android:background="@drawable/ic_trash_can"
+      android:layout_marginEnd="-10dp"
+      android:background="@drawable/ic_three_dots"
       android:visibility="visible"
       app:layout_constraintBottom_toBottomOf="@id/ll_username"
       app:layout_constraintEnd_toStartOf="@id/v_end"
       app:layout_constraintTop_toTopOf="@id/ll_username"
+      app:layout_constraintEnd_toEndOf="@id/cv_recipe"
       />
 
   <View
@@ -253,7 +254,6 @@
                 android:id="@+id/tv_upvote_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
                 android:textColor="@color/cc_gray"
                 android:textSize="12sp"
                 />
@@ -281,7 +281,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="3dp"
-                android:text="-"
                 android:textColor="@color/cc_gray"
                 android:textSize="12sp"
                 />
@@ -309,7 +308,6 @@
                 android:id="@+id/tv_bookmark_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
                 android:textColor="@color/cc_gray"
                 android:textSize="12sp"
                 />
@@ -322,7 +320,6 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Healthy Vegetarian and Rice"
             android:textColor="@color/cc_gray"
             android:textSize="16sp"
             />

@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:text="Post"
+            android:text="@string/post"
             android:textSize="20sp"
             />
 
@@ -96,7 +96,6 @@
               android:id="@+id/tv_username"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="LetsGoCook123"
               android:textColor="@android:color/black"
               android:textSize="16sp"
               />
@@ -108,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            android:text="Jan xx"
+            android:text="@string/mm_dd"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -178,7 +177,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:textColor="@color/cc_text_dark_green"
-            android:text="-"
             />
       </LinearLayout>
 
@@ -209,7 +207,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:textColor="@color/cc_text_dark_green"
-            android:text="-"
             />
       </LinearLayout>
 

@@ -93,7 +93,7 @@
       android:id="@+id/iv_empty_state"
       android:layout_width="144dp"
       android:layout_height="144dp"
-      android:contentDescription="empty state"
+      android:contentDescription="@string/empty_state"
       android:visibility="gone"
       android:src="@drawable/ic_empty_recipes"
       android:layout_gravity="center"

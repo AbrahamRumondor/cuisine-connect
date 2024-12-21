@@ -8,6 +8,10 @@ data class UserResponse(
     @set:PropertyName("user_id")
     var id: String = "",
 
+    @get:PropertyName("user_language")
+    @set:PropertyName("user_language")
+    var language: String = "id",
+
     @get:PropertyName("user_name")
     @set:PropertyName("user_name")
     var name: String = "", // display name
@@ -79,7 +83,8 @@ data class UserResponse(
                 username = userResponse.uniqueUsername,
                 postContent = userResponse.postContent,
                 background = userResponse.background,
-                bio = userResponse.bio
+                bio = userResponse.bio,
+                language = userResponse.language
             )
         }
 
@@ -98,7 +103,8 @@ data class UserResponse(
                 uniqueUsername = user.username,
                 postContent = user.postContent,
                 background = user.background,
-                bio = user.bio
+                bio = user.bio,
+                language = user.language
             )
         }
     }

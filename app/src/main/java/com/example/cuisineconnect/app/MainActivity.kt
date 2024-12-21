@@ -1,9 +1,9 @@
 package com.example.cuisineconnect.app
 
+import android.content.res.Configuration
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsetsController
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -101,6 +103,20 @@ class MainActivity : AppCompatActivity() {
 
   private fun showBottomNav() {
     binding.bnvMain.visibility = View.VISIBLE
+  }
+
+  fun setLocale(lang: String) {
+    val locale = Locale(lang)
+    Locale.setDefault(locale)
+    val resources = resources
+    val config: Configuration = resources.configuration
+    config.setLocale(locale)
+    resources.updateConfiguration(config, resources.displayMetrics)
+
+    // Restart the activity to apply the changes
+    val intent = intent
+    finish()
+    startActivity(intent)
   }
 
   fun showChooseRecipeView(show: Boolean) {

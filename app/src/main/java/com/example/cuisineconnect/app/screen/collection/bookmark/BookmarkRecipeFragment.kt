@@ -84,7 +84,7 @@ class BookmarkRecipeFragment : Fragment() {
 
   private fun setupSpinner() {
     val spinner: Spinner = binding.spinnerSortBy // Assuming you have the Spinner in your binding
-    val sortingOptions = arrayOf("Latest", "Most Liked", "Oldest", "Least Liked")
+    val sortingOptions = arrayOf(getString(R.string.latest), getString(R.string.most_liked),getString(R.string.oldest), getString(R.string.least_liked))
 
     val adapter = ArrayAdapter(requireContext(), R.layout.spinner_collection_item, sortingOptions)
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_collection_item)
@@ -95,10 +95,10 @@ class BookmarkRecipeFragment : Fragment() {
         if (view != null) { // Check if view is not null
           val selectedOption = sortingOptions[position]
           val sortBy = when (selectedOption) {
-            "Latest" -> Sort.Latest
-            "Most Liked" -> Sort.MostLiked
-            "Oldest" -> Sort.Oldest
-            "Least Liked" -> Sort.LeastLiked
+            getString(R.string.latest) -> Sort.Latest
+            getString(R.string.most_liked) -> Sort.MostLiked
+            getString(R.string.oldest) -> Sort.Oldest
+            getString(R.string.least_liked) -> Sort.LeastLiked
 
             else -> Sort.Latest // Default case
           }

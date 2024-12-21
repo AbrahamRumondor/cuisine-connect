@@ -40,7 +40,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
-      android:text="LetsGoCook123"
+      android:text="@string/guest_819"
       android:textColor="@android:color/black"
       android:textSize="16sp"
 
@@ -51,7 +51,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="8dp"
-      android:text="LetsGoCook123"
       android:textColor="@android:color/black"
       android:textSize="12sp"
       />

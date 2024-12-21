@@ -72,7 +72,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:paddingBottom="16dp"
-      android:text="post"
+      android:text="@string/post_tag"
       android:textColor="@color/cc_gray"
       android:textSize="12dp"
       app:layout_constraintEnd_toEndOf="@id/cv_profile"
@@ -94,7 +94,6 @@
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LetsGoCook123"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -117,7 +116,7 @@
       android:layout_marginHorizontal="4dp"
       android:layout_weight="1"
       android:gravity="end"
-      android:text="Jan xx"
+      android:text="@string/mm_dd"
       android:textColor="@android:color/black"
       android:textSize="12sp"
       app:layout_constraintBottom_toBottomOf="@id/ll_username"
@@ -129,8 +128,8 @@
       android:id="@+id/btn_edit"
       android:layout_width="24dp"
       android:layout_height="24dp"
-      android:layout_marginHorizontal="4dp"
-      android:background="@drawable/ic_trash_can"
+      android:layout_marginEnd="-10dp"
+      android:background="@drawable/ic_three_dots"
       android:visibility="visible"
       app:layout_constraintBottom_toBottomOf="@id/ll_username"
       app:layout_constraintEnd_toStartOf="@id/v_end"
@@ -206,7 +205,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="5dp"
-          android:text="-"
           />
     </LinearLayout>
 
@@ -231,7 +229,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginHorizontal="5dp"
-          android:text="-"
           />
     </LinearLayout>
 

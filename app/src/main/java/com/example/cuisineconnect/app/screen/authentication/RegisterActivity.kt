@@ -72,7 +72,10 @@ class RegisterActivity : AppCompatActivity() {
 
       // Update the end icon drawable
       textInputLayout.endIconDrawable = if (isPasswordVisible) {
-        ContextCompat.getDrawable(this, R.drawable.ic_eye_closed) // Replace with your "eye closed" icon
+        ContextCompat.getDrawable(
+          this,
+          R.drawable.ic_eye_closed
+        ) // Replace with your "eye closed" icon
       } else {
         ContextCompat.getDrawable(this, R.drawable.ic_eye_open) // Replace with your "eye open" icon
       }
@@ -98,7 +101,11 @@ class RegisterActivity : AppCompatActivity() {
         if (displayName.isEmpty()) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
-          Toast.makeText(this@RegisterActivity, "Please enter your display name", Toast.LENGTH_SHORT)
+          Toast.makeText(
+            this@RegisterActivity,
+            getString(R.string.please_enter_your_display_name),
+            Toast.LENGTH_SHORT
+          )
             .show()
           return@setOnClickListener
         }
@@ -108,7 +115,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "display must only letters, numbers, or underscores",
+            getString(R.string.display_must_only_letters_numbers_or_underscores),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -117,7 +124,8 @@ class RegisterActivity : AppCompatActivity() {
         if (username.isEmpty()) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
-          Toast.makeText(this@RegisterActivity, "Please enter your username", Toast.LENGTH_SHORT)
+          Toast.makeText(this@RegisterActivity,
+            getString(R.string.please_enter_your_username), Toast.LENGTH_SHORT)
             .show()
           return@setOnClickListener
         }
@@ -127,7 +135,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "username must only letters, numbers, or underscores",
+            getString(R.string.username_must_only_letters_numbers_or_underscores),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -137,7 +145,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Username must be between 3 and 15 characters",
+            getString(R.string.username_must_be_between_3_and_15_characters),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -147,7 +155,8 @@ class RegisterActivity : AppCompatActivity() {
         if (email.isEmpty()) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
-          Toast.makeText(this@RegisterActivity, "Please enter your email", Toast.LENGTH_SHORT)
+          Toast.makeText(this@RegisterActivity,
+            getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT)
             .show()
           return@setOnClickListener
         }
@@ -156,7 +165,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Please enter a valid email address",
+            getString(R.string.please_enter_a_valid_email),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -166,7 +175,7 @@ class RegisterActivity : AppCompatActivity() {
         if (password.isEmpty()) {
           pbCreate.visibility = View.GONE
           btnCreate.visibility = View.VISIBLE
-          Toast.makeText(this@RegisterActivity, "Please enter your password", Toast.LENGTH_SHORT)
+          Toast.makeText(this@RegisterActivity, getString(R.string.please_enter_your_password), Toast.LENGTH_SHORT)
             .show()
           return@setOnClickListener
         }
@@ -175,7 +184,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Password must be at least 6 characters",
+            getString(R.string.password_must_be_at_least_6_characters),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -185,7 +194,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Password must contain at least one uppercase letter",
+            getString(R.string.password_must_contain_at_least_one_uppercase_letter),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -195,7 +204,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Password must contain at least one lowercase letter",
+            getString(R.string.password_must_contain_at_least_one_lowercase_letter),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -205,7 +214,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Password must contain at least one number",
+            getString(R.string.password_must_contain_at_least_one_number),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -215,7 +224,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Password must contain at least one special character",
+            getString(R.string.password_must_contain_at_least_one_special_character),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -227,7 +236,7 @@ class RegisterActivity : AppCompatActivity() {
           btnCreate.visibility = View.VISIBLE
           Toast.makeText(
             this@RegisterActivity,
-            "Passwords do not match",
+            getString(R.string.passwords_do_not_match),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -245,14 +254,14 @@ class RegisterActivity : AppCompatActivity() {
           if (success) {
             Toast.makeText(
               baseContext,
-              "Registration successful.",
+              getString(R.string.registration_successful),
               Toast.LENGTH_SHORT,
             ).show()
             goToLogin()
           } else {
             Toast.makeText(
               baseContext,
-              error ?: "Authentication failed.",
+              error ?: getString(R.string.authentication_failed),
               Toast.LENGTH_SHORT,
             ).show()
           }

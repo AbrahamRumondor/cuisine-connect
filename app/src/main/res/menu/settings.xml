@@ -3,8 +3,11 @@
     >
   <item
       android:id="@+id/action_edit"
-      android:title="Edit profile" />
+      android:title="@string/edit_profile" />
+  <item
+      android:id="@+id/action_lang"
+      android:title="@string/choose_language" />
   <item
       android:id="@+id/action_settings"
-      android:title="Log out" />
+      android:title="@string/log_out" />
 </menu>

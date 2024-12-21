@@ -35,7 +35,9 @@ class ProfileRecipeAdapter : RecyclerView.Adapter<ItemRecipeViewHolder>() {
     _isPopulated.value = true // Set the value to true once the item is bound
     val user = items[position].first
     val recipe = items[position].second
-    holder.bind(user, recipe, recipeItemListener, createPostViewModel)
+    holder.bind(user, recipe, recipeItemListener, createPostViewModel) {
+
+    }
   }
 
   override fun getItemCount(): Int {

@@ -42,7 +42,7 @@
         android:layout_marginVertical="40dp"
         android:background="@drawable/button_radius"
         android:paddingHorizontal="100dp"
-        android:text="Try again"
+        android:text="@string/try_again"
         android:textAllCaps="false"
         android:textColor="@color/white" />
 

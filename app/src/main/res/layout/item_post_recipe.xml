@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:text="LetsGoCook123"
+            android:text="@string/guest_819"
             android:textColor="@android:color/black"
             android:textSize="12sp"
             />
@@ -193,7 +193,6 @@
                     android:id="@+id/tv_upvote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-"
                     android:textColor="@color/cc_gray"
                     android:textSize="12sp"
                     />
@@ -221,7 +220,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="3dp"
-                    android:text="-"
                     android:textColor="@color/cc_gray"
                     android:textSize="12sp"
                     />
@@ -249,7 +247,6 @@
                     android:id="@+id/tv_bookmark_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-"
                     android:textColor="@color/cc_gray"
                     android:textSize="12sp"
                     />
@@ -262,7 +259,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Healthy Vegetarian and Rice"
+                android:text="@string/healthy_vegetarian_and_rice"
                 android:textColor="@color/cc_gray"
                 android:textSize="14sp"
                 />

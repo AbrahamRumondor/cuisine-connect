@@ -94,28 +94,28 @@ class LoginActivity : AppCompatActivity() {
 
         // Email field validation
         if (email.isEmpty()) {
-          Toast.makeText(this@LoginActivity, "Please enter your email", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
         if (!email.contains("@")) {
-          Toast.makeText(this@LoginActivity, "Email must contain '@' symbol", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.email_must_contain_at), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
         if (!email.contains(".")) {
-          Toast.makeText(this@LoginActivity, "Email must contain a domain (e.g., '.com')", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.email_must_contain_domain), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-          Toast.makeText(this@LoginActivity, "Please enter a valid email ex:'example@gmail.com'", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.please_enter_a_valid_email), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
@@ -123,14 +123,14 @@ class LoginActivity : AppCompatActivity() {
 
 // Password field validation
         if (password.isEmpty()) {
-          Toast.makeText(this@LoginActivity, "Please enter your password", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.please_enter_your_password), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
         }
 
         if (password.length < 5) {
-          Toast.makeText(this@LoginActivity, "Password must be more than 4 characters", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, getString(R.string.password_must_be_more_than_4_characters), Toast.LENGTH_SHORT).show()
           pbCreate.visibility = View.GONE
           btnLogin.visibility = View.VISIBLE
           return@setOnClickListener
@@ -141,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
         if (!passwordRegex.matches(password)) {
           Toast.makeText(
             this@LoginActivity,
-            "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+            getString(R.string.password_must_contain_uppercase_lowercase_and_number),
             Toast.LENGTH_SHORT
           ).show()
           pbCreate.visibility = View.GONE
@@ -167,14 +167,14 @@ class LoginActivity : AppCompatActivity() {
               Log.w(TAG, "signInWithEmail:failure", task.exception)
               Toast.makeText(
                 baseContext,
-                "Authentication failed.",
+                getString(R.string.authentication_failed),
                 Toast.LENGTH_SHORT,
               ).show()
             }
           }.addOnFailureListener {
             pbCreate.visibility = View.GONE
             btnLogin.visibility = View.VISIBLE
-            Toast.makeText(this@LoginActivity, "Login failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@LoginActivity, getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
           }
       }
     }

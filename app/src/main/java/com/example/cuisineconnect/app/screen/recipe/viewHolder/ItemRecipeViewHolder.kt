@@ -1,17 +1,13 @@
 package com.example.cuisineconnect.app.screen.recipe.viewHolder
 
 import android.app.AlertDialog
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
@@ -22,7 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import com.bumptech.glide.request.target.Target
 
 class ItemRecipeViewHolder(
   private val view: ItemRecipeBigImageBinding,
@@ -34,7 +29,8 @@ class ItemRecipeViewHolder(
     recipe: Recipe?,
     listener: ItemListListener?,
     createPostViewModel: CreatePostViewModel?,
-    fromHomePage: Boolean = false
+    fromHomePage: Boolean = false,
+    alreadyDisplayed: () -> Unit
   ) {
     view.run {
       if (user != null && recipe != null) {
@@ -93,27 +89,25 @@ class ItemRecipeViewHolder(
         btnDelete.visibility = View.GONE
         if (isAuthor) {
           btnDelete.visibility = View.VISIBLE
-          btnDelete.setOnClickListener {
-            val builder = AlertDialog.Builder(view.root.context)
-            builder.setTitle("Delete Recipe")
-            builder.setMessage("Are you sure you want to delete the recipe?")
+          btnDelete.setOnClickListener { view ->
+            // Create a PopupMenu
+            val popupMenu = PopupMenu(view.context, view)
+            popupMenu.menuInflater.inflate(R.menu.item_options, popupMenu.menu)
 
-            builder.setPositiveButton("Yes") { dialog, _ ->
-              Toast.makeText(
-                view.root.context,
-                "${recipe.title} deleted",
-                Toast.LENGTH_SHORT
-              ).show()
-
-              listener?.onItemDeleteClicked(recipe.id, "recipe")
-              dialog.dismiss() // Dismiss the dialog
+            // Set click listeners for menu items
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+              when (menuItem.itemId) {
+                R.id.action_delete -> {
+                  // Show delete confirmation dialog
+                  showDeleteConfirmationDialog(recipe, view, listener)
+                  true
+                }
+                else -> false
+              }
             }
 
-            builder.setNegativeButton("No") { dialog, _ ->
-              dialog.dismiss()
-            }
-
-            builder.create().show()
+            // Show the PopupMenu
+            popupMenu.show()
           }
         }
         val uri = Uri.parse(recipe.image)
@@ -134,6 +128,31 @@ class ItemRecipeViewHolder(
 //                }
       }
     }
+
+    alreadyDisplayed()
+  }
+
+  private fun showDeleteConfirmationDialog(recipe: Recipe, view: View, listener: ItemListListener?) {
+    val builder = AlertDialog.Builder(view.context)
+    builder.setTitle("Delete Recipe")
+    builder.setMessage("Are you sure you want to delete the recipe?")
+
+    builder.setPositiveButton("Yes") { dialog, _ ->
+      Toast.makeText(
+        view.context,
+        "${recipe.title} deleted",
+        Toast.LENGTH_SHORT
+      ).show()
+
+      listener?.onItemDeleteClicked(recipe.id, "recipe")
+      dialog.dismiss() // Dismiss the dialog
+    }
+
+    builder.setNegativeButton("No") { dialog, _ ->
+      dialog.dismiss()
+    }
+
+    builder.create().show()
   }
 
   private fun getRelativeTime(date: Date): String {

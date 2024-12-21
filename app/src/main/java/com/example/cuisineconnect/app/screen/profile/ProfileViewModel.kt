@@ -65,6 +65,22 @@ class ProfileViewModel @Inject constructor(
     return user.value.following.contains(otherUser.value.id)
   }
 
+  fun updateUser(
+    lang: String
+  ) {
+    viewModelScope.launch {
+      try {
+        userUseCase.storeUser(
+          user.value.id,
+          user.value.copy(language = lang)
+        )
+      } catch (e: Exception) {
+        Log.e("ProfileViewModel", "Error updating user data: ${e.message}")
+        Toast.makeText(applicationContext, "Failed to update user data", Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
   fun updateUser (
     displayName: String,
     email: String,

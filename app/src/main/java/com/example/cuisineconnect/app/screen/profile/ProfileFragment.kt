@@ -18,7 +18,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -56,8 +58,8 @@ class ProfileFragment : Fragment() {
     // Link the TabLayout with the ViewPager2
     TabLayoutMediator(binding.tlProfile, binding.vp2Profile) { tab, position ->
       tab.text = when (position) {
-        0 -> "Posts"
-        1 -> "Recipes"
+        0 -> getString(R.string.posts)
+        1 -> getString(R.string.recipes_caps)
         else -> null
       }
     }.attach()
@@ -91,11 +93,11 @@ class ProfileFragment : Fragment() {
             tvBio.visibility = View.GONE
           }
 
-          val posts = Html.fromHtml("<b>${user.recipes.size}</b> recipes")
+          val posts = Html.fromHtml("<b>${user.recipes.size}</b> ${getString(R.string.posts)}")
           tvPosts.text = posts
-          val followers = Html.fromHtml("<b>${user.follower.size}</b> followers")
+          val followers = Html.fromHtml("<b>${user.follower.size}</b> ${getString(R.string.followers)}")
           tvFollowers.text = followers
-          val following = Html.fromHtml("<b>${user.following.size}</b> following")
+          val following = Html.fromHtml("<b>${user.following.size}</b> ${getString(R.string.following)}")
           tvFollowing.text = following
 
           btnSettings.setOnClickListener {
@@ -142,10 +144,10 @@ class ProfileFragment : Fragment() {
 
         R.id.action_settings -> {
           val builder = AlertDialog.Builder(view.context)
-          builder.setTitle("Log out")
-          builder.setMessage("Are you sure you want to log out?")
+          builder.setTitle(getString(R.string.log_out))
+          builder.setMessage(getString(R.string.are_you_sure_you_want_to_log_out))
 
-          builder.setPositiveButton("Yes") { dialog, _ ->
+          builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             Toast.makeText(
               view.context,
               "Logged out",
@@ -154,6 +156,26 @@ class ProfileFragment : Fragment() {
 
             FirebaseAuth.getInstance().signOut()
             goToLogin()
+            dialog.dismiss() // Dismiss the dialog
+          }
+
+          builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+            dialog.dismiss()
+          }
+          builder.show()
+          true
+        }
+
+        R.id.action_lang -> {
+          val builder = AlertDialog.Builder(view.context)
+          val langStr = if (currentUser?.language == "id") "Apakah Anda yakin ingin mengubah bahasa ke Bahasa Inggris?" else "Are you sure you want to change the language to Bahasa Indonesia?"
+          builder.setTitle("Language")
+          builder.setMessage(langStr)
+
+          builder.setPositiveButton("Yes") { dialog, _ ->
+            val lang = if (currentUser?.language == "id") "en" else "id"
+            profileViewModel.updateUser(lang)
+            setLocaleInActivity(lang)
             dialog.dismiss() // Dismiss the dialog
           }
 
@@ -169,6 +191,10 @@ class ProfileFragment : Fragment() {
     }
 
     popupMenu.show()
+  }
+
+  private fun setLocaleInActivity(localeCode: String) {
+    (activity as? MainActivity)?.setLocale(localeCode)
   }
 
   private fun goToLogin() {

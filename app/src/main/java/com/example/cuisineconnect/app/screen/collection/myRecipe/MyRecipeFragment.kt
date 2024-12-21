@@ -94,10 +94,10 @@ class MyRecipeFragment : Fragment() {
         if (view != null) { // Check if view is not null
           val selectedOption = sortingOptions[position]
           val sortBy = when (selectedOption) {
-            "Latest" -> Sort.Latest
-            "Most Liked" -> Sort.MostLiked
-            "Oldest" -> Sort.Oldest
-            "Least Liked" -> Sort.LeastLiked
+            getString(R.string.latest) -> Sort.Latest
+            getString(R.string.most_liked) -> Sort.MostLiked
+            getString(R.string.oldest) -> Sort.Oldest
+            getString(R.string.least_liked) -> Sort.LeastLiked
 
             else -> Sort.Latest // Default case
           }

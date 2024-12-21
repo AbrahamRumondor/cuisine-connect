@@ -47,7 +47,6 @@
         android:id="@+id/tv_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1 Jam 30 Menit"
         android:textColor="@android:color/darker_gray"
         />
 
@@ -70,7 +69,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:text="4 Orang"
         android:textColor="@android:color/darker_gray"
         />
 
