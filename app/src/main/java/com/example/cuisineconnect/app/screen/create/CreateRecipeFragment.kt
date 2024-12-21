@@ -152,13 +152,13 @@ class CreateRecipeFragment : Fragment() {
 
       btnDelete.setOnClickListener {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Clear Progress")
-        builder.setMessage("Are you sure to clear current recipe progress?")
+        builder.setTitle(getString(R.string.clear_progress_title))
+        builder.setMessage(getString(R.string.clear_recipe_progress_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
           createRecipeViewModel.deleteRecipeProgress(object : TwoWayCallback {
             override fun onSuccess() {
-              Toast.makeText(context, "Success! Recipe progress cleared", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, getString(R.string.success_recipe_progress_cleared), Toast.LENGTH_SHORT).show()
               clearRecipeProgress()
             }
 
@@ -168,7 +168,7 @@ class CreateRecipeFragment : Fragment() {
 
           })
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()
@@ -176,10 +176,10 @@ class CreateRecipeFragment : Fragment() {
 
       btnSave.setOnClickListener {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Save Progress")
-        builder.setMessage("Are you sure to save current recipe progress?")
+        builder.setTitle(getString(R.string.save_progress_title))
+        builder.setMessage(getString(R.string.save_recipe_progress_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
 
           showLoadingAnimation()
           val steps = createRecipeViewModel.toSteps(getSteps())
@@ -199,7 +199,7 @@ class CreateRecipeFragment : Fragment() {
           ) { text ->
             hideLoadingAnimation()
             if (text == null) {
-              Toast.makeText(context, "Success! Recipe saved", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, getString(R.string.success_recipe_saved), Toast.LENGTH_SHORT).show()
               findNavController().popBackStack()
             } else {
               Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
@@ -207,7 +207,7 @@ class CreateRecipeFragment : Fragment() {
           }
 
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()
@@ -216,10 +216,10 @@ class CreateRecipeFragment : Fragment() {
 
       btnPublish.setOnClickListener {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Publish")
-        builder.setMessage("Are you sure you want to publish the recipe?")
+        builder.setTitle(getString(R.string.publish_title))
+        builder.setMessage(getString(R.string.publish_recipe_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
           // Validate required fields
           val title = etTitle.text.toString().trim()
           val description = etDescription.text.toString().trim()
@@ -231,7 +231,7 @@ class CreateRecipeFragment : Fragment() {
 
           when {
             title.isEmpty() -> {
-              showError("Title is required to publish the recipe.")
+              showError(getString(R.string.title_required))
               return@setPositiveButton
             }
 //            description.isEmpty() -> {
@@ -239,19 +239,19 @@ class CreateRecipeFragment : Fragment() {
 //              return@setPositiveButton
 //            }
             portion.isEmpty() -> {
-              showError("Portion size is required to publish the recipe.")
+              showError(getString(R.string.portion_required))
               return@setPositiveButton
             }
             duration.isEmpty() -> {
-              showError("Duration is required to publish the recipe.")
+              showError(getString(R.string.duration_required))
               return@setPositiveButton
             }
             ingredients.isEmpty() -> {
-              showError("Please add at least one ingredient.")
+              showError(getString(R.string.add_ingredient_message))
               return@setPositiveButton
             }
             steps.isEmpty() -> {
-              showError("Please add at least one step.")
+              showError(getString(R.string.add_step_message))
               return@setPositiveButton
             }
           }
@@ -271,7 +271,7 @@ class CreateRecipeFragment : Fragment() {
           ) { text ->
             hideLoadingAnimation()
             if (text == null) {
-              Toast.makeText(context, "Success! Recipe created.", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, getString(R.string.success_recipe_created), Toast.LENGTH_SHORT).show()
               findNavController().popBackStack()
             } else {
               Toast.makeText(context, getText(text), Toast.LENGTH_SHORT).show()
@@ -279,7 +279,7 @@ class CreateRecipeFragment : Fragment() {
           }
         }
 
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()
@@ -328,7 +328,7 @@ class CreateRecipeFragment : Fragment() {
       .inflate(R.layout.item_edit_text_input, binding.llIngreContainer, false)
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
     val btnDelete: ImageButton = customCardView.findViewById(R.id.btn_delete)
-    etUserInput.hint = "2 Carrots"
+    etUserInput.hint = getString(R.string.carrot_2)
 
     binding.llIngreContainer.addView(customCardView)
     editTextIngreList.add(etUserInput)
@@ -348,7 +348,7 @@ class CreateRecipeFragment : Fragment() {
     val etUserInput: EditText = customCardView.findViewById(R.id.etUserInput)
     val btnDelete: ImageButton = customCardView.findViewById(R.id.btn_delete)
 
-    etUserInput.hint = "Start by putting all the ingredients together..."
+    etUserInput.hint = getString(R.string.step_hint)
     etUserInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
     binding.llStepContainer.addView(customCardView)
@@ -490,7 +490,7 @@ class CreateRecipeFragment : Fragment() {
       binding.cgChips.addView(chip)
       binding.etTags.setText("")
     } else {
-      Toast.makeText(context, "Hashtag already added", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, getString(R.string.hashtag_already_added), Toast.LENGTH_SHORT).show()
     }
   }
 

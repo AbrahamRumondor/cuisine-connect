@@ -150,13 +150,13 @@ class CreatePostFragment : Fragment() {
         updateTextPostContent()
 
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Save Progress")
-        builder.setMessage("Are you sure to save current post progress?")
+        builder.setTitle(getString(R.string.save_progress_title))
+        builder.setMessage(getString(R.string.save_progress_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
           createPostViewModel.savePostProgress(object : TwoWayCallback {
             override fun onSuccess() {
-              Toast.makeText(context, "Successfully saved post", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, getString(R.string.successfully_saved_post), Toast.LENGTH_SHORT).show()
             }
 
             override fun onFailure(errorMessage: String) {
@@ -164,7 +164,7 @@ class CreatePostFragment : Fragment() {
             }
           })
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()
@@ -172,13 +172,13 @@ class CreatePostFragment : Fragment() {
 
       btnDelete.setOnClickListener {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Clear Progress")
-        builder.setMessage("Are you sure to clear current post progress?")
+        builder.setTitle(getString(R.string.clear_progress_title))
+        builder.setMessage(getString(R.string.clear_progress_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
           createPostViewModel.deletePostProgress(object : TwoWayCallback {
             override fun onSuccess() {
-              Toast.makeText(context, "Successfully delete progress", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, getString(R.string.successfully_deleted_progress), Toast.LENGTH_SHORT).show()
               binding.llPostContents.removeAllViews()
               createPostViewModel.postContent.clear()
             }
@@ -188,7 +188,7 @@ class CreatePostFragment : Fragment() {
             }
           })
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()
@@ -196,10 +196,10 @@ class CreatePostFragment : Fragment() {
 
       btnPost.setOnClickListener {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Publish")
-        builder.setMessage("Are you sure you want to publish the post?")
+        builder.setTitle(getString(R.string.publish_title))
+        builder.setMessage(getString(R.string.publish_message))
 
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
 
           updateTextPostContent()
           showLoadingAnimation()
@@ -207,17 +207,17 @@ class CreatePostFragment : Fragment() {
             val contentIsEmpty = createPostViewModel.postContent.isEmpty() || createPostViewModel.postContent.any { it["value"].isNullOrEmpty() }
             if (contentIsEmpty) {
               hideLoadingAnimation()
-              Toast.makeText(activity, "Please ensure all fields are filled in.", Toast.LENGTH_SHORT)
+              Toast.makeText(activity, getString(R.string.please_fill_all_fields), Toast.LENGTH_SHORT)
                 .show()
               return@savePostInDatabase
             }
-            Toast.makeText(activity, "Successfully Created Post", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.successfully_created_post), Toast.LENGTH_SHORT).show()
             hideLoadingAnimation()
             findNavController().popBackStack()
           }
 
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.show()

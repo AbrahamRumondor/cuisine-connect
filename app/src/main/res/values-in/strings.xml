@@ -54,7 +54,7 @@
   <string name="publish">Terbitkan</string>
   <string name="strip">-</string>
   <string name="text">Teks</string>
-  <string name="recipe">Resep</string>
+  <string name="recipe">resep</string>
   <string name="title_creamy_tomato_basil_pasta">Judul: Pasta Krim Tomat Basil</string>
   <string name="description_a_delicious_and_creamy_pasta_dish_made_with_fresh_tomatoes_basil_and_parmesan_cheese_perfect_for_a_quick_weeknight_dinner">Deskripsi: Hidangan pasta yang lezat dan krim dibuat dengan tomat segar, basil, dan keju parmesan. Sempurna untuk makan malam cepat di malam hari!</string>
   <string name="serving_s">Porsi</string>
@@ -106,9 +106,9 @@
   <string name="are_you_sure_you_want_to_log_out">Apakah Anda yakin ingin keluar?</string>
 
   <string name="please_enter_your_email">Silakan masukkan email Anda</string>
-  <string name="email_must_contain_at">Email harus mengandung simbol \'@'</string>
-  <string name="email_must_contain_domain">Email harus mengandung domain (misalnya, \'.com')</string>
-  <string name="please_enter_a_valid_email">Silakan masukkan email yang valid, contohnya: \'example@gmail.com'</string>
+  <string name="email_must_contain_at">Email must contain @</string>
+  <string name="email_must_contain_domain">Email harus mengandung domain (misalnya, .com)</string>
+  <string name="please_enter_a_valid_email">Silakan masukkan email yang valid, contohnya: example@gmail.com</string>
   <string name="please_enter_your_password">Silakan masukkan kata sandi Anda</string>
   <string name="password_must_be_more_than_4_characters">Kata sandi harus lebih dari 4 karakter</string>
   <string name="password_must_contain_uppercase_lowercase_and_number">Kata sandi harus mengandung setidaknya satu huruf besar, satu huruf kecil, dan satu angka</string>
@@ -147,5 +147,41 @@
   <string name="are_you_sure_you_want_to_delete_the_recipe">Apakah Anda yakin ingin menghapus resep ini?</string>
   <string name="recipe_chosen"> dipilih</string>
   <string name="recipe_deleted"> dihapus</string>
+  <string name="my_recipes">Resepku</string>
+  <string name="saved_recipes">Disimpan</string>
+
+  <string name="save_progress_title">Simpan Progres</string>
+  <string name="save_progress_message">Apakah Anda yakin ingin menyimpan progres pos saat ini?</string>
+  <string name="clear_progress_title">Hapus Progres</string>
+  <string name="clear_progress_message">Apakah Anda yakin ingin menghapus progres pos saat ini?</string>
+  <string name="publish_title">Terbitkan</string>
+  <string name="publish_message">Apakah Anda yakin ingin menerbitkan pos?</string>
+  <string name="successfully_saved_post">Berhasil menyimpan pos</string>
+  <string name="successfully_deleted_progress">Berhasil menghapus progres</string>
+  <string name="please_fill_all_fields">Harap pastikan semua kolom terisi.</string>
+  <string name="successfully_created_post">Post Berhasil Dibuat</string>
+
+  <string name="clear_recipe_progress_message">Apakah Anda yakin ingin menghapus progres resep saat ini?</string>
+  <string name="success_recipe_progress_cleared">Berhasil! Progres resep dihapus</string>
+
+  <string name="save_recipe_progress_message">Apakah Anda yakin ingin menyimpan progres resep saat ini?</string>
+  <string name="success_recipe_saved">Berhasil! Resep disimpan</string>
+
+  <string name="publish_recipe_message">Apakah Anda yakin ingin menerbitkan resep?</string>
+  <string name="success_recipe_created">Berhasil! Resep dibuat.</string>
+
+  <string name="title_required">Judul diperlukan untuk menerbitkan resep.</string>
+  <string name="portion_required">Ukuran porsi diperlukan untuk menerbitkan resep.</string>
+  <string name="duration_required">Durasi diperlukan untuk menerbitkan resep.</string>
+  <string name="add_ingredient_message">Harap tambahkan setidaknya satu bahan.</string>
+  <string name="add_step_message">Harap tambahkan setidaknya satu langkah.</string>
+  <string name="carrot_2">"2 Wortel"</string>
+  <string name="step_hint">Langkah pertama dimulai dengan mengumpulkan semua bahan…</string>
+  <string name="hashtag_already_added">Hashtag sudah ditambahkan</string>
+  <string name="hashtag_added_successfully">Hashtag berhasil ditambahkan!</string>
+  <string name="usages">penggunaan</string>
+
+
+
 
 </resources>

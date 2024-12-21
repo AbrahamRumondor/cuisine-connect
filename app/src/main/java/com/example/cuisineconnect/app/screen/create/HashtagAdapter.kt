@@ -19,8 +19,9 @@ class HashtagAdapter(
 
     fun bind(hashtag: Hashtag) {
       hashtagBody.text = "${hashtag.body}"
+      val usages = itemView.context.getString(R.string.usages)
       hashtagCount.text = if (hashtag.listId.isNotEmpty()) {
-        "${hashtag.listId.size} usages"
+        "${hashtag.listId.size} $usages"
       } else {
         "→"
       }

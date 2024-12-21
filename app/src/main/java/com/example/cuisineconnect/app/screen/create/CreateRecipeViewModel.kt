@@ -364,7 +364,7 @@ class CreateRecipeViewModel @Inject constructor(
 
     hashtagUseCase.addHashtag(tag.lowercase(), itemId, flooredTimeMillis, 1) { success, exception ->
       if (success) {
-        Toast.makeText(applicationContext, "Hashtag added successfully!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, applicationContext.getString(R.string.hashtag_added_successfully), Toast.LENGTH_SHORT).show()
       } else {
         // Handle the failure case, such as showing an error message
         exception?.let {

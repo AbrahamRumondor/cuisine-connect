@@ -5,8 +5,10 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,9 +16,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.alfaresto_customersapp.data.network.NetworkUtils
 import com.example.alfaresto_customersapp.data.network.networkStatusObserver.ConnectivityObserver
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -77,6 +81,12 @@ class MainActivity : AppCompatActivity() {
       }
 
     }
+
+    lifecycleScope.launch {
+      currentUser?.let {
+        setLocale(it.language)
+      }
+    }
   }
 
   private fun checkConnectivityStatus() {
@@ -114,9 +124,10 @@ class MainActivity : AppCompatActivity() {
     resources.updateConfiguration(config, resources.displayMetrics)
 
     // Restart the activity to apply the changes
-    val intent = intent
-    finish()
-    startActivity(intent)
+//    val intent = intent
+//    finish()
+//    startActivity(intent)
+    recreate()
   }
 
   fun showChooseRecipeView(show: Boolean) {

@@ -4,17 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
+  private val mainActivityViewModel: MainActivityViewModel by viewModels()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    mainActivityViewModel.getUser()
 
     // Enable edge-to-edge layout
     WindowCompat.setDecorFitsSystemWindows(window, false)

@@ -33,8 +33,8 @@ class CollectionFragment : Fragment() {
     // Link the TabLayout with the ViewPager2
     TabLayoutMediator(binding.tlCollection, binding.vp2Collection) { tab, position ->
       tab.text = when (position) {
-        0 -> "My Recipes"
-        1 -> "Saved Recipes"
+        0 -> getString(R.string.my_recipes)
+        1 -> getString(R.string.saved_recipes)
         else -> null
       }
     }.attach()
