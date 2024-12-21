@@ -1,7 +1,9 @@
 package com.example.cuisineconnect.app.screen.search
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cuisineconnect.R
 import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
@@ -20,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchPromptViewModel @Inject constructor(
   private val userUseCase: UserUseCase,
-  private val hashtagUseCase: HashtagUseCase
+  private val hashtagUseCase: HashtagUseCase,
+  private val applicationContext: Context
 ) : ViewModel() {
 
   private val _users: MutableStateFlow<List<User>> = MutableStateFlow(emptyList())
@@ -40,10 +43,10 @@ class SearchPromptViewModel @Inject constructor(
       if (prompt.isNotEmpty()) {
         itemsToSubmit.add(prompt)
         itemsToSubmit.add(0) // This could be a divider or some identifier
-        itemsToSubmit.addAll(hashtags.map { it.body }.ifEmpty { listOf("No hashtags found") })
-        itemsToSubmit.addAll(users.ifEmpty { listOf("No users found") })
+        itemsToSubmit.addAll(hashtags.map { it.body }.ifEmpty { listOf(applicationContext.getString(R.string.no_hashtags_found)) })
+        itemsToSubmit.addAll(users.ifEmpty { listOf(applicationContext.getString(R.string.no_users_found)) })
       } else {
-        itemsToSubmit.add("Type something to search...")
+        itemsToSubmit.add(applicationContext.getString(R.string.type_something_to_search))
       }
 
       itemsToSubmit.toList()

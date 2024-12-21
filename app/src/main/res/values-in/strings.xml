@@ -226,6 +226,8 @@
   <string name="delete_confirmation_title">Hapus Resep</string>
   <string name="delete_confirmation_message">Apakah Anda yakin ingin menghapus resep ini?</string>
 
-
+  <string name="no_hashtags_found">Tidak ada hashtag ditemukan</string>
+  <string name="no_users_found">Tidak ada pengguna ditemukan</string>
+  <string name="type_something_to_search">Ketik sesuatu untuk mencari…</string>
 
 </resources>

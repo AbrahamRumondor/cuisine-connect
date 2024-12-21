@@ -81,9 +81,9 @@ class SearchPromptFragment : Fragment() {
 
         // Check if the current text matches any of the specified phrases
         if (prompt in listOf(
-            "No hashtags found",
-            "No users found",
-            "Type something to search..."
+            getString(R.string.no_hashtags_found),
+            getString(R.string.no_users_found),
+            getString(R.string.type_something_to_search)
           )
         ) {
           return
