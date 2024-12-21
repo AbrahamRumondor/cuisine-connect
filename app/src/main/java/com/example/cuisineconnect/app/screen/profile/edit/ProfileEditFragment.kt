@@ -74,7 +74,7 @@ class ProfileEditFragment : Fragment() {
         if (displayName.isEmpty()) {
           Toast.makeText(
             activity,
-            "Please enter your display name",
+            getString(R.string.enter_display_name),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -83,7 +83,7 @@ class ProfileEditFragment : Fragment() {
         if (!displayName.matches(displayNamePattern)) {
           Toast.makeText(
             activity,
-            "Display name must contain only letters, numbers, or underscores",
+            getString(R.string.invalid_display_name),
             Toast.LENGTH_SHORT
           ).show()
           return@setOnClickListener
@@ -91,12 +91,12 @@ class ProfileEditFragment : Fragment() {
 
         // Confirmation dialog
         val builder = AlertDialog.Builder(binding.root.context)
-        builder.setTitle("Are you sure about the changes?")
-        builder.setPositiveButton("Yes") { dialog, _ ->
+        builder.setTitle(getString(R.string.confirm_changes_title))
+        builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
           applySaveEdit(displayName, bio)
           dialog.dismiss()
         }
-        builder.setNegativeButton("No") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
           dialog.dismiss()
         }
         builder.create().show()
@@ -108,7 +108,7 @@ class ProfileEditFragment : Fragment() {
     llLoading.root.visibility = View.VISIBLE
     profileViewModel.updateUser(displayName, "", "", bio, imageProfileUri, imageBackgroundUri) {
       llLoading.root.visibility = View.GONE
-      Toast.makeText(activity, "Successfully updated your profile", Toast.LENGTH_SHORT).show()
+      Toast.makeText(activity, getString(R.string.profile_update_success), Toast.LENGTH_SHORT).show()
       findNavController().navigateUp() // Navigate back to the previous fragment
     }
   }

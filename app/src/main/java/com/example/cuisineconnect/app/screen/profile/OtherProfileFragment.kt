@@ -47,8 +47,8 @@ class OtherProfileFragment : Fragment() {
       // Link the TabLayout with the ViewPager2
       TabLayoutMediator(binding.tlProfile, binding.vp2Profile) { tab, position ->
         tab.text = when (position) {
-          0 -> "Posts"
-          1 -> "Recipes"
+          0 -> getString(R.string.posts_caps)
+          1 -> getString(R.string.recipes_caps)
           else -> null
         }
       }.attach()
@@ -91,20 +91,20 @@ class OtherProfileFragment : Fragment() {
             binding.btnFollow.visibility = View.GONE
           } else if (user.follower.contains(currentUser?.id)) {
             binding.btnFollow.run {
-              text = "Following"
+              text = getString(R.string.following_caps)
               setOnClickListener {
                 // Show confirmation dialog for unfollow
                 val builder = AlertDialog.Builder(context)
-                builder.setTitle("Unfollow User")
-                builder.setMessage("Are you sure you want to unfollow ${user.displayName}?")
+                builder.setTitle(getString(R.string.unfollow_user_title))
+                builder.setMessage("${getString(R.string.unfollow_user_message)} ${user.displayName}?")
 
-                builder.setPositiveButton("Yes") { dialog, _ ->
+                builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                   // Call unfollow logic
                   profileViewModel.unFollowUser(object : TwoWayCallback {
                     override fun onSuccess() {
                       profileViewModel.getUser() // Refresh the current user's profile
                       profileViewModel.getUser(user.id) // Refresh the target user's profile
-                      Toast.makeText(context, "Successfully unfollowed", Toast.LENGTH_SHORT).show()
+                      Toast.makeText(context, getString(R.string.successfully_unfollowed), Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onFailure(errorMessage: String) {
@@ -114,7 +114,7 @@ class OtherProfileFragment : Fragment() {
                   dialog.dismiss() // Dismiss the dialog
                 }
 
-                builder.setNegativeButton("No") { dialog, _ ->
+                builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                   dialog.dismiss() // Dismiss the dialog if the user cancels
                 }
 
@@ -123,13 +123,13 @@ class OtherProfileFragment : Fragment() {
             }
           } else {
             binding.btnFollow.run {
-              text = "Follow"
+              text = getString(R.string.follow)
               setOnClickListener {
                 profileViewModel.followUser(object : TwoWayCallback {
                   override fun onSuccess() {
                     profileViewModel.getUser()
                     profileViewModel.getUser(user.id)
-                    Toast.makeText(context, "Successfully followed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.successfully_followed), Toast.LENGTH_SHORT).show()
                   }
 
                   override fun onFailure(errorMessage: String) {
@@ -140,11 +140,11 @@ class OtherProfileFragment : Fragment() {
             }
           }
 
-          val posts = Html.fromHtml("<b>${user.recipes.size}</b> recipes")
+          val posts = Html.fromHtml("<b>${user.recipes.size}</b> ${getString(R.string.recipes)}")
           tvPosts.text = posts
-          val followers = Html.fromHtml("<b>${user.follower.size}</b> followers")
+          val followers = Html.fromHtml("<b>${user.follower.size}</b> ${getString(R.string.followers)}")
           tvFollowers.text = followers
-          val following = Html.fromHtml("<b>${user.following.size}</b> following")
+          val following = Html.fromHtml("<b>${user.following.size}</b> ${getString(R.string.following)}")
           tvFollowing.text = following
 
           tvFollowers.setOnClickListener {

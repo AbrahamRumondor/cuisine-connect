@@ -84,6 +84,7 @@
   <string name="search_icon">Ikon Pencarian</string>
   <string name="hashtag_strip">#-</string>
   <string name="posts">post</string>
+  <string name="posts_caps">Post</string>
   <string name="enter_text_here">Masukkan teks di sini</string>
   <string name="item_failed_to_reload_or_has_been_removed">Item gagal dimuat ulang atau telah dihapus</string>
   <string name="post_tag">post</string>
@@ -193,7 +194,17 @@
   <string name="delete_post_message">Apakah Anda yakin ingin menghapus postingan?</string>
   <string name="delete_post_confirmation">Postingan dihapus</string>
 
+  <string name="enter_display_name">Silakan masukkan nama tampilan Anda</string>
+  <string name="invalid_display_name">Nama tampilan hanya boleh mengandung huruf, angka, atau garis bawah</string>
+  <string name="confirm_changes_title">Apakah Anda yakin dengan perubahan ini?</string>
+  <string name="profile_update_success">Profil Anda berhasil diperbarui</string>
 
+  <string name="unfollow_user_title">Berhenti Mengikuti Pengguna</string>
+  <string name="unfollow_user_message">Apakah Anda yakin ingin berhenti mengikuti %1$s?</string>
+  <string name="successfully_unfollowed">Berhasil berhenti mengikuti</string>
+  <string name="successfully_followed">Berhasil mengikuti</string>
+  <string name="following_caps">Mengikuti</string>
+  <string name="follow_caps">Follow</string>
 
 
 </resources>

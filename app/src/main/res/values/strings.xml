@@ -194,8 +194,16 @@
   <string name="delete_post_message">Are you sure you want to delete the post?</string>
   <string name="delete_post_confirmation">Post deleted</string>
 
+  <string name="enter_display_name">Please enter your display name</string>
+  <string name="invalid_display_name">Display name must contain only letters, numbers, or underscores</string>
+  <string name="confirm_changes_title">Are you sure about the changes?</string>
+  <string name="profile_update_success">Successfully updated your profile</string>
+  <string name="posts_caps">Posts</string>
+  <string name="following_caps">Following</string>
+  <string name="follow_caps">Follow</string>
 
-
-
-
+  <string name="unfollow_user_title">Unfollow User</string>
+  <string name="unfollow_user_message">Are you sure you want to unfollow</string>
+  <string name="successfully_unfollowed">Successfully unfollowed</string>
+  <string name="successfully_followed">Successfully followed</string>
 </resources>

@@ -172,14 +172,14 @@ class ProfileFragment : Fragment() {
           builder.setTitle("Language")
           builder.setMessage(langStr)
 
-          builder.setPositiveButton("Yes") { dialog, _ ->
+          builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             val lang = if (currentUser?.language == "id") "en" else "id"
             profileViewModel.updateUser(lang)
             setLocaleInActivity(lang)
             dialog.dismiss() // Dismiss the dialog
           }
 
-          builder.setNegativeButton("No") { dialog, _ ->
+          builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
             dialog.dismiss()
           }
           builder.show()
