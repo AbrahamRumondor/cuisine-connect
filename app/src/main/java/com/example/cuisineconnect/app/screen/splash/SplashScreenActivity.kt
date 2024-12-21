@@ -1,6 +1,7 @@
 package com.example.cuisineconnect.app.screen.splash
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,7 +13,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.MainActivityViewModel
 import com.example.cuisineconnect.app.screen.authentication.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
+@AndroidEntryPoint
 class SplashScreenActivity : AppCompatActivity() {
 
   private val mainActivityViewModel: MainActivityViewModel by viewModels()
@@ -39,4 +43,5 @@ class SplashScreenActivity : AppCompatActivity() {
       finish() // Close SplashScreenActivity so it’s not accessible on back press
     }, 1000) // 2-second delay
   }
+
 }

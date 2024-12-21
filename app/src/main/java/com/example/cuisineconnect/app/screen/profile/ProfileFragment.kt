@@ -28,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -169,13 +170,13 @@ class ProfileFragment : Fragment() {
         R.id.action_lang -> {
           val builder = AlertDialog.Builder(view.context)
           val langStr = if (currentUser?.language == "id") "Apakah Anda yakin ingin mengubah bahasa ke Bahasa Inggris?" else "Are you sure you want to change the language to Bahasa Indonesia?"
-          builder.setTitle("Language")
+          builder.setTitle(if (currentUser?.language == "id") "Bahasa" else "Language")
           builder.setMessage(langStr)
 
           builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             val lang = if (currentUser?.language == "id") "en" else "id"
             profileViewModel.updateUser(lang)
-            setLocaleInActivity(lang)
+            setLocaleInActivity(lang, view)
             dialog.dismiss() // Dismiss the dialog
           }
 
@@ -193,8 +194,20 @@ class ProfileFragment : Fragment() {
     popupMenu.show()
   }
 
-  private fun setLocaleInActivity(localeCode: String) {
+  private fun setLocaleInActivity(localeCode: String, view: View) {
     (activity as? MainActivity)?.setLocale(localeCode)
+
+    val builder = AlertDialog.Builder(view.context)
+    val langStr = if (currentUser?.language == "id") "Mohon untuk mengulang aplikasi untuk menerapkan perubahan bahasa." else "Please restart the application to apply the language change."
+    builder.setTitle(if (currentUser?.language == "id") "Pemberitahuan" else "Notification")
+    builder.setMessage(langStr)
+
+    builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+      activity?.finish();
+      exitProcess(0);
+    }
+    builder.show()
+
   }
 
   private fun goToLogin() {

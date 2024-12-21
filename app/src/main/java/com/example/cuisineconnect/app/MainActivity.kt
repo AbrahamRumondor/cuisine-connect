@@ -1,5 +1,6 @@
 package com.example.cuisineconnect.app
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 
 @AndroidEntryPoint
@@ -73,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             showBottomNav()
             this.window.statusBarColor = this.getColor(R.color.cc_vanilla_cream)
           }
+
           else -> {
             this.window.statusBarColor = this.getColor(R.color.white)
             showBottomNav()
@@ -115,19 +118,42 @@ class MainActivity : AppCompatActivity() {
     binding.bnvMain.visibility = View.VISIBLE
   }
 
-  fun setLocale(lang: String) {
-    val locale = Locale(lang)
-    Locale.setDefault(locale)
-    val resources = resources
-    val config: Configuration = resources.configuration
-    config.setLocale(locale)
-    resources.updateConfiguration(config, resources.displayMetrics)
+//  fun setLocale(lang: String) {
+//    val locale = Locale(lang)
+//    Locale.setDefault(locale)
+//    val resources = resources
+//    val config: Configuration = resources.configuration
+//    config.setLocale(locale)
+//    resources.updateConfiguration(config, resources.displayMetrics)
+//
+//    // Restart the activity to apply the changes
+////    val intent = intent
+////    finish()
+////    startActivity(intent)
+//    recreate()
+//  }
 
-    // Restart the activity to apply the changes
-//    val intent = intent
-//    finish()
-//    startActivity(intent)
-    recreate()
+  fun setLocale(lang: String) {
+    val newLocale = Locale(lang)
+    val currentLocale = resources.configuration.locales[0] // Get the current locale
+
+    // Check if the new locale is different from the current locale
+    if (newLocale != currentLocale) {
+      Locale.setDefault(newLocale)
+      val resources = resources
+      val config: Configuration = resources.configuration
+      config.setLocale(newLocale)
+      resources.updateConfiguration(config, resources.displayMetrics)
+
+      val builder = AlertDialog.Builder(application.baseContext)
+      val langStr = if (currentUser?.language == "id") "Mohon untuk mengulang aplikasi untuk menerapkan perubahan bahasa." else "Please restart the application to apply the language change."
+      builder.setTitle(if (currentUser?.language == "id") "Pemberitahuan" else "Notification")
+      builder.setMessage(langStr)
+//      // Restart the activity to apply the changes
+//      val intent = intent
+//      finish()
+//      startActivity(intent)
+    }
   }
 
   fun showChooseRecipeView(show: Boolean) {
