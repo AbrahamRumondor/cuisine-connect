@@ -180,6 +180,18 @@
   <string name="hashtag_already_added">Hashtag sudah ditambahkan</string>
   <string name="hashtag_added_successfully">Hashtag berhasil ditambahkan!</string>
   <string name="usages">penggunaan</string>
+  <string name="seconds_ago">detik yang lalu</string>
+  <string name="minutes_ago">menit yang lalu</string>
+  <string name="hours_ago">jam yang lalu</string>
+  <string name="days_ago">hari yang lalu</string>
+  <string name="second_ago">detik yang lalu</string>
+  <string name="minute_ago">menit yang lalu</string>
+  <string name="hour_ago">jam yang lalu</string>
+  <string name="day_ago">hari yang lalu</string>
+
+  <string name="delete_post_title">Hapus Postingan</string>
+  <string name="delete_post_message">Apakah Anda yakin ingin menghapus postingan?</string>
+  <string name="delete_post_confirmation">Postingan dihapus</string>
 
 
 

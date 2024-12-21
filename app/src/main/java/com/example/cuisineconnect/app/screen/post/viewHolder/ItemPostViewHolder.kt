@@ -30,6 +30,8 @@ class ItemPostViewHolder(
 //    private val itemListener: OrderSummaryItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
+  private val app = view.root.context.resources
+
   fun bind(
     user: User?,
     post: Post,
@@ -125,13 +127,13 @@ class ItemPostViewHolder(
     listener: ItemListListener?
   ) {
     val builder = AlertDialog.Builder(view.context)
-    builder.setTitle("Delete Recipe")
-    builder.setMessage("Are you sure you want to delete the recipe?")
+    builder.setTitle(app.getString(R.string.delete_post_title))
+    builder.setMessage(app.getString(R.string.delete_post_message))
 
-    builder.setPositiveButton("Yes") { dialog, _ ->
+    builder.setPositiveButton(app.getString(R.string.yes)) { dialog, _ ->
       Toast.makeText(
         view.context,
-        "Post deleted",
+        app.getString(R.string.delete_post_confirmation),
         Toast.LENGTH_SHORT
       ).show()
 
@@ -139,7 +141,7 @@ class ItemPostViewHolder(
       dialog.dismiss() // Dismiss the dialog
     }
 
-    builder.setNegativeButton("No") { dialog, _ ->
+    builder.setNegativeButton(app.getString(R.string.no)) { dialog, _ ->
       dialog.dismiss()
     }
     builder.show()
@@ -369,25 +371,25 @@ class ItemPostViewHolder(
       // Less than 1 minute ago
       diff < TimeUnit.MINUTES.toMillis(1) -> {
         val seconds = TimeUnit.MILLISECONDS.toSeconds(diff)
-        if (seconds <= 1) "$seconds second ago" else "$seconds seconds ago"
+        if (seconds <= 1) "$seconds ${app.getString(R.string.second_ago)}" else "$seconds ${app.getString(R.string.seconds_ago)}"
       }
 
       // Less than 1 hour ago
       diff < TimeUnit.HOURS.toMillis(1) -> {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
-        if (minutes == 1L) "$minutes minute ago" else "$minutes minutes ago"
+        if (minutes == 1L) "$minutes ${app.getString(R.string.minute_ago)}" else "$minutes ${app.getString(R.string.minutes_ago)}"
       }
 
       // Less than 1 day ago
       diff < TimeUnit.HOURS.toMillis(24) -> {
         val hours = TimeUnit.MILLISECONDS.toHours(diff)
-        if (hours == 1L) "$hours hour ago" else "$hours hours ago"
+        if (hours == 1L) "$hours ${app.getString(R.string.hour_ago)}" else "$hours ${app.getString(R.string.hours_ago)}"
       }
 
       // Less than 5 days ago
       diff < TimeUnit.DAYS.toMillis(5) -> {
         val days = TimeUnit.MILLISECONDS.toDays(diff)
-        if (days == 1L) "$days day ago" else "$days days ago"
+        if (days == 1L) "$days ${app.getString(R.string.day_ago)}" else "$days ${app.getString(R.string.days_ago)}"
       }
 
       // Default to the "MMM dd" format for anything older
@@ -397,4 +399,5 @@ class ItemPostViewHolder(
       }
     }
   }
+
 }

@@ -176,25 +176,25 @@ class PostDetailFragment : Fragment() {
       // Less than 1 minute ago
       diff < TimeUnit.MINUTES.toMillis(1) -> {
         val seconds = TimeUnit.MILLISECONDS.toSeconds(diff)
-        if (seconds <= 1) "$seconds second ago" else "$seconds seconds ago"
+        if (seconds <= 1) "$seconds ${getString(R.string.second_ago)}" else "$seconds ${getString(R.string.seconds_ago)}"
       }
 
       // Less than 1 hour ago
       diff < TimeUnit.HOURS.toMillis(1) -> {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
-        if (minutes == 1L) "$minutes minute ago" else "$minutes minutes ago"
+        if (minutes == 1L) "$minutes ${getString(R.string.minute_ago)}" else "$minutes ${getString(R.string.minutes_ago)}"
       }
 
       // Less than 1 day ago
       diff < TimeUnit.HOURS.toMillis(24) -> {
         val hours = TimeUnit.MILLISECONDS.toHours(diff)
-        if (hours == 1L) "$hours hour ago" else "$hours hours ago"
+        if (hours == 1L) "$hours ${getString(R.string.hour_ago)}" else "$hours ${getString(R.string.hours_ago)}"
       }
 
       // Less than 5 days ago
       diff < TimeUnit.DAYS.toMillis(5) -> {
         val days = TimeUnit.MILLISECONDS.toDays(diff)
-        if (days == 1L) "$days day ago" else "$days days ago"
+        if (days == 1L) "$days ${getString(R.string.day_ago)}" else "$days ${getString(R.string.days_ago)}"
       }
 
       // Default to the "MMM dd" format for anything older
