@@ -24,6 +24,8 @@ class ItemRecipeViewHolder(
 //    private val itemListener: OrderSummaryItemListener?,
 ) : RecyclerView.ViewHolder(view.root) {
 
+  val app = view.root.context
+
   fun bind(
     user: User?,
     recipe: Recipe?,
@@ -60,17 +62,17 @@ class ItemRecipeViewHolder(
 
         cvRecipe.setOnLongClickListener {
           val builder = AlertDialog.Builder(view.root.context)
-          builder.setTitle("Choose this recipe?")
-          builder.setPositiveButton("Yes") { dialog, _ ->
+          builder.setTitle(app.getString(R.string.choose_recipe_title))
+          builder.setPositiveButton(app.getString(R.string.yes)) { dialog, _ ->
             Toast.makeText(
               view.root.context,
-              "this recipe is chosen",
+              app.getString(R.string.this_recipe_is_chosen),
               Toast.LENGTH_SHORT
             ).show()
             listener?.onRecipeLongClicked(recipe.id)
             dialog.dismiss()
           }
-          builder.setNegativeButton("No") { dialog, _ ->
+          builder.setNegativeButton(app.getString(R.string.no)) { dialog, _ ->
             dialog.dismiss()
           }
           builder.create().show()
@@ -134,13 +136,13 @@ class ItemRecipeViewHolder(
 
   private fun showDeleteConfirmationDialog(recipe: Recipe, view: View, listener: ItemListListener?) {
     val builder = AlertDialog.Builder(view.context)
-    builder.setTitle("Delete Recipe")
-    builder.setMessage("Are you sure you want to delete the recipe?")
+    builder.setTitle(app.getString(R.string.delete_confirmation_title))
+    builder.setMessage(app.getString(R.string.delete_confirmation_message))
 
-    builder.setPositiveButton("Yes") { dialog, _ ->
+    builder.setPositiveButton(app.getString(R.string.yes)) { dialog, _ ->
       Toast.makeText(
         view.context,
-        "${recipe.title} deleted",
+        "${recipe.title}${app.getString(R.string.recipe_deleted)}",
         Toast.LENGTH_SHORT
       ).show()
 
@@ -148,7 +150,7 @@ class ItemRecipeViewHolder(
       dialog.dismiss() // Dismiss the dialog
     }
 
-    builder.setNegativeButton("No") { dialog, _ ->
+    builder.setNegativeButton(app.getString(R.string.no)) { dialog, _ ->
       dialog.dismiss()
     }
 

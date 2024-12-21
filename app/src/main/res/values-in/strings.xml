@@ -218,6 +218,14 @@
   <string name="follow_caps">Follow</string>
 
   <string name="no_image">Tidak ada gambar</string>
+  <string name="replying_to">Balas kepada</string>
+  <string name="reply_recipe">Balasan</string>
+
+  <string name="choose_recipe_title">Pilih resep ini?</string>
+  <string name="this_recipe_is_chosen">Resep ini dipilih</string>
+  <string name="delete_confirmation_title">Hapus Resep</string>
+  <string name="delete_confirmation_message">Apakah Anda yakin ingin menghapus resep ini?</string>
+
 
 
 </resources>

@@ -103,7 +103,7 @@ class ReplyRecipeFragment : Fragment() {
       supportActionBar?.apply {
         setDisplayHomeAsUpEnabled(true) // Enable the back button
         setDisplayShowHomeEnabled(true)
-        title = "Reply Recipe" // Set title for the toolbar
+        title = getString(R.string.reply_recipe) // Set title for the toolbar
       }
     }
 
@@ -150,7 +150,7 @@ class ReplyRecipeFragment : Fragment() {
 
       override fun onReplyInputClicked(position: Int, targetReplyId: String, user: User) {
         binding.run {
-          val text = "Replying to ${user.displayName}"
+          val text = "${getString(R.string.replying_to)} ${user.displayName}"
           tvReplyOtherUser.text = text
           clReplyOther.visibility = View.VISIBLE
 
