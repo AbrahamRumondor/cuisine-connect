@@ -18,6 +18,7 @@ import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -295,7 +296,29 @@ class CreateRecipeFragment : Fragment() {
 
       setupTagsBar()
     }
+
+
+    requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+      guardFromBackDialog()
+    }
+
     return binding.root
+  }
+
+  private fun guardFromBackDialog() {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(getString(R.string.notification))
+    builder.setMessage(getString(R.string.guard))
+
+    builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+      findNavController().navigateUp()
+      dialog.dismiss() // Dismiss the dialog
+    }
+
+    builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+      dialog.dismiss()
+    }
+    builder.show()
   }
 
   private fun showError(message: String) {
@@ -319,7 +342,7 @@ class CreateRecipeFragment : Fragment() {
 
   private fun setupToolbar() {
     binding.btnBack.setOnClickListener {
-      findNavController().navigateUp()
+      guardFromBackDialog()
     }
   }
 

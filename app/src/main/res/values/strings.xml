@@ -101,6 +101,8 @@
   <string name="trending_today">Trending Today</string>
   <string name="choose_language">English (language)</string>
   <string name="log_out">Log out</string>
+  <string name="guard">Are you sure you want to leave?</string>
+  <string name="notification">Notification</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
   <string name="recipes_caps">Recipes</string>

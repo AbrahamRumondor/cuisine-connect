@@ -22,6 +22,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,6 +41,7 @@ import com.example.cuisineconnect.databinding.FragmentCreatePostBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.callbacks.TwoWayCallback
 import com.example.cuisineconnect.domain.model.Hashtag
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -77,6 +79,10 @@ class CreatePostFragment : Fragment() {
     }
 
     setupDisplay()
+
+    requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+      guardFromBackDialog()
+    }
 
     return binding.root
   }
@@ -630,9 +636,27 @@ class CreatePostFragment : Fragment() {
   private fun setupToolbar() {
     binding.btnBack.setOnClickListener {
       createPostViewModel.clearPostContents()
-      findNavController().navigateUp()
+      guardFromBackDialog()
+//      findNavController().navigateUp()
     }
   }
+
+  private fun guardFromBackDialog() {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(getString(R.string.notification))
+    builder.setMessage(getString(R.string.guard))
+
+    builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+      findNavController().navigateUp()
+      dialog.dismiss() // Dismiss the dialog
+    }
+
+    builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+      dialog.dismiss()
+    }
+    builder.show()
+  }
+
 
   private fun updateTextPostContent(): List<String> {
     val list = mutableListOf<String>()
