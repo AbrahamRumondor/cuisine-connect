@@ -148,7 +148,7 @@ class RecipeDetailAdapter :
       }
 
       is Boolean -> (holder as ViewBottomSpacingViewHolder).bind()
-      is List<*> -> (holder as RecipeDetailTagsViewHolder).bind(item as List<String>)
+      is List<*> -> (holder as RecipeDetailTagsViewHolder).bind(item as List<String>, userClickListener)
       else -> throw IllegalArgumentException("Invalid item type")
     }
   }

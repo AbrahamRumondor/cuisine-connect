@@ -84,6 +84,14 @@ class RecipeDetailFragment : Fragment() {
           findNavController().navigate(action)
         }
       }
+
+      override fun onHashtagClicked(hashtag: String) {
+        val action =
+          RecipeDetailFragmentDirections.actionRecipeDetailFragmentToSearchResultFragment(
+            hashtag
+          )
+        findNavController().navigate(action)
+      }
     })
   }
 

@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide
 import com.example.cuisineconnect.R
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.screen.create.CreatePostViewModel
+import com.example.cuisineconnect.app.util.ClickableTextView
+import com.example.cuisineconnect.app.util.NonClickableTextView
 import com.example.cuisineconnect.databinding.ItemPostHorizontalBinding
 import com.example.cuisineconnect.databinding.ItemPostRecipeBinding
 import com.example.cuisineconnect.domain.model.Post
@@ -202,13 +204,13 @@ class ItemPostViewHolder(
 
   private fun addText(text: String, order: Int?) {
     val customCardView = LayoutInflater.from(view.root.context)
-      .inflate(R.layout.item_post_text_view, view.llPostContents, false)
+      .inflate(R.layout.item_post_text_view_non_clickable, view.llPostContents, false)
 
     // Set margins using the new function
     setViewMargins(customCardView, 0, 0, 4)
 
-    val tvUserInput: TextView = customCardView.findViewById(R.id.tvUserInput)
-    tvUserInput.text = text
+    val tvUserInput: NonClickableTextView = customCardView.findViewById(R.id.tvUserInput)
+    tvUserInput.setHashtagText(text)
 
     tvUserInput.textSize = 16f
 

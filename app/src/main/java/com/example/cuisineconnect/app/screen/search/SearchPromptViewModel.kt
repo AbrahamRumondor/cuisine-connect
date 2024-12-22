@@ -45,7 +45,6 @@ class SearchPromptViewModel @Inject constructor(
       val noUsers = if (currentUser?.language == "id") "Pengguna tidak ditemukan" else "No users found"
       val typeSomething = if (currentUser?.language == "id") "Ketik sesuatu untuk mencari…" else "Type something to search…"
 
-
       if (prompt.isNotEmpty()) {
         itemsToSubmit.add(prompt)
         itemsToSubmit.add(0) // This could be a divider or some identifier
