@@ -124,6 +124,12 @@ class ProfileFragment : Fragment() {
               )
             findNavController().navigate(action)
           }
+
+          btnEditBg.setOnClickListener {
+            val action =
+              ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(user.id)
+            findNavController().navigate(action)
+          }
         }
       }
     }
