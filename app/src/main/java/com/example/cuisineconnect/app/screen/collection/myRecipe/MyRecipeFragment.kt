@@ -83,7 +83,7 @@ class MyRecipeFragment : Fragment() {
 
   private fun setupSpinner() {
     val spinner: Spinner = binding.spinnerSortBy // Assuming you have the Spinner in your binding
-    val sortingOptions = arrayOf("Latest", "Most Liked", "Oldest", "Least Liked")
+    val sortingOptions = arrayOf(getString(R.string.latest), getString(R.string.most_liked),getString(R.string.oldest), getString(R.string.least_liked))
 
     val adapter = ArrayAdapter(requireContext(), R.layout.spinner_collection_item, sortingOptions)
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_collection_item)

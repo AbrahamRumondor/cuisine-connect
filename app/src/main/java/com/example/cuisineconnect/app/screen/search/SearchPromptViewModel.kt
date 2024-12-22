@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cuisineconnect.R
+import com.example.cuisineconnect.app.util.UserUtil.currentUser
 import com.example.cuisineconnect.domain.model.Hashtag
 import com.example.cuisineconnect.domain.model.User
 import com.example.cuisineconnect.domain.usecase.hashtag.HashtagUseCase
@@ -40,13 +41,18 @@ class SearchPromptViewModel @Inject constructor(
     combine(prompt, users, hashtags) { prompt, users, hashtags ->
       val itemsToSubmit = mutableListOf<Any?>()
 
+      val noHashtag = if (currentUser?.language == "id") "Hashtag tidak ditemukan" else "No hashtags found"
+      val noUsers = if (currentUser?.language == "id") "Pengguna tidak ditemukan" else "No users found"
+      val typeSomething = if (currentUser?.language == "id") "Ketik sesuatu untuk mencari…" else "Type something to search…"
+
+
       if (prompt.isNotEmpty()) {
         itemsToSubmit.add(prompt)
         itemsToSubmit.add(0) // This could be a divider or some identifier
-        itemsToSubmit.addAll(hashtags.map { it.body }.ifEmpty { listOf(applicationContext.getString(R.string.no_hashtags_found)) })
-        itemsToSubmit.addAll(users.ifEmpty { listOf(applicationContext.getString(R.string.no_users_found)) })
+        itemsToSubmit.addAll(hashtags.map { it.body }.ifEmpty { listOf(noHashtag) })
+        itemsToSubmit.addAll(users.ifEmpty { listOf(noUsers) })
       } else {
-        itemsToSubmit.add(applicationContext.getString(R.string.type_something_to_search))
+        itemsToSubmit.add(typeSomething)
       }
 
       itemsToSubmit.toList()

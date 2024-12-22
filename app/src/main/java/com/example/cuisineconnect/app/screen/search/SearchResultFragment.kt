@@ -20,6 +20,7 @@ import com.example.cuisineconnect.app.MainActivity
 import com.example.cuisineconnect.app.listener.ItemListListener
 import com.example.cuisineconnect.app.listener.RecipeListListener
 import com.example.cuisineconnect.app.screen.home.HomeAdapter
+import com.example.cuisineconnect.app.screen.home.HomeFragmentDirections
 import com.example.cuisineconnect.app.screen.recipe.detail.RecipeDetailFragmentDirections
 import com.example.cuisineconnect.app.util.UserUtil.isSelectingRecipe
 import com.example.cuisineconnect.databinding.FragmentSearchResultBinding
@@ -70,7 +71,8 @@ class SearchResultFragment : Fragment() {
       val navController = findNavController()
 
       // Check if SearchPromptFragment is in the back stack
-      val hasSearchPromptFragment = navController.previousBackStackEntry?.destination?.id == R.id.searchPromptFragment
+      val hasSearchPromptFragment =
+        navController.previousBackStackEntry?.destination?.id == R.id.searchPromptFragment
 
       if (!hasSearchPromptFragment) {
         val action =
@@ -89,12 +91,14 @@ class SearchResultFragment : Fragment() {
   }
 
   private fun setupRecyclerView() {
-    binding.list.adapter = adapter  // Assuming `list` is the RecyclerView ID in `FragmentSearchResultBinding`
+    binding.list.adapter =
+      adapter  // Assuming `list` is the RecyclerView ID in `FragmentSearchResultBinding`
     adapter.isNotFromHome()
 
     adapter.setItemListener(object : ItemListListener {
       override fun onRecipeClicked(recipeId: String) {
-        val action = SearchResultFragmentDirections.actionSearchResultFragmentToRecipeDetailFragment(recipeId)
+        val action =
+          SearchResultFragmentDirections.actionSearchResultFragmentToRecipeDetailFragment(recipeId)
         findNavController().navigate(action)
       }
 
@@ -104,6 +108,19 @@ class SearchResultFragment : Fragment() {
 
       override fun onItemDeleteClicked(itemId: String, type: String) {
 
+      }
+
+      override fun onUserProfileClicked(userId: String) {
+//        if (userId == currentUser?.id) {
+//          val action =
+//            HomeFragmentDirections.actionHomeFragmentToProfileFragment()
+//          findNavController().navigate(action)
+//          return
+//        } else {
+        val action =
+          SearchResultFragmentDirections.actionSearchResultFragmentToOtherProfileFragment(userId)
+        findNavController().navigate(action)
+//        }
       }
     })
   }
@@ -126,11 +143,13 @@ class SearchResultFragment : Fragment() {
           binding.list.visibility = View.VISIBLE
           binding.llEmptyState.visibility = View.VISIBLE
         }
+
         loadStates.refresh is LoadState.Loading -> {
           // Show loading animation while loading
           binding.list.visibility = View.GONE
           showLoadingAnimation()
         }
+
         else -> {
           // Hide empty state and loading animation
           hideLoadingAnimation()
@@ -140,6 +159,7 @@ class SearchResultFragment : Fragment() {
       }
     }
   }
+
   private fun formatSearchQuery(searchQuery: String): Pair<List<String>, String> {
     val splitQueries = searchQuery.split(" ")
     val hashtags = mutableListOf<String>()
